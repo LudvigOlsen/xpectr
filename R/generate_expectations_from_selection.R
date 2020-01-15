@@ -25,6 +25,7 @@
 #'
 #'  E.g. \code{"stop('This gives an expect_error test')"}.
 #' @param indentation Indentation of the selection. (Numeric)
+#' @param tolerance The tolerance for numeric tests as a string. (Character)
 #' @param strip Whether to insert
 #'  \code{\link[xpectr:strip]{strip_msg()}} and
 #'  \code{\link[xpectr:strip]{strip()}}
@@ -53,15 +54,16 @@
 #' library(xpectr)
 #'
 #' \donttest{
+#' df <- data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'),
+#'                  stringsAsFactors = FALSE)
+#'
 #' gxs_selection("stop('This gives an expect_error test!')")
 #' gxs_selection("warning('This gives an expect_warning test!')")
 #' gxs_selection("message('This gives an expect_message test!')")
 #' gxs_selection("stop('This: tests the -> punctuation!')", strip = FALSE)
 #' gxs_selection("sum(1, 2, 3, 4)")
-#' gxs_selection("data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'))")
+#' gxs_selection("df")
 #'
-#' df <- data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'),
-#'                  stringsAsFactors = FALSE)
 #' tests <- gxs_selection("df", out = "return")
 #' for_insertion <- prepare_insertion(tests)
 #' rstudioapi::insertText(for_insertion)
@@ -69,12 +71,14 @@
 gxs_selection <- function(selection,
                           indentation = 0,
                           strip = TRUE,
+                          tolerance = "1e-4",
                           envir = NULL,
                           out = "insert"){
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(x = selection, add = assert_collection)
+  checkmate::assert_string(x = tolerance, add = assert_collection)
   checkmate::assert_choice(x = out, choices = c("insert", "return"), add = assert_collection)
   checkmate::assert_flag(x = strip, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
@@ -117,10 +121,12 @@ gxs_selection <- function(selection,
     # Create expectations based on the type of the objects
     if (is.data.frame(obj)) {
       expectations <- create_expectations_data_frame(obj, name = selection,
-                                                     indentation = indentation)
+                                                     indentation = indentation,
+                                                     tolerance = tolerance)
     } else if (is.vector(obj)) {
       expectations <- create_expectations_vector(obj, name = selection,
-                                                 indentation = indentation)
+                                                 indentation = indentation,
+                                                 tolerance = tolerance)
     } else {
       stop("The selection is not of a currently supported class.")
     }

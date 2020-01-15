@@ -29,34 +29,6 @@ capture <- function(string) {
   apply_capture(string, identity)
 }
 
-# Prepare output for insertion
-# TODO export
-prepare_insertion <- function(strings,
-                              indentation = 0,
-                              trim_left = FALSE,
-                              trim_right = FALSE
-                              ) {
-
-  # Create string of spaces
-  spaces_string <- create_space_string(n = indentation)
-
-  # Collapse strings
-  string <- paste(strings, collapse = paste0("\n", spaces_string))
-
-  # Trimming
-  to_trim <- dplyr::case_when(
-    isTRUE(trim_left) && isTRUE(trim_right) ~ "both",
-    isTRUE(trim_left) ~ "left",
-    isTRUE(trim_right) ~ "right",
-    TRUE ~ "none"
-  )
-
-  if (to_trim != "none"){
-    string <- trimws(string, which = to_trim)
-  }
-
-  string
-}
 
 # Insert code at selection with rstudioapi
 insert_code <- function(strings, prepare = TRUE, indentation = 0) {
@@ -64,26 +36,25 @@ insert_code <- function(strings, prepare = TRUE, indentation = 0) {
   if (!(is.list(strings) || is.character(strings)))
     stop("'strings' should be either a list or a character vector.")
 
+  # Prepare the strings for insertion
   if (isTRUE(prepare)) {
     code <- prepare_insertion(strings, indentation = indentation)
   } else {
     code <- strings
   }
 
-  # TODO Set indentation based on current indentation
-
+  # Insert the code
   rstudioapi::insertText(code)
 }
 
-# Get user's selection. Warn if empty.
+# Get user's primary selection. Warn if empty.
 get_selection <- function() {
   # Get context
   context <- rstudioapi::getActiveDocumentContext()
   # Get the selected variable name
   selection <- rstudioapi::primary_selection(context)[["text"]]
-  if (selection == "") {
-    warning("Selection was empty")
-  }
+  message_if(selection == "",
+             "Selection was empty")
   selection
 }
 
@@ -91,11 +62,10 @@ get_selection <- function() {
 get_indentation <- function() {
   # Get context
   context <- rstudioapi::getActiveDocumentContext()
+  selection <- rstudioapi::primary_selection(context)
   # Get the column of the beginning of the selection
-  context$selection[[1]]$range$start[[2]] - 1 # starts at 1
+  selection$range$start[[2]] - 1 # starts at 1
 }
-
-
 
 # split x at each index in pos
 # Found on stackoverflow (TODO check)

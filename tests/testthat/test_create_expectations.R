@@ -92,21 +92,21 @@ test_that("expectation are created properly with create_expectations_vector()", 
 
   # vec_4
   exp_vec_4 <- list(
-    "expect_equal(\n  vec_4[[\"a1\"]],\n  10,\n  tolerance = 1e-4)",
-    "expect_equal(\n  vec_4[[\"a2\"]],\n  2,\n  tolerance = 1e-4)",
-    "expect_equal(\n  vec_4[[\"a3\"]],\n  4,\n  tolerance = 1e-4)",
-    "expect_equal(\n  vec_4[[\"b1\"]],\n  20,\n  tolerance = 1e-4)",
-    "expect_equal(\n  vec_4[[\"b2\"]],\n  1,\n  tolerance = 1e-4)",
-    "expect_equal(\n  vec_4[[\"b3\"]],\n  3,\n  tolerance = 1e-4)",
-    "expect_equal(\n  vec_4[[\"c1\"]],\n  2,\n  tolerance = 1e-4)",
-    "expect_equal(\n  vec_4[[\"c2\"]],\n  3,\n  tolerance = 1e-4)",
-    "expect_equal(\n  vec_4[[\"c3\"]],\n  30,\n  tolerance = 1e-4)",
+    "expect_equal(\n  vec_4[[\"a1\"]],\n  10,\n  tolerance = 1e-5)",
+    "expect_equal(\n  vec_4[[\"a2\"]],\n  2,\n  tolerance = 1e-5)",
+    "expect_equal(\n  vec_4[[\"a3\"]],\n  4,\n  tolerance = 1e-5)",
+    "expect_equal(\n  vec_4[[\"b1\"]],\n  20,\n  tolerance = 1e-5)",
+    "expect_equal(\n  vec_4[[\"b2\"]],\n  1,\n  tolerance = 1e-5)",
+    "expect_equal(\n  vec_4[[\"b3\"]],\n  3,\n  tolerance = 1e-5)",
+    "expect_equal(\n  vec_4[[\"c1\"]],\n  2,\n  tolerance = 1e-5)",
+    "expect_equal(\n  vec_4[[\"c2\"]],\n  3,\n  tolerance = 1e-5)",
+    "expect_equal(\n  vec_4[[\"c3\"]],\n  30,\n  tolerance = 1e-5)",
     paste0("expect_equal(\n  names( vec_4 ),\n  c(\"a1\", \"a2\", \"a3",
          "\", \"b1\", \"b2\", \"b3\", \"c1\", \"c2\", \"c3\"),\n  fixed = TRUE)")
 
   )
   expect_equal(
-    create_expectations_vector(vec_4),
+    create_expectations_vector(vec_4, tolerance = "1e-5"),
     exp_vec_4
   )
   eval_expectations(exp_vec_4, current_envir)
@@ -213,3 +213,5 @@ test_that("capture_side_effects() works", {
                fixed = TRUE)
   expect_true(warn_sfx$has_side_effects)
 })
+
+

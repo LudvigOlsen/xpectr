@@ -8,6 +8,7 @@ gxs_selection(
   selection,
   indentation = 0,
   strip = TRUE,
+  tolerance = "1e-4",
   envir = NULL,
   out = "insert"
 )
@@ -27,6 +28,8 @@ in tests of side effects. (Logical)
 Sometimes testthat tests have differences in punctuation and newlines on different
 systems. By stripping both the error message and the expected message of non-alphanumeric symbols,
 we can avoid such failed tests.}
+
+\item{tolerance}{The tolerance for numeric tests as a string. (Character)}
 
 \item{out}{Either "insert" or "return".
 
@@ -63,15 +66,16 @@ Addin: \code{\link[xpectr:insertExpectationsAddin]{insertExpectationsAddin()}}
 library(xpectr)
 
 \donttest{
+df <- data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'),
+                 stringsAsFactors = FALSE)
+
 gxs_selection("stop('This gives an expect_error test!')")
 gxs_selection("warning('This gives an expect_warning test!')")
 gxs_selection("message('This gives an expect_message test!')")
 gxs_selection("stop('This: tests the -> punctuation!')", strip = FALSE)
 gxs_selection("sum(1, 2, 3, 4)")
-gxs_selection("data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'))")
+gxs_selection("df")
 
-df <- data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'),
-                 stringsAsFactors = FALSE)
 tests <- gxs_selection("df", out = "return")
 for_insertion <- prepare_insertion(tests)
 rstudioapi::insertText(for_insertion)

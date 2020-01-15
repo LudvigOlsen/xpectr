@@ -4,7 +4,8 @@
 #   Create Expectations Data Frame                                          ####
 
 
-create_expectations_data_frame <- function(data, name = NULL, indentation = 0) {
+create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
+                                           tolerance = "1e-4") {
 
 
 ##  .................. #< 2271fda988ae80e314ffc80ad1364070 ># ..................
@@ -17,6 +18,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0) {
     x = name, min.chars = 1, null.ok = TRUE,
     add = assert_collection
   )
+  checkmate::assert_string(x = tolerance, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
 
 
@@ -53,7 +55,8 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0) {
     create_expect_equal(x, y,
                         add_tolerance = is.numeric(current_col),
                         add_fixed = is.character(current_col),
-                        spaces = 2 + indentation)
+                        spaces = 2 + indentation,
+                        tolerance = tolerance)
   })
 
   # Append name expectation
@@ -85,7 +88,8 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0) {
 
 
 # Only split into multiple tests when all elements are named
-create_expectations_vector <- function(data, name = NULL, indentation = 0) {
+create_expectations_vector <- function(data, name = NULL, indentation = 0,
+                                       tolerance = "1e-4") {
 
 
 ##  .................. #< 00dc0af83dcb4c3bb7b5e04a48b8bfbb ># ..................
@@ -98,6 +102,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0) {
     x = name, min.chars = 1, null.ok = TRUE,
     add = assert_collection
   )
+  checkmate::assert_string(x = tolerance, add = assert_collection)
   checkmate::assert_number(x = indentation, lower = 0,
                            add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -140,7 +145,8 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0) {
       create_expect_equal(x, y,
                           add_tolerance = is.numeric(current_elem),
                           add_fixed = is.character(current_elem),
-                          spaces = indentation + 2)
+                          spaces = indentation + 2,
+                          tolerance = tolerance)
     })
 
     # Append name expectation
@@ -158,7 +164,8 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0) {
         x, y,
         add_tolerance = is.numeric(data),
         add_fixed = is.character(data),
-        spaces = indentation + 2
+        spaces = indentation + 2,
+        tolerance = tolerance
       )
     )
   }
@@ -289,7 +296,8 @@ create_name_expectation <- function(data, name) {
 create_expect_equal <- function(x, y,
                                 add_tolerance = FALSE,
                                 add_fixed = FALSE,
-                                spaces = 2) {
+                                spaces = 2,
+                                tolerance = "1e-4") {
 
   # Create string of spaces
   spaces_string <- create_space_string(n = spaces)
@@ -299,7 +307,8 @@ create_expect_equal <- function(x, y,
           "Cannot add both 'tolerance' and 'fixed' setting.")
 
   if (isTRUE(add_tolerance)) {
-    settings_string <- paste0(",\n", spaces_string, "tolerance = 1e-4")
+    settings_string <- paste0(",\n", spaces_string,
+                              paste0("tolerance = ", tolerance))
   } else if (isTRUE(add_fixed)) {
     settings_string <- paste0(",\n", spaces_string, "fixed = TRUE")
   }else {
