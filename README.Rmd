@@ -41,8 +41,10 @@ Note: `gxs` stands for `generate expectations`.
 * `gxs_selection()` 
 * `strip()`
 * `strip_msg()`
+* `prepare_insertion()`
 * `capture_side_effects()`
 * `capture_parse_eval_side_effects()`
+* `stop_if()`, `warn_if()`, `message_if()`
 
 ## Addins
 
