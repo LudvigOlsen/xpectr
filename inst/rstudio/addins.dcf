@@ -1,0 +1,21 @@
+Name: dput() Selected
+Description: Runs dput() on selected code.
+Binding: dputSelectedAddin
+Interactive: false
+
+Name: Insert Expectations
+Description: Creates expect_* testthat tests from the selected code.
+Binding: insertExpectationsAddin
+Interactive: false
+
+Name: Wrap String with Paste0
+Description: Inserts the wrapped selection.
+Binding: wrapStringAddin
+Interactive: false
+
+Name: Insert checkmate AssertCollection code
+Description: Inserts checkmate AssertCollection initialization and reporting code
+Binding: assertCollectionAddin
+Interactive: false
+
+
