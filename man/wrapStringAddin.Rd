@@ -4,25 +4,47 @@
 \alias{wrapStringAddin}
 \title{Wraps the selection with paste0}
 \usage{
-wrapStringAddin(selection = NULL, insert = TRUE, indentation = 0)
+wrapStringAddin(
+  selection = NULL,
+  indentation = 0,
+  every_n = NULL,
+  tolerance = 10,
+  insert = TRUE
+)
 }
 \arguments{
 \item{selection}{String of code. (Character)
 
 N.B. Mainly intended for testing the addin programmatically.}
 
+\item{indentation}{Indentation of the selection. (Numeric)
+
+N.B. Mainly intended for testing the addin programmatically.}
+
+\item{every_n}{Number of characters per split.
+
+If NULL, the following is used to calculate the string width:
+
+\code{max(min(80 - indentation, 70), 50)}
+
+N.B. Strings shorter than \code{every_n + tolerance} will not be wrapped.}
+
+\item{tolerance}{Tolerance. Number of characters.
+
+We may prefer not to split a string that's only a few
+characters too long. Strings shorter than \code{every_n + tolerance}
+will not be wrapped.}
+
 \item{insert}{Whether to insert the wrapped text via
 \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
 or return it. (Logical)
 
 N.B. Mainly intended for testing the addin programmatically.}
-
-\item{indentation}{Indentation of the selection. (Numeric)
-
-N.B. Mainly intended for testing the addin programmatically.}
 }
 \value{
-Inserts \code{paste0("first n chars", "next n chars")} etc.
+Inserts the following (with newlines and correct indentation):
+
+\code{paste0("first n chars", "next n chars")}
 
 Returns \code{NULL} invisibly.
 }

@@ -96,6 +96,10 @@ fn <- function(raise = FALSE){
 
 ### `gxs_selection()`
 
+Note: `gxs_selection()` can be used with the `Insert Expectations`
+addin. See `?insertExpectationsAddin` for instructions on how to set up
+a key command.
+
 #### Selection is a vector
 
 Numeric vector:
