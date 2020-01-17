@@ -179,7 +179,7 @@ test_that("expectations are created returned by insertExpectationsAddin()", {
     "expect_message(\n  msgs_warns_fn(),\n  \"ihhh\\n\",\n  fixed = TRUE)"),
     fixed = TRUE)
 
-  set_seed_for_R_compatibility(42)
+  set_seed(42)
   long_df <- data.frame("a" = runif(40), "b" = runif(40), stringsAsFactors = FALSE)
 
   # Check smpl is used

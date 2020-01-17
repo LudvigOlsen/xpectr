@@ -50,7 +50,7 @@ smpl <- function(data,
   # End of argument checks ####
 
   # Set seed to be compatible with R before and after v3.6
-  set_seed_for_R_compatibility(seed)
+  set_seed(seed)
 
   # Sample data
   if (is.data.frame(data)) {
