@@ -24,21 +24,6 @@ skip_test_if_old_R_version <- function(min_R_version = "3.6") {
   }
 }
 
-# Wrapper for setting seed with the sample generator for R versions <3.6
-# Used for unittests
-# Partly contributed by R. Mark Sharp
-set_seed_for_R_compatibility <- function(seed = 1) {
-  if ((getRversion()$major == 3 &&
-       getRversion()$minor >= 6) ||
-      getRversion()$major > 3) {
-    args <- list(seed, sample.kind = "Rounding")
-  } else {
-    args <- list(seed)
-  }
-  suppressWarnings(do.call(set.seed, args))
-}
-
-
 # Remove NAs and empty "" names
 non_empty_names <- function(x) {
   ns <- names(x)
