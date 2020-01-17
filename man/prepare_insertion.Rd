@@ -25,7 +25,7 @@ As returned with \code{gxs_*} functions with \code{out = "return"}.}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Collapses a list of expectation strings and adds the specified indentation.
+Collapses a list/vector of expectation strings and adds the specified indentation.
 }
 \examples{
 # Attach packages

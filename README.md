@@ -32,6 +32,7 @@ Note: `gxs` stands for `generate expectations`.
   - `gxs_selection()`
   - `strip()`
   - `strip_msg()`
+  - `smpl()`
   - `prepare_insertion()`
   - `capture_side_effects()`
   - `capture_parse_eval_side_effects()`
@@ -67,6 +68,7 @@ library(testthat)
 
 num_vec <- 1:10
 char_vec <- head(LETTERS, 10)
+long_vec <- 1:40
 
 df <- data.frame(
   'a' = c(1, 2, 3),
@@ -90,6 +92,8 @@ fn <- function(raise = FALSE){
 
 #### Selection is a vector
 
+Numeric vector:
+
 ``` r
 gxs_selection("num_vec")
 
@@ -99,7 +103,11 @@ expect_equal(
   num_vec,
   1:10,
   tolerance = 1e-4)
+```
 
+Character vector:
+
+``` r
 gxs_selection("char_vec")
 
 # Inserts the following tests:
@@ -108,6 +116,19 @@ expect_equal(
   char_vec,
   c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"),
   fixed = TRUE)
+```
+
+Long vector (currently \> 30 elements) adds `smpl()`:
+
+``` r
+gxs_selection("long_vec")
+
+# Inserts the following tests:
+
+expect_equal(
+  xpectr::smpl(long_vec, n = 30),
+  c(2L, 3L, 5L, 6L, 7L, 8L, 10L, 11L, 12L, 13L, 14L, 17L, 18L, 19L, 21L, 22L, 23L, 24L, 25L, 26L, 27L, 29L, 30L, 31L, 32L, 35L, 36L, 37L, 38L, 40L),
+  tolerance = 1e-4)
 ```
 
 #### Selection is a data frame

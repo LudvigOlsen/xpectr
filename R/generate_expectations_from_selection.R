@@ -26,6 +26,16 @@
 #'  E.g. \code{"stop('This gives an expect_error test')"}.
 #' @param indentation Indentation of the selection. (Numeric)
 #' @param tolerance The tolerance for numeric tests as a string. (Character)
+#' @param sample_n The number of elements/rows to sample. Set to \code{NULL} to avoid sampling.
+#'
+#'  Inserts \code{\link[xpectr:strip]{smpl()}} in the generated tests when sampling was used. A seed is
+#'  set internally, setting \code{sample.kind} as \code{"Rounding"} to ensure compatibility with R versions
+#'  \code{< 3.6.0}.
+#'
+#'  The order of the elements/rows is kept intact. No replacement is used, why no oversampling will
+#'  take place.
+#'
+#'  When testing a big data frame, sampling the rows can help keep the test files somewhat readable.
 #' @param strip Whether to insert
 #'  \code{\link[xpectr:strip]{strip_msg()}} and
 #'  \code{\link[xpectr:strip]{strip()}}
@@ -73,6 +83,7 @@ gxs_selection <- function(selection,
                           strip = TRUE,
                           tolerance = "1e-4",
                           envir = NULL,
+                          sample_n = 30,
                           out = "insert"){
 
   # Check arguments ####
@@ -82,6 +93,7 @@ gxs_selection <- function(selection,
   checkmate::assert_choice(x = out, choices = c("insert", "return"), add = assert_collection)
   checkmate::assert_flag(x = strip, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
+  checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -122,11 +134,13 @@ gxs_selection <- function(selection,
     if (is.data.frame(obj)) {
       expectations <- create_expectations_data_frame(obj, name = selection,
                                                      indentation = indentation,
-                                                     tolerance = tolerance)
+                                                     tolerance = tolerance,
+                                                     sample_n = sample_n)
     } else if (is.vector(obj)) {
       expectations <- create_expectations_vector(obj, name = selection,
                                                  indentation = indentation,
-                                                 tolerance = tolerance)
+                                                 tolerance = tolerance,
+                                                 sample_n = sample_n)
     } else {
       stop("The selection is not of a currently supported class.")
     }

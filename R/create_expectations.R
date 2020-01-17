@@ -5,6 +5,7 @@
 
 
 create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
+                                           sample_n = 30,
                                            tolerance = "1e-4") {
 
 
@@ -30,6 +31,16 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     name <- deparse(substitute(data))
   }
 
+  # Whether to sample data
+  sample_data <- !is.null(sample_n) && nrow(data) > sample_n
+
+  # Sample data
+  if (isTRUE(sample_data)){
+    data <- smpl(data = data,
+                 n = sample_n,
+                 keep_order = TRUE)
+    }
+
   # Create expect_equal expectations
   expectations <- plyr::llply(colnames(data), function(col_name) {
     # Get current column
@@ -40,6 +51,9 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 
     # Left side of expectation
     x <- paste0(name, "[[\"", col_name, "\"]]")
+    if (isTRUE(sample_data)){
+      x <- paste0("xpectr::smpl(", x, ", n = ", sample_n, ")")
+    }
     # Right side of expectation
     y <- capture.output(dput(current_col))
     # In case dput spanned multiple lines
@@ -89,6 +103,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 
 # Only split into multiple tests when all elements are named
 create_expectations_vector <- function(data, name = NULL, indentation = 0,
+                                       sample_n = 30,
                                        tolerance = "1e-4") {
 
 
@@ -116,6 +131,16 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     name <- deparse(substitute(data))
   }
 
+  # Whether to sample data
+  sample_data <- !is.null(sample_n) && length(data) > sample_n
+
+  # Sample data
+  if (isTRUE(sample_data)){
+    data <- smpl(data = data,
+                 n = sample_n,
+                 keep_order = TRUE)
+  }
+
   # Get non-empty and non-NULL element names
   element_names <- get_element_names(data, remove_empty_names = TRUE)
 
@@ -130,6 +155,9 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
       current_elem <- data[[elem_name]]
       # Left side of expectation
       x <- paste0(name, "[[\"", elem_name, "\"]]")
+      if (isTRUE(sample_data)){
+        x <- paste0("xpectr::smpl(", x, ", n = ", sample_n, ")")
+      }
       # Right side of expectation
       y <- capture.output(dput(current_elem))
       # In case dput spanned multiple lines
@@ -154,6 +182,9 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     expectations <- c(expectations, name_expectation)
   } else {
     x <- name
+    if (isTRUE(sample_data)){
+      x <- paste0("xpectr::smpl(", x, ", n = ", sample_n, ")")
+    }
     y <- capture.output(dput(data))
     # In case dput spanned multiple lines
     # we collapse them to one string

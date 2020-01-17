@@ -10,6 +10,7 @@ gxs_selection(
   strip = TRUE,
   tolerance = "1e-4",
   envir = NULL,
+  sample_n = 30,
   out = "insert"
 )
 }
@@ -30,6 +31,17 @@ systems. By stripping both the error message and the expected message of non-alp
 we can avoid such failed tests.}
 
 \item{tolerance}{The tolerance for numeric tests as a string. (Character)}
+
+\item{sample_n}{The number of elements/rows to sample. Set to \code{NULL} to avoid sampling.
+
+Inserts \code{\link[xpectr:strip]{smpl()}} in the generated tests when sampling was used. A seed is
+set internally, setting \code{sample.kind} as \code{"Rounding"} to ensure compatibility with R versions
+\code{< 3.6.0}.
+
+The order of the elements/rows is kept intact. No replacement is used, why no oversampling will
+take place.
+
+When testing a big data frame, sampling the rows can help keep the test files somewhat readable.}
 
 \item{out}{Either "insert" or "return".
 
