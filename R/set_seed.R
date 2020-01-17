@@ -10,6 +10,7 @@
 #' @param ... Named arguments to \code{\link[base:set.seed]{set.seed()}}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @author R. Mark Sharp
+#' @export
 #' @details
 #'  Initially contributed by R. Mark Sharp (github: @@rmsharp).
 set_seed <- function(seed = 42, ...) {

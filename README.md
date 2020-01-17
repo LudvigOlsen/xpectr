@@ -33,6 +33,7 @@ Note: `gxs` stands for `generate expectations`.
   - `strip()`
   - `strip_msg()`
   - `smpl()`
+  - `set_seed()`
   - `prepare_insertion()`
   - `capture_side_effects()`
   - `capture_parse_eval_side_effects()`
@@ -61,6 +62,11 @@ NOTE: This won’t work on CRAN before it is released there.
 ``` r
 library(xpectr)
 library(testthat)
+
+# Set a seed
+# When R > 3.6.0 it sets sampling.kind to "Rounding" to make
+# tests compatible with previous versions of R
+set_seed(42)
 ```
 
 ``` r

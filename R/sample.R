@@ -26,6 +26,7 @@
 #'  The seed is set with \code{sample.kind = "Rounding"}
 #'  for compatibility with R versions \code{< 3.6.0}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @export
 #' @examples
 #' # Attach packages
 #' library(xpectr)
