@@ -11,17 +11,17 @@ dputSelectedAddin(selection = NULL, insert = TRUE, indentation = 0)
 
 E.g. \code{"stop('This gives an expect_error test')"}.
 
-N.B. Mainly intended for testing the addin programmatically.}
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
 
 \item{insert}{Whether to insert the expectations via
 \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
 or return them. (Logical)
 
-N.B. Mainly intended for testing the addin programmatically.}
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
 
 \item{indentation}{Indentation of the selection. (Numeric)
 
-N.B. Mainly intended for testing the addin programmatically.}
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
 }
 \value{
 Inserts the output of running
@@ -58,6 +58,13 @@ Press \code{Apply}.
 Press \code{Execute}.
 }
 }
+\seealso{
+Other addins: 
+\code{\link{assertCollectionAddin}()},
+\code{\link{insertExpectationsAddin}()},
+\code{\link{wrapStringAddin}()}
+}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{addins}

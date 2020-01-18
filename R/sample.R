@@ -18,7 +18,7 @@
 #' @param data Vector or data frame. (Logical)
 #' @param n Number of elements/rows to sample.
 #'
-#'  N.B. No replacement is used, why \code{n >} the number of elements/rows in \code{data} won't
+#'  \strong{N.B.} No replacement is used, why \code{n >} the number of elements/rows in \code{data} won't
 #'  perform oversampling.
 #' @param keep_order Whether to keep the order of the elements. (Logical)
 #' @param seed Seed to use.

@@ -10,6 +10,7 @@
 #'  This makes it easy for a user to create their own addin without the comments.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
+#' @family addins
 #' @return Inserts the following (excluding the \code{----}):
 #'
 #'  \code{----}

@@ -39,6 +39,7 @@ devtools::install_github("ludvigolsen/xpectr")
 Note: `gxs` stands for `generate expectations`.
 
 * `gxs_selection()` 
+* `gxs_function()` 
 * `strip()`
 * `strip_msg()`
 * `smpl()`
@@ -200,15 +201,83 @@ expect_error(
   fixed = TRUE)
 ```
 
-### wrapStringAddin()
+### `gxs_function()`
+
+Based on a set of supplied values for each function argument, a set of `testthat` `expect_*` statements are generated.
+
+The first value supplied for an argument is considered the _valid baseline_ value. For each argument, we create tests for each of the supplied values, where the other arguments have their baseline value. It automatically adds `NULL` to the list of values to check for each argument.
+
+```{r eval=FALSE}
+# Define a function with arguments
+fn <- function(x, y, z){
+  if (x>3) stop("'x' > 3")
+  if (y<0) warning("'y'<0")
+  if (z==10) message("'z' was 10!")
+  x + y + z
+}
+
+# Create tests for the function
+# Note: We currently need to specify the list of arguments
+# in the function call
+gxs_function(fn = fn,
+             args_values = list(
+               "x" = list(2, 4, NA),
+               "y" = list(0,-1),
+               "z" = list(5, 10, 15)
+             ))
+
+# Inserts the following tests:
+
+expect_error(
+  xpectr::strip_msg(fn(x = 4, y = 0, z = 5)),
+  xpectr::strip("'x' > 3"),
+  fixed = TRUE)
+expect_error(
+  xpectr::strip_msg(fn(x = NA, y = 0, z = 5)),
+  xpectr::strip("missing value where TRUE/FALSE needed"),
+  fixed = TRUE)
+expect_warning(
+  xpectr::strip_msg(fn(x = 2, y = -1, z = 5)),
+  xpectr::strip("'y'<0"),
+  fixed = TRUE)
+expect_message(
+  xpectr::strip_msg(fn(x = 2, y = 0, z = 10)),
+  xpectr::strip("'z' was 10!\n"),
+  fixed = TRUE)
+expect_equal(
+  fn(x = 2, y = 0, z = 15),
+  17,
+  tolerance = 1e-4)
+expect_equal(
+  fn(x = 2, y = 0, z = 5),
+  7,
+  tolerance = 1e-4)
+expect_error(
+  xpectr::strip_msg(fn(x = NULL, y = 0, z = 5)),
+  xpectr::strip("argument is of length zero"),
+  fixed = TRUE)
+expect_error(
+  xpectr::strip_msg(fn(x = 2, y = NULL, z = 5)),
+  xpectr::strip("argument is of length zero"),
+  fixed = TRUE)
+expect_error(
+  xpectr::strip_msg(fn(x = 2, y = 0, z = NULL)),
+  xpectr::strip("argument is of length zero"),
+  fixed = TRUE)
+```
+
+
+### `wrapStringAddin()`
 
 This addin splits long strings and wraps them with `paste0()`.
 
-```{r}
+```{r eval=FALSE}
 wrapStringAddin("This is a fairly long sentence that we would very very much like to make shorter in our test file!")
 
 # Inserts the following:
 
 paste0("This is a fairly long sentence that we would very very much ",
-       "like to make shorter in our test file!")```
+       "like to make shorter in our test file!")
+
+```
 

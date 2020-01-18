@@ -23,15 +23,15 @@
 #'
 #'  E.g. \code{"stop('This gives an expect_error test')"}.
 #'
-#'  N.B. Mainly intended for testing the addin programmatically.
+#'  \strong{N.B.} Mainly intended for testing the addin programmatically.
 #' @param indentation Indentation of the selection. (Numeric)
 #'
-#'  N.B. Mainly intended for testing the addin programmatically.
+#'  \strong{N.B.} Mainly intended for testing the addin programmatically.
 #' @param insert Whether to insert the expectations via
 #'  \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
 #'  or return them. (Logical)
 #'
-#'  N.B. Mainly intended for testing the addin programmatically.
+#'  \strong{N.B.} Mainly intended for testing the addin programmatically.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family expectation generators
 #' @family addins

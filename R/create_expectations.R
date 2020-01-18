@@ -28,8 +28,12 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 
 
   if (is.null(name)) {
-    name <- deparse(substitute(data))
+    name <- trimws(deparse(substitute(data)))
   }
+
+  # Dimension expectations
+  # NOTE: Must come before sampling!
+  dim_expectation <- create_dim_expectation(data, name)
 
   # Whether to sample data
   sample_data <- !is.null(sample_n) && nrow(data) > sample_n
@@ -75,7 +79,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 
   # Append name expectation
   name_expectation <- create_name_expectation(data, name)
-  expectations <- c(expectations, name_expectation)
+  expectations <- c(expectations, name_expectation, dim_expectation)
 
   null_indices <- get_null_indices(expectations)
   if (length(null_indices) > 0) {
@@ -128,8 +132,12 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
 
 
   if (is.null(name)) {
-    name <- deparse(substitute(data))
+    name <- trimws(deparse(substitute(data)))
   }
+
+  # Create length expectation
+  # NOTE: Must be done before sampling!
+  length_expectation <- create_length_expectation(data, name)
 
   # Whether to sample data
   sample_data <- !is.null(sample_n) && length(data) > sample_n
@@ -200,6 +208,8 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
       )
     )
   }
+
+  expectations <- c(expectations, length_expectation)
 
   # Note: as list(1,2,3)[-integer()] returns and empty list
   # We must check if there's a NULL first
@@ -321,6 +331,32 @@ create_name_expectation <- function(data, name) {
     y = y,
     add_tolerance = FALSE,
     add_fixed = TRUE
+  )
+}
+
+# Does not work for all types of data!
+# Use for data frames only for now!
+create_dim_expectation <- function(data, name) {
+  x <- paste("dim(", name, ")")
+  y <- capture.output(dput(dim(data)))
+  create_expect_equal(
+    x = x,
+    y = y,
+    add_tolerance = FALSE,
+    add_fixed = FALSE
+  )
+}
+
+# Does not work for all types of data!
+# Use for data frames only for now!
+create_length_expectation <- function(data, name) {
+  x <- paste("length(", name, ")")
+  y <- capture.output(dput(length(data)))
+  create_expect_equal(
+    x = x,
+    y = y,
+    add_tolerance = FALSE,
+    add_fixed = FALSE
   )
 }
 

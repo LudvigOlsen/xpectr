@@ -15,11 +15,11 @@ wrapStringAddin(
 \arguments{
 \item{selection}{String of code. (Character)
 
-N.B. Mainly intended for testing the addin programmatically.}
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
 
 \item{indentation}{Indentation of the selection. (Numeric)
 
-N.B. Mainly intended for testing the addin programmatically.}
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
 
 \item{every_n}{Number of characters per split.
 
@@ -27,7 +27,7 @@ If NULL, the following is used to calculate the string width:
 
 \code{max(min(80 - indentation, 70), 50)}
 
-N.B. Strings shorter than \code{every_n + tolerance} will not be wrapped.}
+\strong{N.B.} Strings shorter than \code{every_n + tolerance} will not be wrapped.}
 
 \item{tolerance}{Tolerance. Number of characters.
 
@@ -39,7 +39,7 @@ will not be wrapped.}
 \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
 or return it. (Logical)
 
-N.B. Mainly intended for testing the addin programmatically.}
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
 }
 \value{
 Inserts the following (with newlines and correct indentation):
@@ -72,6 +72,13 @@ Press \code{Apply}.
 Press \code{Execute}.
 }
 }
+\seealso{
+Other addins: 
+\code{\link{assertCollectionAddin}()},
+\code{\link{dputSelectedAddin}()},
+\code{\link{insertExpectationsAddin}()}
+}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{addins}

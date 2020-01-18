@@ -54,6 +54,13 @@ Press \code{Apply}.
 Press \code{Execute}.
 }
 }
+\seealso{
+Other addins: 
+\code{\link{dputSelectedAddin}()},
+\code{\link{insertExpectationsAddin}()},
+\code{\link{wrapStringAddin}()}
+}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{addins}

@@ -11,17 +11,17 @@ insertExpectationsAddin(selection = NULL, insert = TRUE, indentation = 0)
 
 E.g. \code{"stop('This gives an expect_error test')"}.
 
-N.B. Mainly intended for testing the addin programmatically.}
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
 
 \item{insert}{Whether to insert the expectations via
 \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
 or return them. (Logical)
 
-N.B. Mainly intended for testing the addin programmatically.}
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
 
 \item{indentation}{Indentation of the selection. (Numeric)
 
-N.B. Mainly intended for testing the addin programmatically.}
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
 }
 \value{
 Inserts \code{\link[testthat:expect_equal]{testthat::expect_*}}
@@ -71,7 +71,13 @@ Press \code{Execute}.
 }
 \seealso{
 Other expectation generators: 
+\code{\link{gxs_function}()},
 \code{\link{gxs_selection}()}
+
+Other addins: 
+\code{\link{assertCollectionAddin}()},
+\code{\link{dputSelectedAddin}()},
+\code{\link{wrapStringAddin}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

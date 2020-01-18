@@ -21,7 +21,8 @@ test_that("expectation are created properly with create_expectations_data_frame(
     "expect_equal(\n  df1[[\"b\"]],\n  c(\"a\", \"f\", \"g\", \"s\"),\n  fixed = TRUE)",
     paste0("expect_equal(\n  df1[[\"f\"]],\n  structure(1:4, .Label = c",
            "(\"1\", \"2\", \"3\", \"4\"), class = \"factor\"))"),
-    "expect_equal(\n  names( df1 ),\n  c(\"a\", \"b\", \"c\", \"d\", \"f\"),\n  fixed = TRUE)"
+    "expect_equal(\n  names( df1 ),\n  c(\"a\", \"b\", \"c\", \"d\", \"f\"),\n  fixed = TRUE)",
+    "expect_equal(\n  dim( df1 ),\n  4:5)"
   )
   expect_equal(
     expts,
@@ -46,7 +47,8 @@ test_that("expectation are created properly with create_expectations_vector()", 
   # Vec 1
   expect_equal(
     create_expectations_vector(vec_1),
-    list("expect_equal(\n  vec_1,\n  c(1, 2, 3, 4),\n  tolerance = 1e-4)")
+    list("expect_equal(\n  vec_1,\n  c(1, 2, 3, 4),\n  tolerance = 1e-4)",
+         "expect_equal(\n  length( vec_1 ),\n  4L)")
   )
   expect_equal(
     vec_1,
@@ -55,14 +57,14 @@ test_that("expectation are created properly with create_expectations_vector()", 
   )
 
   # Vec 2
-  create_expectations_vector(vec_2)
   expect_equal(
     create_expectations_vector(vec_2),
     list(
       "expect_equal(\n  vec_2[[\"a\"]],\n  10,\n  tolerance = 1e-4)",
       "expect_equal(\n  vec_2[[\"b\"]],\n  20,\n  tolerance = 1e-4)",
       "expect_equal(\n  vec_2[[\"c\"]],\n  30,\n  tolerance = 1e-4)",
-      "expect_equal(\n  names( vec_2 ),\n  c(\"a\", \"b\", \"c\"),\n  fixed = TRUE)"
+      "expect_equal(\n  names( vec_2 ),\n  c(\"a\", \"b\", \"c\"),\n  fixed = TRUE)",
+      "expect_equal(\n  length( vec_2 ),\n  3L)"
     )
   )
   expect_equal(names(vec_2), c("a", "b", "c"))
@@ -82,7 +84,8 @@ test_that("expectation are created properly with create_expectations_vector()", 
     "expect_equal(\n  vec_3[[\"c3\"]],\n  30,\n  tolerance = 1e-4)",
     paste0("expect_equal(\n  names( vec_3 ),\n  c(\"a1\", \"a2\", \"a3",
            "\", \"b1\", \"b2\", \"b3\", \"c1\", \"c2\", \"c3\"),\n  fixed",
-           " = TRUE)")
+           " = TRUE)"),
+    "expect_equal(\n  length( vec_3 ),\n  9L)"
   )
   expect_equal(
     create_expectations_vector(vec_3),
@@ -102,7 +105,8 @@ test_that("expectation are created properly with create_expectations_vector()", 
     "expect_equal(\n  vec_4[[\"c2\"]],\n  3,\n  tolerance = 1e-5)",
     "expect_equal(\n  vec_4[[\"c3\"]],\n  30,\n  tolerance = 1e-5)",
     paste0("expect_equal(\n  names( vec_4 ),\n  c(\"a1\", \"a2\", \"a3",
-         "\", \"b1\", \"b2\", \"b3\", \"c1\", \"c2\", \"c3\"),\n  fixed = TRUE)")
+         "\", \"b1\", \"b2\", \"b3\", \"c1\", \"c2\", \"c3\"),\n  fixed = TRUE)"),
+    "expect_equal(\n  length( vec_4 ),\n  9L)"
 
   )
   expect_equal(
@@ -118,7 +122,8 @@ test_that("expectation are created properly with create_expectations_vector()", 
       "expect_equal(\n  vec_5[[\"b\"]],\n  list(20, 1, 3))",
       "expect_equal(\n  vec_5[[\"c\"]],\n  list(2, 3, 30))",
       paste0("expect_equal(\n  names( vec_5 ),\n  c(\"a\", \"b\", \"c\"),",
-             "\n  fixed = TRUE)")
+             "\n  fixed = TRUE)"),
+      "expect_equal(\n  length( vec_5 ),\n  3L)"
     )
   expect_equal(
     create_expectations_vector(vec_5),
@@ -128,7 +133,8 @@ test_that("expectation are created properly with create_expectations_vector()", 
 
   # vec_6
   exp_vec_6 <- list(paste0("expect_equal(\n  vec_6,\n  list(a = list(10, 2, 4), b = lis",
-                           "t(20, 1, 3), list(2, 3, 30)))"))
+                           "t(20, 1, 3), list(2, 3, 30)))"),
+                    "expect_equal(\n  length( vec_6 ),\n  3L)")
   expect_equal(
     create_expectations_vector(vec_6),
     exp_vec_6
@@ -138,7 +144,8 @@ test_that("expectation are created properly with create_expectations_vector()", 
   # vec_7
   expect_equal(
     create_expectations_vector(vec_7),
-    list("expect_equal(\n  vec_7,\n  list(5, 6, 7, 8))")
+    list("expect_equal(\n  vec_7,\n  list(5, 6, 7, 8))",
+         "expect_equal(\n  length( vec_7 ),\n  4L)")
   )
   expect_equal(vec_7, list(5, 6, 7, 8))
 })
@@ -208,7 +215,8 @@ test_that("expectations are created returned by insertExpectationsAddin()", {
            "7410342283547, 0.719355837674811, 0.00788473873399198, 0.375",
            "489964615554, 0.00157055421732366),\n  tolerance = 1e-4)"),
     paste0("expect_equal(\n  names( long_df ),\n  c(\"a\", \"b\"),\n  f",
-           "ixed = TRUE)")),
+           "ixed = TRUE)"),
+    "expect_equal(\n  dim( long_df ),\n  c(40L, 2L))"),
     fixed = TRUE)
 
   expect_equal(
@@ -223,7 +231,8 @@ test_that("expectations are created returned by insertExpectationsAddin()", {
                 "4211784349754, 0.390203467104584, 0.446969628101215, 0.83600",
                 "4259996116, 0.737595617771149, 0.811055141268298, 0.00394833",
                 "879545331, 0.832916080253199, 0.00733414688147604, 0.2076589",
-                "72823992, 0.611778643447906),\n  tolerance = 1e-4)")),
+                "72823992, 0.611778643447906),\n  tolerance = 1e-4)"),
+         "expect_equal(\n  length( long_df$a ),\n  40L)"),
     fixed = TRUE)
 
 })

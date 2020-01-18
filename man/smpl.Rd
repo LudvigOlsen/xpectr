@@ -11,7 +11,7 @@ smpl(data, n, keep_order = TRUE, seed = 42)
 
 \item{n}{Number of elements/rows to sample.
 
-N.B. No replacement is used, why \code{n >} the number of elements/rows in \code{data} won't
+\strong{N.B.} No replacement is used, why \code{n >} the number of elements/rows in \code{data} won't
 perform oversampling.}
 
 \item{keep_order}{Whether to keep the order of the elements. (Logical)}
