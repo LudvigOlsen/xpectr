@@ -75,6 +75,12 @@ split_string_every <- function(string, per = 60) {
 # Split long string into elements in paste0
 split_to_paste0 <- function(string, per = 60, tolerance = 10, spaces = 2) {
 
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_string(x = string, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
   # We only want to split it if it is too long
   if (nchar(string) > per + tolerance) {
     splits <- split_string_every(paste0(string))

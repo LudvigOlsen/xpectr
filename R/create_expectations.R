@@ -6,7 +6,8 @@
 
 create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
                                            sample_n = 30,
-                                           tolerance = "1e-4") {
+                                           tolerance = "1e-4",
+                                           add_comments = TRUE) {
 
 
 ##  .................. #< 2271fda988ae80e314ffc80ad1364070 ># ..................
@@ -20,6 +21,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     add = assert_collection
   )
   checkmate::assert_string(x = tolerance, add = assert_collection)
+  checkmate::assert_flag(x = add_comments, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
 
 
@@ -31,9 +33,11 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     name <- trimws(deparse(substitute(data)))
   }
 
-  # Dimension expectations
-  # NOTE: Must come before sampling!
+  # Extra expectations
+  # NOTE: Some must come before sampling!
+  name_expectation <- create_name_expectation(data, name)
   dim_expectation <- create_dim_expectation(data, name)
+  group_key_names_expectation <- create_group_key_names_expectation(data, name)
 
   # Whether to sample data
   sample_data <- !is.null(sample_n) && nrow(data) > sample_n
@@ -46,7 +50,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     }
 
   # Create expect_equal expectations
-  expectations <- plyr::llply(colnames(data), function(col_name) {
+  column_expectations <- plyr::llply(colnames(data), function(col_name) {
     # Get current column
     current_col <- data[[col_name]]
     if (is.list(current_col)) {
@@ -77,11 +81,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
                         tolerance = tolerance)
   })
 
-  # Append name expectation
-  name_expectation <- create_name_expectation(data, name)
-  expectations <- c(expectations, name_expectation, dim_expectation)
-
-  null_indices <- get_null_indices(expectations)
+  null_indices <- get_null_indices(column_expectations)
   if (length(null_indices) > 0) {
 
     # Warn about skipped elements
@@ -94,8 +94,30 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     ))
 
     # Remove NULLS
-    expectations <- expectations[-null_indices]
+    column_expectations <- column_expectations[-null_indices]
   }
+
+  # Collect expectations and add comments
+  expectations <-
+    c(
+      create_test_comment(name, section = "intro",
+                          indentation = indentation,
+                          create_comment = add_comments),
+      create_test_comment("column values", indentation = indentation,
+                          create_comment = add_comments),
+      column_expectations,
+      create_test_comment("column names", indentation = indentation,
+                          create_comment = add_comments),
+      name_expectation,
+      create_test_comment("dimensions", indentation = indentation,
+                          create_comment = add_comments),
+      dim_expectation,
+      create_test_comment("group keys", indentation = indentation,
+                          create_comment = add_comments),
+      group_key_names_expectation,
+      create_test_comment(name, section = "outro", indentation = indentation,
+                          create_comment = add_comments)
+    )
 
   expectations
 }
@@ -108,7 +130,8 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 # Only split into multiple tests when all elements are named
 create_expectations_vector <- function(data, name = NULL, indentation = 0,
                                        sample_n = 30,
-                                       tolerance = "1e-4") {
+                                       tolerance = "1e-4",
+                                       add_comments = TRUE) {
 
 
 ##  .................. #< 00dc0af83dcb4c3bb7b5e04a48b8bfbb ># ..................
@@ -122,10 +145,10 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     add = assert_collection
   )
   checkmate::assert_string(x = tolerance, add = assert_collection)
+  checkmate::assert_flag(x = add_comments, add = assert_collection)
   checkmate::assert_number(x = indentation, lower = 0,
                            add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-
 
 ##  .................. #< fe958b30a0397775f7e311bcff15a411 ># ..................
 ##  Create expectations                                                     ####
@@ -158,7 +181,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     length(data) == length(element_names)) {
 
     # Create expect_equal expectations
-    expectations <- plyr::llply(element_names, function(elem_name) {
+    value_expectations <- plyr::llply(element_names, function(elem_name) {
       # Get current column
       current_elem <- data[[elem_name]]
       # Left side of expectation
@@ -185,9 +208,6 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
                           tolerance = tolerance)
     })
 
-    # Append name expectation
-    name_expectation <- create_name_expectation(data, name)
-    expectations <- c(expectations, name_expectation)
   } else {
     x <- name
     if (isTRUE(sample_data)){
@@ -198,7 +218,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     # we collapse them to one string
     y <- collapse_strings(y)
 
-    expectations <- list(
+    value_expectations <- list(
       create_expect_equal(
         x, y,
         add_tolerance = is.numeric(data),
@@ -209,11 +229,9 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     )
   }
 
-  expectations <- c(expectations, length_expectation)
-
   # Note: as list(1,2,3)[-integer()] returns and empty list
   # We must check if there's a NULL first
-  null_indices <- get_null_indices(expectations)
+  null_indices <- get_null_indices(value_expectations)
   if (length(null_indices) > 0) {
 
     # Warn about skipped elements
@@ -225,8 +243,31 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     ))
 
     # Remove NULLS
-    expectations <- expectations[-null_indices]
+    value_expectations <- value_expectations[-null_indices]
   }
+
+  # Create name expectation
+  if (isTRUE(sample_data)){
+    sampled_name <- paste0("xpectr::smpl(", name, ", n = ", sample_n, ")")
+  } else sampled_name <- name
+  name_expectation <- create_name_expectation(data, sampled_name)
+
+  expectations <-
+    c(
+      create_test_comment(name, section = "intro", indentation = indentation,
+                          create_comment = add_comments),
+      create_test_comment("values", indentation = indentation,
+                          create_comment = add_comments),
+      value_expectations,
+      create_test_comment("names", indentation = indentation,
+                          create_comment = add_comments),
+      name_expectation,
+      create_test_comment("length", indentation = indentation,
+                          create_comment = add_comments),
+      length_expectation,
+      create_test_comment(name, section = "outro", indentation = indentation,
+                          create_comment = add_comments)
+    )
 
   expectations
 }
@@ -236,7 +277,9 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
 #   Create expectations side effects                                        ####
 
 
-create_expectations_side_effect <- function(side_effects, name = NULL, indentation = 0, strip = TRUE) {
+create_expectations_side_effect <- function(side_effects, name = NULL,
+                                            indentation = 0, strip = TRUE,
+                                            add_comments = TRUE) {
 
 
 ##  .................. #< cdf3aa2ed9d644f88940281a6a5538ac ># ..................
@@ -262,6 +305,9 @@ create_expectations_side_effect <- function(side_effects, name = NULL, indentati
   )
   checkmate::assert_flag(
     x = strip, add = assert_collection
+  )
+  checkmate::assert_flag(
+    x = add_comments, add = assert_collection
   )
   checkmate::reportAssertions(assert_collection)
 
@@ -314,7 +360,16 @@ create_expectations_side_effect <- function(side_effects, name = NULL, indentati
     }
   }
 
-  expectations
+  # TODO add expectation of side effect counts (for warnings and messages at least)
+  expectations <- c(
+    create_test_comment(name, section = "intro", indentation = indentation,
+                        create_comment = add_comments),
+    create_test_comment("side effects", indentation = indentation,
+                        create_comment = add_comments),
+    expectations,
+    create_test_comment(name, section = "outro", indentation = indentation,
+                        create_comment = add_comments)
+  )
 }
 
 
@@ -357,6 +412,17 @@ create_length_expectation <- function(data, name) {
     y = y,
     add_tolerance = FALSE,
     add_fixed = FALSE
+  )
+}
+
+create_group_key_names_expectation <- function(data, name) {
+  x <- paste("colnames(dplyr::group_keys(", name, "))")
+  y <- capture.output(dput(colnames(dplyr::group_keys(data))))
+  create_expect_equal(
+    x = x,
+    y = y,
+    add_tolerance = FALSE,
+    add_fixed = TRUE
   )
 }
 
@@ -449,4 +515,61 @@ create_expect_side_effect <- function(x, y,
     "fixed = TRUE",
     ")"
   )
+}
+
+
+#   __________________ #< ff3057d67f7da6a3155f5034c941f142 ># __________________
+#   Create comments                                                         ####
+
+create_test_comment <- function(what, section = "test",
+                                indentation = 0,
+                                create_comment = TRUE){
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_string(x = what, add = assert_collection)
+  checkmate::assert_count(x = indentation, add = assert_collection)
+  checkmate::assert_choice(x = section,
+                           choices = c("intro","outro","test"),
+                           add = assert_collection)
+  checkmate::assert_flag(x = create_comment, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  if (!isTRUE(create_comment)){
+    return(NULL)
+  }
+
+  if (indentation > 40){
+    warning("indentation > 40 characters is ignored.")
+    indentation <- 40
+  }
+
+  # Shorten too long calls from intro and outro comments
+  if (nchar(what) > 49 - indentation){
+    what <- paste0(substring(what, 1, 46 - indentation), "...")
+  }
+
+  # Create "   ####" string
+  multihashtags <- paste0(create_space_string(54 - indentation - nchar(what)),
+                          "####")
+
+  # We only quote in the intro and outro
+  quote_string <- ifelse(section == "test", "", "'")
+
+  if (section == "outro"){
+    comment <- paste0("## Finished testing ",
+                      quote_string, what, quote_string,
+                      multihashtags)
+  } else {
+    comment <- paste0("# Testing ", quote_string, what, quote_string)
+    if (section == "intro"){
+      comment <- paste0("#", comment,
+                        create_space_string(9),
+                        multihashtags,
+                        "\n",create_space_string(indentation),
+                        "## Initially generated by xpectr")
+    }
+  }
+
+  comment
 }

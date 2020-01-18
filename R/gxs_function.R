@@ -69,6 +69,7 @@ gxs_function <- function(fn,
                          tolerance = "1e-4",
                          envir = NULL,
                          sample_n = 30,
+                         add_comments = TRUE,
                          out = "insert"){
 
   # Check arguments ####
@@ -80,6 +81,7 @@ gxs_function <- function(fn,
   checkmate::assert_string(x = tolerance, add = assert_collection)
   checkmate::assert_choice(x = out, choices = c("insert", "return"), add = assert_collection)
   checkmate::assert_flag(x = strip, add = assert_collection)
+  checkmate::assert_flag(x = add_comments, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
@@ -111,6 +113,7 @@ gxs_function <- function(fn,
   if (is.null(envir)) envir <- parent.frame()
 
   expectations <- plyr::llply(fn_call_strings, function(string){
+    c(create_test_comment(string, create_comment = add_comments),
     gxs_selection(
       selection = string,
       indentation = indentation,
@@ -118,9 +121,19 @@ gxs_function <- function(fn,
       tolerance = tolerance,
       envir = envir,
       sample_n = sample_n,
+      add_comment = FALSE,
       out = "return"
-    )
+    ))
   }) %>% unlist(recursive = TRUE)
+
+  # Add comments
+  expectations <- c(create_test_comment(fn_name, section = "intro",
+                                        create_comment = add_comments),
+                    create_test_comment("different combinations of argument values",
+                                        create_comment = add_comments),
+                    expectations,
+                    create_test_comment(fn_name, section = "outro",
+                                        create_comment = add_comments))
 
   if (out == "insert")
     insert_code(expectations, prepare = TRUE, indentation = indentation)
