@@ -16,12 +16,14 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(x = data, add = assert_collection)
-  checkmate::assert_string(
-    x = name, min.chars = 1, null.ok = TRUE,
-    add = assert_collection
+  add_create_exps_checks(
+    collection = assert_collection,
+    name = name,
+    indentation = indentation,
+    tolerance = tolerance,
+    sample_n = sample_n,
+    add_comments = add_comments
   )
-  checkmate::assert_string(x = tolerance, add = assert_collection)
-  checkmate::assert_flag(x = add_comments, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
 
 
@@ -35,9 +37,9 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 
   # Extra expectations
   # NOTE: Some must come before sampling!
-  name_expectation <- create_name_expectation(data, name)
-  dim_expectation <- create_dim_expectation(data, name)
-  group_key_names_expectation <- create_group_key_names_expectation(data, name)
+  name_expectation <- create_name_expectation(data, name, indentation = indentation)
+  dim_expectation <- create_dim_expectation(data, name, indentation = indentation)
+  group_key_names_expectation <- create_group_key_names_expectation(data, name, indentation = indentation)
 
   # Whether to sample data
   sample_data <- !is.null(sample_n) && nrow(data) > sample_n
@@ -128,6 +130,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 
 
 # Only split into multiple tests when all elements are named
+# plus some other checks
 create_expectations_vector <- function(data, name = NULL, indentation = 0,
                                        sample_n = 30,
                                        tolerance = "1e-4",
@@ -140,14 +143,14 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
 
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_vector(x = data, add = assert_collection)
-  checkmate::assert_string(
-    x = name, min.chars = 1, null.ok = TRUE,
-    add = assert_collection
+  add_create_exps_checks(
+    collection = assert_collection,
+    name = name,
+    indentation = indentation,
+    tolerance = tolerance,
+    sample_n = sample_n,
+    add_comments = add_comments
   )
-  checkmate::assert_string(x = tolerance, add = assert_collection)
-  checkmate::assert_flag(x = add_comments, add = assert_collection)
-  checkmate::assert_number(x = indentation, lower = 0,
-                           add = assert_collection)
   checkmate::reportAssertions(assert_collection)
 
 ##  .................. #< fe958b30a0397775f7e311bcff15a411 ># ..................
@@ -160,7 +163,8 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
 
   # Create length expectation
   # NOTE: Must be done before sampling!
-  length_expectation <- create_length_expectation(data, name)
+  length_expectation <- create_length_expectation(data, name, indentation = indentation)
+  sublengths_expectation <- create_sum_sub_lengths_expectation(data, name, indentation = indentation)
 
   # Whether to sample data
   sample_data <- !is.null(sample_n) && length(data) > sample_n
@@ -175,10 +179,31 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
   # Get non-empty and non-NULL element names
   element_names <- get_element_names(data, remove_empty_names = TRUE)
 
+  # In order to establish whether we should test each element separately
+  # we first check if the elements are simple and have length 1
+
+  is_simple <-
+    checkmate::test_list(
+      as.list(data),
+      types = c(
+        "logical",
+        "integer",
+        "double",
+        "numeric",
+        "complex",
+        "atomic",
+        "function",
+        "null"
+      )
+    ) &&
+    !any(unlist(lapply(data, length)) > 1)
+
   # If all elements have names
   # We can test each individually
   if (length(element_names) > 0 &&
-    length(data) == length(element_names)) {
+      length(data) == length(element_names) &&
+      !isTRUE(is_simple)
+      ) {
 
     # Create expect_equal expectations
     value_expectations <- plyr::llply(element_names, function(elem_name) {
@@ -250,7 +275,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
   if (isTRUE(sample_data)){
     sampled_name <- paste0("xpectr::smpl(", name, ", n = ", sample_n, ")")
   } else sampled_name <- name
-  name_expectation <- create_name_expectation(data, sampled_name)
+  name_expectation <- create_name_expectation(data, sampled_name, indentation = indentation)
 
   expectations <-
     c(
@@ -265,6 +290,9 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
       create_test_comment("length", indentation = indentation,
                           create_comment = add_comments),
       length_expectation,
+      create_test_comment("sum of element lengths", indentation = indentation,
+                          create_comment = add_comments),
+      sublengths_expectation,
       create_test_comment(name, section = "outro", indentation = indentation,
                           create_comment = add_comments)
     )
@@ -299,15 +327,14 @@ create_expectations_side_effect <- function(side_effects, name = NULL,
     ),
     type = "named"
   )
-  checkmate::assert_string(
-    x = name, min.chars = 1, null.ok = TRUE,
-    add = assert_collection
+  add_create_exps_checks(
+    collection = assert_collection,
+    name = name,
+    indentation = indentation,
+    add_comments = add_comments
   )
   checkmate::assert_flag(
     x = strip, add = assert_collection
-  )
-  checkmate::assert_flag(
-    x = add_comments, add = assert_collection
   )
   checkmate::reportAssertions(assert_collection)
 
@@ -373,58 +400,9 @@ create_expectations_side_effect <- function(side_effects, name = NULL,
 }
 
 
-#   __________________ #< bccbc6fd9c7ff1b37cd1bcd884f72b0d ># __________________
-#   Utils                                                                   ####
+#   __________________ #< b3caa9bbc4f32ccc4aa583dfb8bc7a47 ># __________________
+#   Create expect equal                                                     ####
 
-
-# returns: expect_equal(names(name), c("a","b"))
-create_name_expectation <- function(data, name) {
-  x <- paste("names(", name, ")")
-  y <- capture.output(dput(names(data)))
-  create_expect_equal(
-    x = x,
-    y = y,
-    add_tolerance = FALSE,
-    add_fixed = TRUE
-  )
-}
-
-# Does not work for all types of data!
-# Use for data frames only for now!
-create_dim_expectation <- function(data, name) {
-  x <- paste("dim(", name, ")")
-  y <- capture.output(dput(dim(data)))
-  create_expect_equal(
-    x = x,
-    y = y,
-    add_tolerance = FALSE,
-    add_fixed = FALSE
-  )
-}
-
-# Does not work for all types of data!
-# Use for data frames only for now!
-create_length_expectation <- function(data, name) {
-  x <- paste("length(", name, ")")
-  y <- capture.output(dput(length(data)))
-  create_expect_equal(
-    x = x,
-    y = y,
-    add_tolerance = FALSE,
-    add_fixed = FALSE
-  )
-}
-
-create_group_key_names_expectation <- function(data, name) {
-  x <- paste("colnames(dplyr::group_keys(", name, "))")
-  y <- capture.output(dput(colnames(dplyr::group_keys(data))))
-  create_expect_equal(
-    x = x,
-    y = y,
-    add_tolerance = FALSE,
-    add_fixed = TRUE
-  )
-}
 
 create_expect_equal <- function(x, y,
                                 add_tolerance = FALSE,
@@ -462,6 +440,11 @@ create_expect_equal <- function(x, y,
     ")"
   )
 }
+
+
+#   __________________ #< 8045419dc30661aa4868754ca8a7a8fa ># __________________
+#   Create side effect expectation                                          ####
+
 
 create_expect_side_effect <- function(x, y,
                                       side_effect_type = "error",
@@ -572,4 +555,29 @@ create_test_comment <- function(what, section = "test",
   }
 
   comment
+}
+
+
+
+#   __________________ #< 3feae1f2a76409360ca8e7fa286cbdf9 ># __________________
+#   Common arg checks                                                       ####
+
+
+# Adds common checks to assert collection
+add_create_exps_checks <- function(collection,
+                                   name,
+                                   indentation = 0,
+                                   tolerance = "1e-4",
+                                   sample_n = 30,
+                                   add_comments = TRUE) {
+
+
+  checkmate::assert_string(
+    x = name, min.chars = 1, null.ok = TRUE,
+    add = collection
+  )
+  checkmate::assert_string(x = tolerance, add = collection)
+  checkmate::assert_flag(x = add_comments, add = collection)
+  checkmate::assert_count(x = indentation, add = collection)
+
 }

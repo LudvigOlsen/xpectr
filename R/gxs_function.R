@@ -26,7 +26,7 @@
 #' @param args_values The arguments and the values to create tests for.
 #'  Should be supplied as a named list of lists, like the following:
 #'
-#'  \code{args_values = list("x1" = list(\strong{1},2,3), "x2" = list(\strong{"a"},"b","c"))}
+#'  \code{args_values = list("x1" = list(1,2,3), "x2" = list("a","b","c"))}
 #'
 #'  The first value for each argument (referred to as the 'baseline' value) should be valid
 #'  (not throw an error/message/warning).
@@ -99,11 +99,10 @@ gxs_function <- function(fn,
   #   Each element in those are 1: list/c, 2: first element, 3: second element, etc.
   arg_call <- substitute(args_values)
 
-  if (!grepl("[\\(\\)]", deparse(arg_call), fixed = FALSE)){
+  if (!grepl("[\\(\\)]", collapse_strings(deparse(arg_call)), fixed = FALSE)){
     assert_collection$push("Please define the 'arg_values' list directly in the function call.")
     checkmate::reportAssertions(assert_collection)
   }
-
 
   # Generate function call fn(arg = value) strings
   fn_call_strings <- generate_function_strings(fn_name = fn_name,
@@ -121,7 +120,7 @@ gxs_function <- function(fn,
       tolerance = tolerance,
       envir = envir,
       sample_n = sample_n,
-      add_comment = FALSE,
+      add_comments = FALSE,
       out = "return"
     ))
   }) %>% unlist(recursive = TRUE)
@@ -176,7 +175,7 @@ generate_function_strings <- function(fn_name,
       deparse(av)
     }) %>% tibble::enframe(name = "index") %>%
       dplyr::mutate(arg_name = an,
-                    index = index - 1)
+                    index = .data$index - 1)
   }) %>% subset(index != 0)
 
   default_values <- tibbled_args_values %>%
@@ -224,7 +223,8 @@ generate_function_strings <- function(fn_name,
   function_call_strings <- combinations %>%
     dplyr::mutate(name_value = paste0(.data$arg_name," = ", .data$value)) %>%
     dplyr::group_by(.data$combination) %>%
-    dplyr::summarise(call_strings = paste0(fn_name,"(", paste0(name_value, collapse = ", "), ")")) %>%
+    dplyr::summarise(call_strings = paste0(
+      fn_name,"(", paste0(.data$name_value, collapse = ", "), ")")) %>%
     dplyr::pull(.data$call_strings) %>%
     unique()
 

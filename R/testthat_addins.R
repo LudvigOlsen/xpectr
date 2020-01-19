@@ -64,7 +64,8 @@
 #'  Press \code{Execute}.
 #'  }
 #' @importFrom utils capture.output head tail
-#' @importFrom rlang :=
+#' @importFrom rlang := .data
+#' @importFrom dplyr %>%
 insertExpectationsAddin <- function(selection = NULL, insert = TRUE, indentation = 0) {
 
 

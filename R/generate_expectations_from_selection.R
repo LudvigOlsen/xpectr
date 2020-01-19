@@ -45,6 +45,7 @@
 #'  systems. By stripping both the error message and the expected message of non-alphanumeric symbols,
 #'  we can avoid such failed tests.
 #' @param add_comments Whether to add comments. (Logical)
+#' @param envir Environment to evaluate in.
 #' @param out Either "insert" or "return".
 #'
 #'  \subsection{"insert" (Default)}{
