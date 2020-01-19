@@ -11,6 +11,7 @@ gxs_selection(
   tolerance = "1e-4",
   envir = NULL,
   sample_n = 30,
+  add_comments = TRUE,
   out = "insert"
 )
 }
@@ -32,6 +33,8 @@ we can avoid such failed tests.}
 
 \item{tolerance}{The tolerance for numeric tests as a string. (Character)}
 
+\item{envir}{Environment to evaluate in.}
+
 \item{sample_n}{The number of elements/rows to sample. Set to \code{NULL} to avoid sampling.
 
 Inserts \code{\link[xpectr:strip]{smpl()}} in the generated tests when sampling was used. A seed is
@@ -42,6 +45,8 @@ The order of the elements/rows is kept intact. No replacement is used, why no ov
 take place.
 
 When testing a big data frame, sampling the rows can help keep the test files somewhat readable.}
+
+\item{add_comments}{Whether to add comments. (Logical)}
 
 \item{out}{Either "insert" or "return".
 

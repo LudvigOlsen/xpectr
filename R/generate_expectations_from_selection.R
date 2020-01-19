@@ -44,6 +44,8 @@
 #'  Sometimes testthat tests have differences in punctuation and newlines on different
 #'  systems. By stripping both the error message and the expected message of non-alphanumeric symbols,
 #'  we can avoid such failed tests.
+#' @param add_comments Whether to add comments. (Logical)
+#' @param envir Environment to evaluate in.
 #' @param out Either "insert" or "return".
 #'
 #'  \subsection{"insert" (Default)}{
@@ -84,6 +86,7 @@ gxs_selection <- function(selection,
                           tolerance = "1e-4",
                           envir = NULL,
                           sample_n = 30,
+                          add_comments = TRUE,
                           out = "insert"){
 
   # Check arguments ####
@@ -92,6 +95,7 @@ gxs_selection <- function(selection,
   checkmate::assert_string(x = tolerance, add = assert_collection)
   checkmate::assert_choice(x = out, choices = c("insert", "return"), add = assert_collection)
   checkmate::assert_flag(x = strip, add = assert_collection)
+  checkmate::assert_flag(x = add_comments, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
@@ -111,7 +115,8 @@ gxs_selection <- function(selection,
     expectations <- create_expectations_side_effect(
       side_effects, name = selection,
       indentation = indentation,
-      strip = strip)
+      strip = strip,
+      add_comments = add_comments)
 
   } else {
 
@@ -135,12 +140,14 @@ gxs_selection <- function(selection,
       expectations <- create_expectations_data_frame(obj, name = selection,
                                                      indentation = indentation,
                                                      tolerance = tolerance,
-                                                     sample_n = sample_n)
+                                                     sample_n = sample_n,
+                                                     add_comments = add_comments)
     } else if (is.vector(obj)) {
       expectations <- create_expectations_vector(obj, name = selection,
                                                  indentation = indentation,
                                                  tolerance = tolerance,
-                                                 sample_n = sample_n)
+                                                 sample_n = sample_n,
+                                                 add_comments = add_comments)
     } else {
       stop("The selection is not of a currently supported class.")
     }
@@ -148,6 +155,9 @@ gxs_selection <- function(selection,
 
   if (out == "insert")
     insert_code(expectations, prepare = TRUE, indentation = indentation)
-  else
+  else {
     return(expectations)
+  }
+
+
 }

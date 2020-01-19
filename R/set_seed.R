@@ -1,5 +1,5 @@
 
-#' @title Set random seed
+#' @title Set random seed for unit tests
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
@@ -13,7 +13,7 @@
 #' @export
 #' @details
 #'  Initially contributed by R. Mark Sharp (github: @@rmsharp).
-set_seed <- function(seed = 42, ...) {
+set_test_seed <- function(seed = 42, ...) {
   if ((getRversion()$major == 3 &&
        getRversion()$minor >= 6) ||
       getRversion()$major > 3) {
