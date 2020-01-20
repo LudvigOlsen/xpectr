@@ -3,68 +3,90 @@
 #   __________________ #< bff1ce9ea40e521479e8d8cf57f1bc31 ># __________________
 #   Expectation creator wrappers                                            ####
 
+# Creates expect_equal
+create_equality_expectation <- function(data,
+                                        name,
+                                        prefix,
+                                        suffix,
+                                        add_tolerance = FALSE,
+                                        add_fixed = FALSE,
+                                        indentation = 0) {
 
-# returns: expect_equal(names(name), c("a","b"))
-create_name_expectation <- function(data, name, indentation = 0) {
-  x <- paste("names(", name, ")")
-  y <- capture.output(dput(names(data)))
+  # Create x
+  x <- paste0(prefix, name, suffix)
+  # Create y as string
+  y_string <- paste0(prefix, "data", suffix)
+
+  # Get current environment
+  current_envir <- sys.frame(which = sys.nframe())
+
+  # Evaluate y and capture its dput
+  y <- apply_capture(
+    string = y_string,
+    fn = dput,
+    envir = current_envir)
+
+  # Create test
   create_expect_equal(
     x = x,
     y = y,
-    add_tolerance = FALSE,
-    add_fixed = TRUE,
+    add_tolerance = add_tolerance,
+    add_fixed = add_fixed,
     spaces = indentation + 2
+  )
+}
+
+# returns: expect_equal(names(name), c("a","b"))
+create_name_expectation <- function(data, name, indentation = 0) {
+  create_equality_expectation(
+    data = data,
+    name = name,
+    prefix = "names(",
+    suffix = ")",
+    add_fixed = TRUE,
+    indentation = indentation
   )
 }
 
 # Does not work for all types of data!
 # Use for data frames only for now!
 create_dim_expectation <- function(data, name, indentation = 0) {
-  x <- paste("dim(", name, ")")
-  y <- capture.output(dput(dim(data)))
-  create_expect_equal(
-    x = x,
-    y = y,
-    add_tolerance = FALSE,
-    add_fixed = FALSE,
-    spaces = indentation + 2
+  create_equality_expectation(
+    data = data,
+    name = name,
+    prefix = "dim(",
+    suffix = ")",
+    indentation = indentation
   )
 }
 
-# Does not work for all types of data!
-# Use for data frames only for now!
 create_length_expectation <- function(data, name, indentation = 0) {
-  x <- paste("length(", name, ")")
-  y <- capture.output(dput(length(data)))
-  create_expect_equal(
-    x = x,
-    y = y,
-    add_tolerance = FALSE,
-    add_fixed = FALSE,
-    spaces = indentation + 2
+  create_equality_expectation(
+    data = data,
+    name = name,
+    prefix = "length(",
+    suffix = ")",
+    indentation = indentation
   )
 }
 
 create_group_key_names_expectation <- function(data, name, indentation = 0) {
-  x <- paste("colnames(dplyr::group_keys(", name, "))")
-  y <- capture.output(dput(colnames(dplyr::group_keys(data))))
-  create_expect_equal(
-    x = x,
-    y = y,
-    add_tolerance = FALSE,
+  create_equality_expectation(
+    data = data,
+    name = name,
+    prefix = "colnames(dplyr::group_keys(",
+    suffix = "))",
     add_fixed = TRUE,
-    spaces = indentation + 2
+    indentation = indentation
   )
 }
 
 create_sum_sub_lengths_expectation <- function(data, name, indentation = 0) {
-  x <- paste("sum(unlist(lapply(", name, ", length)))")
-  y <- capture.output(dput(sum(unlist(lapply(data, length)))))
-  create_expect_equal(
-    x = x,
-    y = y,
-    add_tolerance = FALSE,
-    add_fixed = FALSE,
-    spaces = indentation + 2
+  create_equality_expectation(
+    data = data,
+    name = name,
+    prefix = "sum(unlist(lapply(",
+    suffix = ", length)))",
+    indentation = indentation
   )
 }

@@ -121,16 +121,16 @@ expect_equal(
   tolerance = 1e-4)
 # Testing names
 expect_equal(
-  names( num_vec ),
+  names(num_vec),
   NULL,
   fixed = TRUE)
 # Testing length
 expect_equal(
-  length( num_vec ),
+  length(num_vec),
   10L)
 # Testing sum of element lengths
 expect_equal(
-  sum(unlist(lapply( num_vec , length))),
+  sum(unlist(lapply(num_vec, length))),
   10L)
 ## Finished testing 'num_vec'                                               ####
 ```
@@ -151,16 +151,16 @@ expect_equal(
   fixed = TRUE)
 # Testing names
 expect_equal(
-  names( char_vec ),
+  names(char_vec),
   NULL,
   fixed = TRUE)
 # Testing length
 expect_equal(
-  length( char_vec ),
+  length(char_vec),
   10L)
 # Testing sum of element lengths
 expect_equal(
-  sum(unlist(lapply( char_vec , length))),
+  sum(unlist(lapply(char_vec, length))),
   10L)
 ## Finished testing 'char_vec'                                              ####
 ```
@@ -181,16 +181,16 @@ expect_equal(
   tolerance = 1e-4)
 # Testing names
 expect_equal(
-  names( xpectr::smpl(long_vec, n = 30) ),
+  names(xpectr::smpl(long_vec, n = 30)),
   NULL,
   fixed = TRUE)
 # Testing length
 expect_equal(
-  length( long_vec ),
+  length(long_vec),
   40L)
 # Testing sum of element lengths
 expect_equal(
-  sum(unlist(lapply( long_vec , length))),
+  sum(unlist(lapply(long_vec, length))),
   40L)
 ## Finished testing 'long_vec'                                              ####
 ```
@@ -215,16 +215,16 @@ expect_equal(
   fixed = TRUE)
 # Testing column names
 expect_equal(
-  names( df ),
+  names(df),
   c("a", "b"),
   fixed = TRUE)
 # Testing dimensions
 expect_equal(
-  dim( df ),
+  dim(df),
   3:2)
 # Testing group keys
 expect_equal(
-  colnames(dplyr::group_keys( df )),
+  colnames(dplyr::group_keys(df)),
   "a",
   fixed = TRUE)
 ## Finished testing 'df'                                                    ####
@@ -343,14 +343,14 @@ expect_equal(
   17,
   tolerance = 1e-4)
 expect_equal(
-  names( fn(x = 2, y = 0, z = 15) ),
+  names(fn(x = 2, y = 0, z = 15)),
   NULL,
   fixed = TRUE)
 expect_equal(
-  length( fn(x = 2, y = 0, z = 15) ),
+  length(fn(x = 2, y = 0, z = 15)),
   1L)
 expect_equal(
-  sum(unlist(lapply( fn(x = 2, y = 0, z = 15) , length))),
+  sum(unlist(lapply(fn(x = 2, y = 0, z = 15), length))),
   1L)
 # Testing fn(x = 2, y = 0, z = 5)
 expect_equal(
@@ -358,14 +358,14 @@ expect_equal(
   7,
   tolerance = 1e-4)
 expect_equal(
-  names( fn(x = 2, y = 0, z = 5) ),
+  names(fn(x = 2, y = 0, z = 5)),
   NULL,
   fixed = TRUE)
 expect_equal(
-  length( fn(x = 2, y = 0, z = 5) ),
+  length(fn(x = 2, y = 0, z = 5)),
   1L)
 expect_equal(
-  sum(unlist(lapply( fn(x = 2, y = 0, z = 5) , length))),
+  sum(unlist(lapply(fn(x = 2, y = 0, z = 5), length))),
   1L)
 # Testing fn(x = NULL, y = 0, z = 5)
 expect_error(
