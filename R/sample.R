@@ -8,7 +8,7 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Sample a vector or data frame. Useful to reduce size of testthat \code{expect_*} tests.
+#'  Sample a vector, factor or data frame. Useful to reduce size of testthat \code{expect_*} tests.
 #'  Not intended for other purposes.
 #'
 #'  Wraps \code{\link[base:sample.int]{sample.int()}}. Data frames are sampled rowwise.
@@ -70,7 +70,7 @@ smpl <- function(data,
 
     data <- data[indices,]
 
-  } else if (is.vector(data)) {
+  } else if (is.vector(data) || is.factor(data)) {
     if (length(data) <= n) {
       if (isTRUE(keep_order))
         return(data)
@@ -88,7 +88,7 @@ smpl <- function(data,
     data <- data[indices]
 
   } else {
-    stop("Only vectors and data frames are currently supported.")
+    stop("Only vectors, factors and data frames are currently supported.")
   }
 
   data

@@ -1,7 +1,7 @@
 
 
 #   __________________ #< 2451d1703a5d7b006fa4e72e2dcc59ed ># __________________
-#   Create Expectations Data Frame                                          ####
+#   Create expectations data frame                                          ####
 
 
 create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
@@ -35,11 +35,26 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     name <- trimws(deparse(substitute(data)))
   }
 
-  # Extra expectations
+  # Create expectations
   # NOTE: Some must come before sampling!
-  name_expectation <- create_name_expectation(data, name, indentation = indentation)
-  dim_expectation <- create_dim_expectation(data, name, indentation = indentation)
-  group_key_names_expectation <- create_group_key_names_expectation(data, name, indentation = indentation)
+  class_expectation <- create_class_expectation(name = name,
+                                                data = data,
+                                                indentation = indentation)
+  names_expectation <- create_names_expectation(data = data, name = name,
+                                                indentation = indentation)
+  dim_expectation <- create_dim_expectation(data = data, name = name,
+                                            indentation = indentation)
+  column_types_expectation <- create_element_types_expectation(data = data,
+                                                               name = name,
+                                                               sample_n = sample_n,
+                                                               indentation = indentation)
+  column_classes_expectation <- create_element_classes_expectation(data = data,
+                                                                   name = name,
+                                                                   sample_n = sample_n,
+                                                                   indentation = indentation)
+  group_key_names_expectation <- create_group_key_names_expectation(data = data,
+                                                                    name = name,
+                                                                    indentation = indentation)
 
   # Whether to sample data
   sample_data <- !is.null(sample_n) && nrow(data) > sample_n
@@ -105,12 +120,21 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
       create_test_comment(name, section = "intro",
                           indentation = indentation,
                           create_comment = add_comments),
+      create_test_comment("class", indentation = indentation,
+                          create_comment = add_comments),
+      class_expectation,
       create_test_comment("column values", indentation = indentation,
                           create_comment = add_comments),
       column_expectations,
       create_test_comment("column names", indentation = indentation,
                           create_comment = add_comments),
-      name_expectation,
+      names_expectation,
+      create_test_comment("column classes", indentation = indentation,
+                          create_comment = add_comments),
+      column_classes_expectation,
+      create_test_comment("column types", indentation = indentation,
+                          create_comment = add_comments),
+      column_types_expectation,
       create_test_comment("dimensions", indentation = indentation,
                           create_comment = add_comments),
       dim_expectation,
@@ -161,8 +185,12 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     name <- trimws(deparse(substitute(data)))
   }
 
-  # Create length expectation
-  # NOTE: Must be done before sampling!
+  # Create expectations
+  # Without sampling
+  type_expectation <- create_type_expectation(name = name, type = typeof(data),
+                                              indentation = indentation)
+  class_expectation <- create_class_expectation(name = name, data = data,
+                                                indentation = indentation)
   length_expectation <- create_length_expectation(data, name, indentation = indentation)
   sublengths_expectation <- create_sum_sub_lengths_expectation(data, name, indentation = indentation)
 
@@ -205,13 +233,28 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
       !isTRUE(is_simple)
       ) {
 
+    element_types_expectation <-
+      create_element_types_expectation(
+        data = data,
+        name = name,
+        sample_n = sample_n,
+        indentation = indentation
+      )
+    element_classes_expectation <-
+      create_element_classes_expectation(
+        data = data,
+        name = name,
+        sample_n = sample_n,
+        indentation = indentation
+      )
+
     # Create expect_equal expectations
     value_expectations <- plyr::llply(element_names, function(elem_name) {
       # Get current column
       current_elem <- data[[elem_name]]
       # Left side of expectation
       x <- paste0(name, "[[\"", elem_name, "\"]]")
-      if (isTRUE(sample_data)){
+      if (isTRUE(sample_data)){ # TODO are the elements themselves sampled? is this correct????
         x <- paste0("xpectr::smpl(", x, ", n = ", sample_n, ")")
       }
       # Right side of expectation
@@ -271,28 +314,48 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     value_expectations <- value_expectations[-null_indices]
   }
 
-  # Create name expectation
+  # Create names expectation
   if (isTRUE(sample_data)){
     sampled_name <- paste0("xpectr::smpl(", name, ", n = ", sample_n, ")")
   } else sampled_name <- name
-  name_expectation <- create_name_expectation(data, sampled_name, indentation = indentation)
+  names_expectation <- create_names_expectation(data, sampled_name, indentation = indentation)
+
+  if (exists("element_types_expectation")){
+    element_types_classes_expectations <- c(
+      create_test_comment("element classes", indentation = indentation,
+                          create_comment = add_comments),
+      element_classes_expectation,
+      create_test_comment("element types", indentation = indentation,
+                          create_comment = add_comments),
+      element_types_expectation
+    )
+  } else {
+    element_types_classes_expectations <- NULL
+  }
 
   expectations <-
     c(
       create_test_comment(name, section = "intro", indentation = indentation,
                           create_comment = add_comments),
+      create_test_comment("class", indentation = indentation,
+                          create_comment = add_comments),
+      class_expectation,
+      create_test_comment("type", indentation = indentation,
+                          create_comment = add_comments),
+      type_expectation,
       create_test_comment("values", indentation = indentation,
                           create_comment = add_comments),
       value_expectations,
       create_test_comment("names", indentation = indentation,
                           create_comment = add_comments),
-      name_expectation,
+      names_expectation,
       create_test_comment("length", indentation = indentation,
                           create_comment = add_comments),
       length_expectation,
       create_test_comment("sum of element lengths", indentation = indentation,
                           create_comment = add_comments),
       sublengths_expectation,
+      element_types_classes_expectations,
       create_test_comment(name, section = "outro", indentation = indentation,
                           create_comment = add_comments)
     )
@@ -400,163 +463,92 @@ create_expectations_side_effect <- function(side_effects, name = NULL,
 }
 
 
-#   __________________ #< b3caa9bbc4f32ccc4aa583dfb8bc7a47 ># __________________
-#   Create expect equal                                                     ####
-
-
-create_expect_equal <- function(x, y,
-                                add_tolerance = FALSE,
-                                add_fixed = FALSE,
-                                spaces = 2,
-                                tolerance = "1e-4") {
-
-  # Create string of spaces
-  spaces_string <- create_space_string(n = spaces)
-
-  # Check that only one of the setting strings are specified
-  stop_if(isTRUE(add_tolerance) && isTRUE(add_fixed),
-          "Cannot add both 'tolerance' and 'fixed' setting.")
-
-  if (isTRUE(add_tolerance)) {
-    settings_string <- paste0(",\n", spaces_string,
-                              paste0("tolerance = ", tolerance))
-  } else if (isTRUE(add_fixed)) {
-    settings_string <- paste0(",\n", spaces_string, "fixed = TRUE")
-  }else {
-    settings_string <- ""
-  }
-
-  # In case a string has \n, \t, etc.
-  y <- escape_metacharacters(y)
-
-  paste0(
-    "expect_equal(\n",
-    spaces_string,
-    x,
-    ",\n",
-    spaces_string,
-    y,
-    settings_string,
-    ")"
-  )
-}
-
-
-#   __________________ #< 8045419dc30661aa4868754ca8a7a8fa ># __________________
-#   Create side effect expectation                                          ####
-
-
-create_expect_side_effect <- function(x, y,
-                                      side_effect_type = "error",
-                                      spaces = 2,
-                                      strip = TRUE) {
-  # Check arguments ####
-  assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_choice(
-    x = side_effect_type,
-    choices = c("error", "warning", "message"),
-    add = assert_collection
-  )
-  checkmate::assert_flag(
-    x = strip, add = assert_collection
-  )
-  checkmate::reportAssertions(assert_collection)
-  # End of argument checks ####
-
-  spaces_string <- create_space_string(n = spaces)
-
-  expect_fn <- dplyr::case_when(
-    side_effect_type == "error" ~ "expect_error",
-    side_effect_type == "warning" ~ "expect_warning",
-    side_effect_type == "message" ~ "expect_message",
-    TRUE ~ "" # Won't get here anyway
-  )
-
-  add_strip_msg <- function(x, strip) {
-    if (isTRUE(strip))
-      x <- paste0("xpectr::strip_msg(", x, ")")
-    x
-  }
-  add_strip <- function(x, strip) {
-    if (isTRUE(strip))
-      x <- paste0("xpectr::strip(", x, ")")
-    x
-  }
-
-  y <- escape_metacharacters(y)
-  y <- split_to_paste0(y, spaces = spaces)
-
-  paste0(
-    expect_fn, "(\n",
-    spaces_string,
-    add_strip_msg(x, strip = strip),
-    ",\n",
-    spaces_string,
-    add_strip(y, strip = strip),
-    ",\n",
-    spaces_string,
-    "fixed = TRUE",
-    ")"
-  )
-}
-
-
 #   __________________ #< ff3057d67f7da6a3155f5034c941f142 ># __________________
-#   Create comments                                                         ####
+#   Create expectations factor                                              ####
 
-create_test_comment <- function(what, section = "test",
-                                indentation = 0,
-                                create_comment = TRUE){
-  # Check arguments ####
+# Only split into multiple tests when all elements are named
+# plus some other checks
+create_expectations_factor <- function(data, name = NULL,
+                                       indentation = 0,
+                                       sample_n = 30,
+                                       tolerance = "1e-4",
+                                       add_comments = TRUE) {
+
+
+##  .................. #< c8abec0740b04c7d59fbaa30de451cb9 ># ..................
+##  Assert arguments                                                        ####
+
+
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_string(x = what, add = assert_collection)
-  checkmate::assert_count(x = indentation, add = assert_collection)
-  checkmate::assert_choice(x = section,
-                           choices = c("intro","outro","test"),
-                           add = assert_collection)
-  checkmate::assert_flag(x = create_comment, add = assert_collection)
+  checkmate::assert_factor(x = data, add = assert_collection)
+  add_create_exps_checks(
+    collection = assert_collection,
+    name = name,
+    indentation = indentation,
+    tolerance = tolerance,
+    sample_n = sample_n,
+    add_comments = add_comments
+  )
   checkmate::reportAssertions(assert_collection)
-  # End of argument checks ####
 
-  if (!isTRUE(create_comment)){
-    return(NULL)
+
+##  .................. #< 36893b0a8da49f8aca8d237642f5958f ># ..................
+##  Create expectations                                                     ####
+
+
+  if (is.null(name)) {
+    name <- trimws(deparse(substitute(data)))
   }
 
-  if (indentation > 40){
-    warning("indentation > 40 characters is ignored.")
-    indentation <- 40
-  }
+  # Without sampling
+  factor_expectation <- create_is_factor_expectation(name = name,
+                                                     indentation = indentation)
+  length_expectation <- create_length_expectation(data = data, name = name,
+                                                  indentation = indentation)
+  n_levels_expectation <- create_nlevels_expectation(data = data, name = name,
+                                                     indentation = indentation)
 
-  # Shorten too long calls from intro and outro comments
-  if (nchar(what) > 49 - indentation){
-    what <- paste0(substring(what, 1, 46 - indentation), "...")
-  }
+  # With sampling
+  value_expectations <- create_as_character_expectation(data = data,
+                                                        name = name,
+                                                        sample_n = sample_n,
+                                                        indentation = indentation)
+  levels_expectation <- create_levels_expectation(data = data, name = name,
+                                                  sample_n = sample_n,
+                                                  indentation = indentation)
+  names_expectation <- create_names_expectation(data = data,
+                                               name = name,
+                                               sample_n = sample_n,
+                                               indentation = indentation)
 
-  # Create "   ####" string
-  multihashtags <- paste0(create_space_string(54 - indentation - nchar(what)),
-                          "####")
+  expectations <-
+    c(
+      create_test_comment(name, section = "intro", indentation = indentation,
+                          create_comment = add_comments),
+      create_test_comment("is factor", indentation = indentation,
+                          create_comment = add_comments),
+      factor_expectation,
+      create_test_comment("values", indentation = indentation,
+                          create_comment = add_comments),
+      value_expectations,
+      create_test_comment("names", indentation = indentation,
+                          create_comment = add_comments),
+      names_expectation,
+      create_test_comment("length", indentation = indentation,
+                          create_comment = add_comments),
+      length_expectation,
+      create_test_comment("number of levels", indentation = indentation,
+                          create_comment = add_comments),
+      n_levels_expectation,
+      create_test_comment("levels", indentation = indentation,
+                          create_comment = add_comments),
+      levels_expectation,
+      create_test_comment(name, section = "outro", indentation = indentation,
+                          create_comment = add_comments)
+    )
 
-  # We only quote in the intro and outro
-  quote_string <- ifelse(section == "test", "", "'")
-
-  if (section == "outro"){
-    comment <- paste0("## Finished testing ",
-                      quote_string, what, quote_string,
-                      multihashtags)
-  } else {
-    comment <- paste0("# Testing ", quote_string, what, quote_string)
-    if (section == "intro"){
-      comment <- paste0("#", comment,
-                        create_space_string(9),
-                        multihashtags,
-                        "\n",create_space_string(indentation),
-                        "## Initially generated by xpectr")
-    }
-  }
-
-  comment
+  expectations
 }
-
 
 
 #   __________________ #< 3feae1f2a76409360ca8e7fa286cbdf9 ># __________________

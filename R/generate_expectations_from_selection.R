@@ -148,6 +148,12 @@ gxs_selection <- function(selection,
                                                  tolerance = tolerance,
                                                  sample_n = sample_n,
                                                  add_comments = add_comments)
+    } else if (is.factor(obj)) {
+      expectations <- create_expectations_factor(obj, name = selection,
+                                                 indentation = indentation,
+                                                 tolerance = tolerance,
+                                                 sample_n = sample_n,
+                                                 add_comments = add_comments)
     } else {
       stop("The selection is not of a currently supported class.")
     }
