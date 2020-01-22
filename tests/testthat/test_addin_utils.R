@@ -10,8 +10,6 @@ test_that("apply_capture() works as expected", {
   # Create vector
   a_vec <- c(1, 2, 3, 4)
 
-
-
   expect_equal(
     apply_capture("a_vec", dput, envir = current_envir),
     "c(1, 2, 3, 4)"
@@ -78,21 +76,21 @@ test_that("create_expect_equal() works as expected", {
   expect_equal(
     create_expect_equal(x = "cat", y = "c(1,2,3)",
                         spaces = 5, add_tolerance = FALSE),
-    "expect_equal(\n     cat,\n     c(1,2,3))"
+    "expect_equal(\n     cat,\n     c(1, 2, 3))"
   )
   expect_equal(
     create_expect_equal(x = "cat", y = "c(1,2,3)",
                         spaces = 3, add_tolerance = FALSE),
-    "expect_equal(\n   cat,\n   c(1,2,3))"
+    "expect_equal(\n   cat,\n   c(1, 2, 3))"
   )
   expect_equal(
     create_expect_equal(x = "cat", y = "c(1,2,3)",
                         spaces = 2, add_tolerance = TRUE),
-    "expect_equal(\n  cat,\n  c(1,2,3),\n  tolerance = 1e-4)"
+    "expect_equal(\n  cat,\n  c(1, 2, 3),\n  tolerance = 1e-4)"
   )
   expect_equal(
     create_expect_equal(x = "cat", y = "c(1,2,3)",
                         spaces = 2, add_fixed = TRUE),
-    "expect_equal(\n  cat,\n  c(1,2,3),\n  fixed = TRUE)"
+    "expect_equal(\n  cat,\n  c(1, 2, 3),\n  fixed = TRUE)"
   )
 })

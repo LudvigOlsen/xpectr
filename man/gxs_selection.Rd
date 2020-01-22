@@ -11,7 +11,8 @@ gxs_selection(
   tolerance = "1e-4",
   envir = NULL,
   sample_n = 30,
-  add_comments = TRUE,
+  add_wrapper_comments = TRUE,
+  add_test_comments = TRUE,
   out = "insert"
 )
 }
@@ -46,9 +47,11 @@ take place.
 
 When testing a big data frame, sampling the rows can help keep the test files somewhat readable.}
 
-\item{add_comments}{Whether to add comments. (Logical)}
+\item{add_wrapper_comments}{Whether to add intro and outro comments. (Logical)}
 
-\item{out}{Either "insert" or "return".
+\item{add_test_comments}{Whether to add comments for each test. (Logical)}
+
+\item{out}{Either \code{"insert"} or \code{"return"}.
 
 \subsection{"insert" (Default)}{
 Inserts the expectations via
@@ -72,7 +75,7 @@ it will create an \code{\link[testthat:expect_equal]{expect_equal}}
 test for each column, along with a test of the column names.
 
 Currently supports side effects (error, warnings, messages),
-data frames, and vectors.
+data frames, vectors, and factors.
 
 List columns in data frames (like nested tibbles) are currently skipped.
 

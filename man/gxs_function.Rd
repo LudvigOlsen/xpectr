@@ -13,7 +13,8 @@ gxs_function(
   tolerance = "1e-4",
   envir = NULL,
   sample_n = 30,
-  add_comments = TRUE,
+  add_wrapper_comments = TRUE,
+  add_test_comments = TRUE,
   out = "insert"
 )
 }
@@ -63,9 +64,11 @@ take place.
 
 When testing a big data frame, sampling the rows can help keep the test files somewhat readable.}
 
-\item{add_comments}{Whether to add comments. (Logical)}
+\item{add_wrapper_comments}{Whether to add intro and outro comments. (Logical)}
 
-\item{out}{Either "insert" or "return".
+\item{add_test_comments}{Whether to add comments for each test. (Logical)}
+
+\item{out}{Either \code{"insert"} or \code{"return"}.
 
 \subsection{"insert" (Default)}{
 Inserts the expectations via
@@ -90,7 +93,7 @@ create tests for each of the supplied values, where the other arguments
 have their baseline value.
 
 Currently, supported tests are of side effects (error, warnings, messages),
-data frames, and vectors. List columns in data frames (like nested tibbles) are skipped.
+data frames, vectors, and factors. List columns in data frames (like nested tibbles) are skipped.
 
 \strong{N.B.} This function is undergoing active development!
 }

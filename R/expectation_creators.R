@@ -182,8 +182,8 @@ create_sum_sub_lengths_expectation <- function(data, name, indentation = 0) {
   create_equality_expectation(
     data = data,
     name = name,
-    prefix = "sum(unlist(lapply(",
-    suffix = ", length)))",
+    prefix = "sum(xpectr::element_lengths(",
+    suffix = "))",
     indentation = indentation
   )
 }
@@ -274,8 +274,8 @@ create_element_types_expectation <- function(data, name,
 
   pref_suff <- add_smpl_string(
     condition = !is.null(sample_n) && length(data) > sample_n,
-    prefix = "unlist(lapply(",
-    suffix = ", typeof), use.names = FALSE)",
+    prefix = "xpectr::element_types(",
+    suffix = ")",
     sample_n = sample_n)
 
   create_equality_expectation(
@@ -298,8 +298,8 @@ create_element_classes_expectation <- function(data, name,
   # Note: length of data frame is ncol why this also works there
   pref_suff <- add_smpl_string(
     condition = !is.null(sample_n) && length(data) > sample_n,
-    prefix = "unlist(lapply(",
-    suffix = ", class), use.names = FALSE)",
+    prefix = "xpectr::element_classes(",
+    suffix = ")",
     sample_n = sample_n)
 
   create_equality_expectation(
@@ -320,7 +320,8 @@ create_expect_equal <- function(x, y,
                                 add_tolerance = FALSE,
                                 add_fixed = FALSE,
                                 spaces = 2,
-                                tolerance = "1e-4") {
+                                tolerance = "1e-4",
+                                wrap_elements = TRUE) {
 
   # Create string of spaces
   spaces_string <- create_space_string(n = spaces)
@@ -341,6 +342,13 @@ create_expect_equal <- function(x, y,
   # In case a string has \n, \t, etc.
   y <- escape_metacharacters(y)
 
+  # Wrap elements
+  if (isTRUE(wrap_elements)){
+    y <- wrap_elements_in_string(y, max_n = 65 - spaces,
+                                 indentation = spaces)
+  }
+
+
   paste0(
     "expect_equal(\n",
     spaces_string,
@@ -352,7 +360,6 @@ create_expect_equal <- function(x, y,
     ")"
   )
 }
-
 
 #   __________________ #< 644f57f5e60a7e987fa4035d2fa4dd47 ># __________________
 #   Create expect type                                                      ####
@@ -531,4 +538,26 @@ add_smpl_string <- function(condition, prefix="", suffix="", sample_n=NULL) {
     )
   }
   pref_suff
+}
+#   __________________ #< cfe8c57bf8bfa870149930c756c90bf2 ># __________________
+#   Wrap elements                                                           ####
+
+
+wrap_elements_in_string <- function(string, max_n = 60, indentation = 0){
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_string(x = string, add = assert_collection)
+  checkmate::assert_count(x = max_n, add = assert_collection)
+  checkmate::assert_count(x = indentation, add = assert_collection)
+  # checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # Reformat and wrap the string
+  spaces <- create_space_string(indentation + 2)
+  lines <- deparse(parse(text = string)[[1]], width.cutoff = max_n)
+  lines <- gsub("[[:blank:]]+", " ", lines)
+  lines <- trimws(lines, which = "both")
+  paste0(lines, collapse = paste0("\n", spaces))
 }

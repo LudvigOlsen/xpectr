@@ -16,7 +16,7 @@
 #'  test for each column, along with a test of the column names.
 #'
 #'  Currently supports side effects (error, warnings, messages),
-#'  data frames, and vectors.
+#'  data frames, vectors, and factors.
 #'
 #'  List columns in data frames (like nested tibbles) are currently skipped.
 #'
@@ -44,9 +44,10 @@
 #'  Sometimes testthat tests have differences in punctuation and newlines on different
 #'  systems. By stripping both the error message and the expected message of non-alphanumeric symbols,
 #'  we can avoid such failed tests.
-#' @param add_comments Whether to add comments. (Logical)
+#' @param add_wrapper_comments Whether to add intro and outro comments. (Logical)
+#' @param add_test_comments Whether to add comments for each test. (Logical)
 #' @param envir Environment to evaluate in.
-#' @param out Either "insert" or "return".
+#' @param out Either \code{"insert"} or \code{"return"}.
 #'
 #'  \subsection{"insert" (Default)}{
 #'  Inserts the expectations via
@@ -86,7 +87,8 @@ gxs_selection <- function(selection,
                           tolerance = "1e-4",
                           envir = NULL,
                           sample_n = 30,
-                          add_comments = TRUE,
+                          add_wrapper_comments = TRUE,
+                          add_test_comments = TRUE,
                           out = "insert"){
 
   # Check arguments ####
@@ -95,7 +97,8 @@ gxs_selection <- function(selection,
   checkmate::assert_string(x = tolerance, add = assert_collection)
   checkmate::assert_choice(x = out, choices = c("insert", "return"), add = assert_collection)
   checkmate::assert_flag(x = strip, add = assert_collection)
-  checkmate::assert_flag(x = add_comments, add = assert_collection)
+  checkmate::assert_flag(x = add_wrapper_comments, add = assert_collection)
+  checkmate::assert_flag(x = add_test_comments, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
@@ -116,7 +119,8 @@ gxs_selection <- function(selection,
       side_effects, name = selection,
       indentation = indentation,
       strip = strip,
-      add_comments = add_comments)
+      add_wrapper_comments = add_wrapper_comments,
+      add_test_comments = add_test_comments)
 
   } else {
 
@@ -141,19 +145,22 @@ gxs_selection <- function(selection,
                                                      indentation = indentation,
                                                      tolerance = tolerance,
                                                      sample_n = sample_n,
-                                                     add_comments = add_comments)
+                                                     add_wrapper_comments = add_wrapper_comments,
+                                                     add_test_comments = add_test_comments)
     } else if (is.vector(obj)) {
       expectations <- create_expectations_vector(obj, name = selection,
                                                  indentation = indentation,
                                                  tolerance = tolerance,
                                                  sample_n = sample_n,
-                                                 add_comments = add_comments)
+                                                 add_wrapper_comments = add_wrapper_comments,
+                                                 add_test_comments = add_test_comments)
     } else if (is.factor(obj)) {
       expectations <- create_expectations_factor(obj, name = selection,
                                                  indentation = indentation,
                                                  tolerance = tolerance,
                                                  sample_n = sample_n,
-                                                 add_comments = add_comments)
+                                                 add_wrapper_comments = add_wrapper_comments,
+                                                 add_test_comments = add_test_comments)
     } else {
       stop("The selection is not of a currently supported class.")
     }

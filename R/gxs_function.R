@@ -19,7 +19,7 @@
 #'  have their baseline value.
 #'
 #'  Currently, supported tests are of side effects (error, warnings, messages),
-#'  data frames, and vectors. List columns in data frames (like nested tibbles) are skipped.
+#'  data frames, vectors, and factors. List columns in data frames (like nested tibbles) are skipped.
 #'
 #'  \strong{N.B.} This function is undergoing active development!
 #' @param fn Function to create tests for.
@@ -69,7 +69,8 @@ gxs_function <- function(fn,
                          tolerance = "1e-4",
                          envir = NULL,
                          sample_n = 30,
-                         add_comments = TRUE,
+                         add_wrapper_comments = TRUE,
+                         add_test_comments = TRUE,
                          out = "insert"){
 
   # Check arguments ####
@@ -81,7 +82,8 @@ gxs_function <- function(fn,
   checkmate::assert_string(x = tolerance, add = assert_collection)
   checkmate::assert_choice(x = out, choices = c("insert", "return"), add = assert_collection)
   checkmate::assert_flag(x = strip, add = assert_collection)
-  checkmate::assert_flag(x = add_comments, add = assert_collection)
+  checkmate::assert_flag(x = add_wrapper_comments, add = assert_collection)
+  checkmate::assert_flag(x = add_test_comments, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
@@ -112,7 +114,7 @@ gxs_function <- function(fn,
   if (is.null(envir)) envir <- parent.frame()
 
   expectations <- plyr::llply(fn_call_strings, function(string){
-    c(create_test_comment(string, create_comment = add_comments),
+    c(create_test_comment(string, create_comment = add_test_comments),
     gxs_selection(
       selection = string,
       indentation = indentation,
@@ -120,19 +122,21 @@ gxs_function <- function(fn,
       tolerance = tolerance,
       envir = envir,
       sample_n = sample_n,
-      add_comments = FALSE,
+      add_test_comments = add_test_comments,
+      add_wrapper_comments = FALSE,
       out = "return"
-    ))
+    ), "")
   }) %>% unlist(recursive = TRUE)
 
   # Add comments
   expectations <- c(create_test_comment(fn_name, section = "intro",
-                                        create_comment = add_comments),
+                                        create_comment = add_wrapper_comments),
                     create_test_comment("different combinations of argument values",
-                                        create_comment = add_comments),
+                                        create_comment = add_test_comments),
+                    "",
                     expectations,
                     create_test_comment(fn_name, section = "outro",
-                                        create_comment = add_comments))
+                                        create_comment = add_wrapper_comments))
 
   if (out == "insert")
     insert_code(expectations, prepare = TRUE, indentation = indentation)
@@ -176,20 +180,20 @@ generate_function_strings <- function(fn_name,
     }) %>% tibble::enframe(name = "index") %>%
       dplyr::mutate(arg_name = an,
                     index = .data$index - 1)
-  }) %>% subset(index != 0)
+  }) %>% dplyr::filter(.data$index != 0)
 
   default_values <- tibbled_args_values %>%
-    subset(index == 1)
+    dplyr::filter(.data$index == 1)
 
   non_default_values <- tibbled_args_values %>%
-    subset(index != 1)
+    dplyr::filter(.data$index != 1)
 
   # Generate the combinations of argument values
   combinations <- plyr::ldply(seq_len(nrow(non_default_values)), function(r){
     current_row <- non_default_values[r,]
     current_arg <- current_row[1, "arg_name"]
     dplyr::bind_rows(
-      default_values %>% subset(arg_name != current_arg),
+      default_values %>% dplyr::filter(.data$arg_name != current_arg),
       current_row
     ) %>%
       dplyr::mutate(combination = as.character(r))

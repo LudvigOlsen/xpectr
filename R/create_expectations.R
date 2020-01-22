@@ -7,7 +7,9 @@
 create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
                                            sample_n = 30,
                                            tolerance = "1e-4",
-                                           add_comments = TRUE) {
+                                           round_to_tolerance = TRUE,
+                                           add_wrapper_comments = TRUE,
+                                           add_test_comments = TRUE) {
 
 
 ##  .................. #< 2271fda988ae80e314ffc80ad1364070 ># ..................
@@ -16,13 +18,15 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(x = data, add = assert_collection)
+  checkmate::assert_flag(x = round_to_tolerance, add = assert_collection)
   add_create_exps_checks(
     collection = assert_collection,
     name = name,
     indentation = indentation,
     tolerance = tolerance,
     sample_n = sample_n,
-    add_comments = add_comments
+    add_wrapper_comments = add_wrapper_comments,
+    add_test_comments = add_test_comments
   )
   checkmate::reportAssertions(assert_collection)
 
@@ -33,6 +37,11 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 
   if (is.null(name)) {
     name <- trimws(deparse(substitute(data)))
+  }
+
+  if (isTRUE(round_to_tolerance)){
+    numeric_tolerance <- as.numeric(tolerance)
+    digits <- nchar(1/numeric_tolerance) # tolerance + 1
   }
 
   # Create expectations
@@ -79,6 +88,10 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     if (isTRUE(sample_data)){
       x <- paste0("xpectr::smpl(", x, ", n = ", sample_n, ")")
     }
+
+    if (is.numeric(current_col) && isTRUE(round_to_tolerance)){
+      current_col <- round(current_col, digits = digits)
+    }
     # Right side of expectation
     y <- capture.output(dput(current_col))
     # In case dput spanned multiple lines
@@ -119,30 +132,30 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     c(
       create_test_comment(name, section = "intro",
                           indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_wrapper_comments),
       create_test_comment("class", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       class_expectation,
       create_test_comment("column values", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       column_expectations,
       create_test_comment("column names", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       names_expectation,
       create_test_comment("column classes", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       column_classes_expectation,
       create_test_comment("column types", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       column_types_expectation,
       create_test_comment("dimensions", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       dim_expectation,
       create_test_comment("group keys", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       group_key_names_expectation,
       create_test_comment(name, section = "outro", indentation = indentation,
-                          create_comment = add_comments)
+                          create_comment = add_wrapper_comments)
     )
 
   expectations
@@ -158,7 +171,8 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 create_expectations_vector <- function(data, name = NULL, indentation = 0,
                                        sample_n = 30,
                                        tolerance = "1e-4",
-                                       add_comments = TRUE) {
+                                       add_wrapper_comments = TRUE,
+                                       add_test_comments = TRUE) {
 
 
 ##  .................. #< 00dc0af83dcb4c3bb7b5e04a48b8bfbb ># ..................
@@ -173,7 +187,8 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     indentation = indentation,
     tolerance = tolerance,
     sample_n = sample_n,
-    add_comments = add_comments
+    add_wrapper_comments = add_wrapper_comments,
+    add_test_comments = add_test_comments
   )
   checkmate::reportAssertions(assert_collection)
 
@@ -224,7 +239,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
         "null"
       )
     ) &&
-    !any(unlist(lapply(data, length)) > 1)
+    !any(element_lengths(data, length) > 1)
 
   # If all elements have names
   # We can test each individually
@@ -323,10 +338,10 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
   if (exists("element_types_expectation")){
     element_types_classes_expectations <- c(
       create_test_comment("element classes", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       element_classes_expectation,
       create_test_comment("element types", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       element_types_expectation
     )
   } else {
@@ -336,28 +351,28 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
   expectations <-
     c(
       create_test_comment(name, section = "intro", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_wrapper_comments),
       create_test_comment("class", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       class_expectation,
       create_test_comment("type", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       type_expectation,
       create_test_comment("values", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       value_expectations,
       create_test_comment("names", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       names_expectation,
       create_test_comment("length", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       length_expectation,
       create_test_comment("sum of element lengths", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       sublengths_expectation,
       element_types_classes_expectations,
       create_test_comment(name, section = "outro", indentation = indentation,
-                          create_comment = add_comments)
+                          create_comment = add_wrapper_comments)
     )
 
   expectations
@@ -370,7 +385,8 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
 
 create_expectations_side_effect <- function(side_effects, name = NULL,
                                             indentation = 0, strip = TRUE,
-                                            add_comments = TRUE) {
+                                            add_wrapper_comments = TRUE,
+                                            add_test_comments = TRUE) {
 
 
 ##  .................. #< cdf3aa2ed9d644f88940281a6a5538ac ># ..................
@@ -394,7 +410,8 @@ create_expectations_side_effect <- function(side_effects, name = NULL,
     collection = assert_collection,
     name = name,
     indentation = indentation,
-    add_comments = add_comments
+    add_wrapper_comments = add_wrapper_comments,
+    add_test_comments = add_wrapper_comments
   )
   checkmate::assert_flag(
     x = strip, add = assert_collection
@@ -453,12 +470,12 @@ create_expectations_side_effect <- function(side_effects, name = NULL,
   # TODO add expectation of side effect counts (for warnings and messages at least)
   expectations <- c(
     create_test_comment(name, section = "intro", indentation = indentation,
-                        create_comment = add_comments),
+                        create_comment = add_wrapper_comments),
     create_test_comment("side effects", indentation = indentation,
-                        create_comment = add_comments),
+                        create_comment = add_test_comments),
     expectations,
     create_test_comment(name, section = "outro", indentation = indentation,
-                        create_comment = add_comments)
+                        create_comment = add_wrapper_comments)
   )
 }
 
@@ -472,7 +489,8 @@ create_expectations_factor <- function(data, name = NULL,
                                        indentation = 0,
                                        sample_n = 30,
                                        tolerance = "1e-4",
-                                       add_comments = TRUE) {
+                                       add_wrapper_comments = TRUE,
+                                       add_test_comments = TRUE) {
 
 
 ##  .................. #< c8abec0740b04c7d59fbaa30de451cb9 ># ..................
@@ -487,7 +505,8 @@ create_expectations_factor <- function(data, name = NULL,
     indentation = indentation,
     tolerance = tolerance,
     sample_n = sample_n,
-    add_comments = add_comments
+    add_wrapper_comments = add_wrapper_comments,
+    add_test_comments = add_test_comments
   )
   checkmate::reportAssertions(assert_collection)
 
@@ -524,27 +543,27 @@ create_expectations_factor <- function(data, name = NULL,
   expectations <-
     c(
       create_test_comment(name, section = "intro", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_wrapper_comments),
       create_test_comment("is factor", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       factor_expectation,
       create_test_comment("values", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       value_expectations,
       create_test_comment("names", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       names_expectation,
       create_test_comment("length", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       length_expectation,
       create_test_comment("number of levels", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       n_levels_expectation,
       create_test_comment("levels", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_test_comments),
       levels_expectation,
       create_test_comment(name, section = "outro", indentation = indentation,
-                          create_comment = add_comments)
+                          create_comment = add_wrapper_comments)
     )
 
   expectations
@@ -561,7 +580,8 @@ add_create_exps_checks <- function(collection,
                                    indentation = 0,
                                    tolerance = "1e-4",
                                    sample_n = 30,
-                                   add_comments = TRUE) {
+                                   add_wrapper_comments = TRUE,
+                                   add_test_comments = TRUE) {
 
 
   checkmate::assert_string(
@@ -569,7 +589,8 @@ add_create_exps_checks <- function(collection,
     add = collection
   )
   checkmate::assert_string(x = tolerance, add = collection)
-  checkmate::assert_flag(x = add_comments, add = collection)
+  checkmate::assert_flag(x = add_wrapper_comments, add = collection)
+  checkmate::assert_flag(x = add_test_comments, add = collection)
   checkmate::assert_count(x = indentation, add = collection)
 
 }
