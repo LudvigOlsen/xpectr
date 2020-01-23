@@ -419,7 +419,7 @@ Based on a set of supplied values for each function argument, a set of `testthat
 
 The first value supplied for an argument is considered the _valid baseline_ value. For each argument, we create tests for each of the supplied values, where the other arguments have their baseline value. It automatically adds `NULL` to the list of values to check for each argument.
 
-Note that we assign the output of the function to a `output_xxxxx` variable, so we don't have to run it more than once.
+We assign the output of the function to an `output_xxxxx` variable, so we don't have to run it more than once.
 
 ```{r eval=FALSE}
 # Define a function with arguments

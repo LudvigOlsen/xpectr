@@ -444,6 +444,9 @@ supplied values, where the other arguments have their baseline value. It
 automatically adds `NULL` to the list of values to check for each
 argument.
 
+We assign the output of the function to an `output_xxxxx` variable, so
+we don’t have to run it more than once.
+
 ``` r
 # Define a function with arguments
 fn <- function(x, y, z) {
@@ -498,61 +501,65 @@ expect_message(
   fixed = TRUE)
 
 # Testing fn(x = 2, y = 0, z = 15)
+# Assigning output
+output_17375 <- fn(x = 2, y = 0, z = 15)
 # Testing class
 expect_equal(
-  class(fn(x = 2, y = 0, z = 15)),
+  class(output_17375),
   "numeric",
   fixed = TRUE)
 # Testing type
 expect_type(
-  fn(x = 2, y = 0, z = 15),
+  output_17375,
   type = "double")
 # Testing values
 expect_equal(
-  fn(x = 2, y = 0, z = 15),
+  output_17375,
   17,
   tolerance = 1e-4)
 # Testing names
 expect_equal(
-  names(fn(x = 2, y = 0, z = 15)),
+  names(output_17375),
   NULL,
   fixed = TRUE)
 # Testing length
 expect_equal(
-  length(fn(x = 2, y = 0, z = 15)),
+  length(output_17375),
   1L)
 # Testing sum of element lengths
 expect_equal(
-  sum(xpectr::element_lengths(fn(x = 2, y = 0, z = 15))),
+  sum(xpectr::element_lengths(output_17375)),
   1L)
 
 # Testing fn(x = 2, y = 0, z = 5)
+# Assigning output
+output_18109 <- fn(x = 2, y = 0, z = 5)
 # Testing class
 expect_equal(
-  class(fn(x = 2, y = 0, z = 5)),
+  class(output_18109),
   "numeric",
   fixed = TRUE)
 # Testing type
 expect_type(
-  fn(x = 2, y = 0, z = 5),
+  output_18109,
   type = "double")
 # Testing values
 expect_equal(
-  fn(x = 2, y = 0, z = 5),
+  output_18109,
   7,
   tolerance = 1e-4)
 # Testing names
 expect_equal(
-  names(fn(x = 2, y = 0, z = 5)),
+  names(output_18109),
   NULL,
   fixed = TRUE)
 # Testing length
 expect_equal(
-  length(fn(x = 2, y = 0, z = 5)),
+  length(output_18109),
   1L)
 # Testing sum of element lengths
 expect_equal(
-  sum(xpectr::element_lengths(fn(x = 2, y = 0, z = 5))),
+  sum(xpectr::element_lengths(output_18109)),
   1L)
 
 # Testing fn(x = NULL, y = 0, z = 5)
