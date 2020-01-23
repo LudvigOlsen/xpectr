@@ -269,10 +269,11 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     ) &&
     !any(element_lengths(data, length) > 1)
 
+  all_uniquely_named <- checkmate::test_list(x = as.list(data), names = "unique")
+
   # If all elements have names
   # We can test each individually
-  if (length(element_names) > 0 &&
-      length(data) == length(element_names) &&
+  if (isTRUE(all_uniquely_named) &&
       !isTRUE(is_simple)
       ) {
 
