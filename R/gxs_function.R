@@ -65,12 +65,13 @@ gxs_function <- function(fn,
                          args_values,
                          check_nulls = TRUE,
                          indentation = 0,
-                         strip = TRUE,
                          tolerance = "1e-4",
-                         envir = NULL,
+                         strip = TRUE,
                          sample_n = 30,
+                         envir = NULL,
                          add_wrapper_comments = TRUE,
                          add_test_comments = TRUE,
+                         assign_output = TRUE,
                          out = "insert"){
 
   # Check arguments ####
@@ -84,6 +85,7 @@ gxs_function <- function(fn,
   checkmate::assert_flag(x = strip, add = assert_collection)
   checkmate::assert_flag(x = add_wrapper_comments, add = assert_collection)
   checkmate::assert_flag(x = add_test_comments, add = assert_collection)
+  checkmate::assert_flag(x = assign_output, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
@@ -124,6 +126,7 @@ gxs_function <- function(fn,
       sample_n = sample_n,
       add_test_comments = add_test_comments,
       add_wrapper_comments = FALSE,
+      assign_output = assign_output,
       out = "return"
     ), "")
   }) %>% unlist(recursive = TRUE)

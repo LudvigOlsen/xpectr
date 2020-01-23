@@ -9,12 +9,13 @@ gxs_function(
   args_values,
   check_nulls = TRUE,
   indentation = 0,
-  strip = TRUE,
   tolerance = "1e-4",
-  envir = NULL,
+  strip = TRUE,
   sample_n = 30,
+  envir = NULL,
   add_wrapper_comments = TRUE,
   add_test_comments = TRUE,
+  assign_output = TRUE,
   out = "insert"
 )
 }
@@ -40,6 +41,8 @@ unless it should be the baseline value.}
 
 \item{indentation}{Indentation of the selection. (Numeric)}
 
+\item{tolerance}{The tolerance for numeric tests as a string. (Character)}
+
 \item{strip}{Whether to insert
 \code{\link[xpectr:strip]{strip_msg()}} and
 \code{\link[xpectr:strip]{strip()}}
@@ -48,10 +51,6 @@ in tests of side effects. (Logical)
 Sometimes testthat tests have differences in punctuation and newlines on different
 systems. By stripping both the error message and the expected message of non-alphanumeric symbols,
 we can avoid such failed tests.}
-
-\item{tolerance}{The tolerance for numeric tests as a string. (Character)}
-
-\item{envir}{Environment to evaluate in.}
 
 \item{sample_n}{The number of elements/rows to sample. Set to \code{NULL} to avoid sampling.
 
@@ -64,9 +63,20 @@ take place.
 
 When testing a big data frame, sampling the rows can help keep the test files somewhat readable.}
 
+\item{envir}{Environment to evaluate in.}
+
 \item{add_wrapper_comments}{Whether to add intro and outro comments. (Logical)}
 
 \item{add_test_comments}{Whether to add comments for each test. (Logical)}
+
+\item{assign_output}{Whether to assign the output of a function call or long selection
+to a variable. This will avoid recalling the function and decrease cluttering. (Logical)
+
+Heuristic: when the \code{selection} isn't of a string and contains a paranthesis, it is considered a function call.
+A selection with more than 30 characters will be assigned as well.
+
+The tests themselves can be more difficult to interpret, as you will
+have to look at the assignment to see the object that is being tested.}
 
 \item{out}{Either \code{"insert"} or \code{"return"}.
 

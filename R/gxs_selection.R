@@ -46,6 +46,14 @@
 #'  we can avoid such failed tests.
 #' @param add_wrapper_comments Whether to add intro and outro comments. (Logical)
 #' @param add_test_comments Whether to add comments for each test. (Logical)
+#' @param assign_output Whether to assign the output of a function call or long selection
+#'  to a variable. This will avoid recalling the function and decrease cluttering. (Logical)
+#'
+#'  Heuristic: when the \code{selection} isn't of a string and contains a paranthesis, it is considered a function call.
+#'  A selection with more than 30 characters will be assigned as well.
+#'
+#'  The tests themselves can be more difficult to interpret, as you will
+#'  have to look at the assignment to see the object that is being tested.
 #' @param envir Environment to evaluate in.
 #' @param out Either \code{"insert"} or \code{"return"}.
 #'
@@ -83,12 +91,13 @@
 #' }
 gxs_selection <- function(selection,
                           indentation = 0,
-                          strip = TRUE,
                           tolerance = "1e-4",
-                          envir = NULL,
+                          strip = TRUE,
                           sample_n = 30,
+                          envir = NULL,
                           add_wrapper_comments = TRUE,
                           add_test_comments = TRUE,
+                          assign_output = TRUE,
                           out = "insert"){
 
   # Check arguments ####
@@ -99,6 +108,7 @@ gxs_selection <- function(selection,
   checkmate::assert_flag(x = strip, add = assert_collection)
   checkmate::assert_flag(x = add_wrapper_comments, add = assert_collection)
   checkmate::assert_flag(x = add_test_comments, add = assert_collection)
+  checkmate::assert_flag(x = assign_output, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
@@ -139,6 +149,20 @@ gxs_selection <- function(selection,
       }
     )
 
+    # TODO perhaps assign_once and evaluate_once aren't the most descriptive var names?
+    # If the selection is a very long string
+    # we might prefer to assign it once
+    assign_once <- nchar(selection) > 30 ||
+      (grepl("[\\(\\)]", selection) &&
+         !checkmate::test_string(x = obj))
+
+    # If selection is a function call
+    if (isTRUE(assign_output) && assign_once){
+      evaluate_once <- TRUE
+    } else {
+      evaluate_once <- FALSE
+    }
+
     # Create expectations based on the type of the objects
     if (is.data.frame(obj)) {
       expectations <- create_expectations_data_frame(obj, name = selection,
@@ -146,21 +170,24 @@ gxs_selection <- function(selection,
                                                      tolerance = tolerance,
                                                      sample_n = sample_n,
                                                      add_wrapper_comments = add_wrapper_comments,
-                                                     add_test_comments = add_test_comments)
+                                                     add_test_comments = add_test_comments,
+                                                     evaluate_once = evaluate_once)
     } else if (is.vector(obj)) {
       expectations <- create_expectations_vector(obj, name = selection,
                                                  indentation = indentation,
                                                  tolerance = tolerance,
                                                  sample_n = sample_n,
                                                  add_wrapper_comments = add_wrapper_comments,
-                                                 add_test_comments = add_test_comments)
+                                                 add_test_comments = add_test_comments,
+                                                 evaluate_once = evaluate_once)
     } else if (is.factor(obj)) {
       expectations <- create_expectations_factor(obj, name = selection,
                                                  indentation = indentation,
                                                  tolerance = tolerance,
                                                  sample_n = sample_n,
                                                  add_wrapper_comments = add_wrapper_comments,
-                                                 add_test_comments = add_test_comments)
+                                                 add_test_comments = add_test_comments,
+                                                 evaluate_once = evaluate_once)
     } else {
       stop("The selection is not of a currently supported class.")
     }
