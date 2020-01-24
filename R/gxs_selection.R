@@ -164,7 +164,12 @@ gxs_selection <- function(selection,
     }
 
     # Create expectations based on the type of the objects
-    if (is.data.frame(obj)) {
+    if (is.null(obj)) {
+      expectations <- create_expectations_null(name = selection,
+                                               indentation = indentation,
+                                               add_wrapper_comments = add_wrapper_comments,
+                                               add_test_comments = add_test_comments)
+    } else if (is.data.frame(obj)) {
       expectations <- create_expectations_data_frame(obj, name = selection,
                                                      indentation = indentation,
                                                      tolerance = tolerance,
@@ -189,7 +194,8 @@ gxs_selection <- function(selection,
                                                  add_test_comments = add_test_comments,
                                                  evaluate_once = evaluate_once)
     } else {
-      stop("The selection is not of a currently supported class.")
+      stop(paste0("The selection is not of a currently supported class: ",
+                  class(obj)))
     }
   }
 

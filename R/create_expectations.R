@@ -1,5 +1,54 @@
 
 
+
+#   __________________ #< a728fc4a8cf823f5d1f50ada4565aa66 ># __________________
+#   Create expectations for NULL                                            ####
+
+create_expectations_null <- function(name = selection,
+                                     indentation = indentation,
+                                     add_wrapper_comments = add_wrapper_comments,
+                                     add_test_comments = add_test_comments) {
+
+##  .................. #< 2271fda988ae80e314ffc80ad1364070 ># ..................
+##  Assert arguments                                                        ####
+
+
+  assert_collection <- checkmate::makeAssertCollection()
+  add_create_exps_checks(
+    collection = assert_collection,
+    name = name,
+    indentation = indentation,
+    add_wrapper_comments = add_wrapper_comments,
+    add_test_comments = add_test_comments,
+  )
+  checkmate::reportAssertions(assert_collection)
+
+
+##  .................. #< 2da3e73be55460e78db79bd7977467c9 ># ..................
+##  Create expectation                                                      ####
+
+  # Create test
+  null_expectation <- create_expect_true(
+    x = paste0("is.null(", name, ")"),
+    spaces = indentation + 2
+  )
+
+  # Collect expectations and add comments
+  expectations <-
+    c(create_test_comment(name, section = "intro",
+                          indentation = indentation,
+                          create_comment = add_wrapper_comments),
+      create_test_comment("is NULL", indentation = indentation,
+                          create_comment = add_test_comments),
+      null_expectation,
+      create_test_comment(name, section = "outro", indentation = indentation,
+                          create_comment = add_wrapper_comments)
+    )
+
+  expectations
+}
+
+
 #   __________________ #< 2451d1703a5d7b006fa4e72e2dcc59ed ># __________________
 #   Create expectations data frame                                          ####
 
