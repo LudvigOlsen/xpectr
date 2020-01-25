@@ -59,3 +59,17 @@ rcmd_import_handler <- function(){
 #   df
 # }
 
+# https://stackoverflow.com/a/55923178/11832955
+# TODO Test
+ndigits <- function(x){
+
+  trunc_x <- floor(abs(x))
+
+  if(trunc_x != 0){
+    floor(log10(trunc_x)) + 1
+  } else {
+    1
+  }
+
+}
+

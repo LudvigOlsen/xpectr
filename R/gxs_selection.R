@@ -25,7 +25,10 @@
 #'
 #'  E.g. \code{"stop('This gives an expect_error test')"}.
 #' @param indentation Indentation of the selection. (Numeric)
-#' @param tolerance The tolerance for numeric tests as a string. (Character)
+#' @param tolerance The tolerance for numeric tests as a string, like \code{"1e-4"}. (Character)
+#' @param round_to_tolerance Whether to round numeric elements to the specified tolerance. (Logical)
+#'
+#'  This is currently applied to numeric columns and vectors.
 #' @param sample_n The number of elements/rows to sample. Set to \code{NULL} to avoid sampling.
 #'
 #'  Inserts \code{\link[xpectr:strip]{smpl()}} in the generated tests when sampling was used. A seed is
@@ -92,6 +95,7 @@
 gxs_selection <- function(selection,
                           indentation = 0,
                           tolerance = "1e-4",
+                          round_to_tolerance = TRUE,
                           strip = TRUE,
                           sample_n = 30,
                           envir = NULL,
@@ -109,6 +113,7 @@ gxs_selection <- function(selection,
   checkmate::assert_flag(x = add_wrapper_comments, add = assert_collection)
   checkmate::assert_flag(x = add_test_comments, add = assert_collection)
   checkmate::assert_flag(x = assign_output, add = assert_collection)
+  checkmate::assert_flag(x = round_to_tolerance, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
@@ -173,6 +178,7 @@ gxs_selection <- function(selection,
       expectations <- create_expectations_data_frame(obj, name = selection,
                                                      indentation = indentation,
                                                      tolerance = tolerance,
+                                                     round_to_tolerance = round_to_tolerance,
                                                      sample_n = sample_n,
                                                      add_wrapper_comments = add_wrapper_comments,
                                                      add_test_comments = add_test_comments,
@@ -181,6 +187,7 @@ gxs_selection <- function(selection,
       expectations <- create_expectations_vector(obj, name = selection,
                                                  indentation = indentation,
                                                  tolerance = tolerance,
+                                                 round_to_tolerance = round_to_tolerance,
                                                  sample_n = sample_n,
                                                  add_wrapper_comments = add_wrapper_comments,
                                                  add_test_comments = add_test_comments,

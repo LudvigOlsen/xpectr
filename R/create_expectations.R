@@ -68,7 +68,6 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(x = data, add = assert_collection)
-  checkmate::assert_flag(x = round_to_tolerance, add = assert_collection)
   add_create_exps_checks(
     collection = assert_collection,
     name = name,
@@ -77,7 +76,8 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     sample_n = sample_n,
     add_wrapper_comments = add_wrapper_comments,
     add_test_comments = add_test_comments,
-    evaluate_once = evaluate_once
+    evaluate_once = evaluate_once,
+    round_to_tolerance = round_to_tolerance
   )
   checkmate::reportAssertions(assert_collection)
 
@@ -104,7 +104,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
   # Find digits for rounding
   if (isTRUE(round_to_tolerance)){
     numeric_tolerance <- as.numeric(tolerance)
-    digits <- nchar(1/numeric_tolerance) # tolerance + 1
+    digits <- ndigits(1/numeric_tolerance) # tolerance + 1
   }
 
   # Create expectations
@@ -235,6 +235,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 create_expectations_vector <- function(data, name = NULL, indentation = 0,
                                        sample_n = 30,
                                        tolerance = "1e-4",
+                                       round_to_tolerance = TRUE,
                                        add_wrapper_comments = TRUE,
                                        add_test_comments = TRUE,
                                        evaluate_once = FALSE) {
@@ -254,7 +255,8 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     sample_n = sample_n,
     add_wrapper_comments = add_wrapper_comments,
     add_test_comments = add_test_comments,
-    evaluate_once = evaluate_once
+    evaluate_once = evaluate_once,
+    round_to_tolerance = round_to_tolerance
   )
   checkmate::reportAssertions(assert_collection)
 
@@ -276,6 +278,12 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
   assign_string <- create_assignment_strings(
     call_name = call_name, new_name = name,
     evaluate_once = evaluate_once)
+
+  # Find digits for rounding
+  if (isTRUE(round_to_tolerance)){
+    numeric_tolerance <- as.numeric(tolerance)
+    digits <- ndigits(1/numeric_tolerance) # tolerance + 1
+  }
 
   # Create expectations
   # Without sampling
@@ -350,6 +358,12 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
       if (isTRUE(sample_data)){ # TODO are the elements themselves sampled? is this correct????
         x <- paste0("xpectr::smpl(", x, ", n = ", sample_n, ")")
       }
+
+      # Round to tolerance
+      if (is.numeric(current_elem) && isTRUE(round_to_tolerance)){
+        current_elem <- round(current_elem, digits = digits)
+      }
+
       # Right side of expectation
       y <- capture.output(dput(current_elem))
       # In case dput spanned multiple lines
@@ -374,6 +388,12 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     if (isTRUE(sample_data)){
       x <- paste0("xpectr::smpl(", x, ", n = ", sample_n, ")")
     }
+
+    # Round to tolerance
+    if (is.numeric(data) && isTRUE(round_to_tolerance)){
+      data <- round(data, digits = digits)
+    }
+
     y <- capture.output(dput(data))
     # In case dput spanned multiple lines
     # we collapse them to one string
@@ -673,6 +693,7 @@ add_create_exps_checks <- function(collection,
                                    name,
                                    indentation = 0,
                                    tolerance = "1e-4",
+                                   round_to_tolerance = TRUE,
                                    sample_n = 30,
                                    add_wrapper_comments = TRUE,
                                    add_test_comments = TRUE,
@@ -688,6 +709,7 @@ add_create_exps_checks <- function(collection,
   checkmate::assert_flag(x = add_wrapper_comments, add = collection)
   checkmate::assert_flag(x = add_test_comments, add = collection)
   checkmate::assert_flag(x = evaluate_once, add = collection)
+  checkmate::assert_flag(x = round_to_tolerance, add = collection)
 
 }
 

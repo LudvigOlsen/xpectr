@@ -66,6 +66,7 @@ gxs_function <- function(fn,
                          check_nulls = TRUE,
                          indentation = 0,
                          tolerance = "1e-4",
+                         round_to_tolerance = TRUE,
                          strip = TRUE,
                          sample_n = 30,
                          envir = NULL,
@@ -86,6 +87,7 @@ gxs_function <- function(fn,
   checkmate::assert_flag(x = add_wrapper_comments, add = assert_collection)
   checkmate::assert_flag(x = add_test_comments, add = assert_collection)
   checkmate::assert_flag(x = assign_output, add = assert_collection)
+  checkmate::assert_flag(x = round_to_tolerance, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
@@ -122,6 +124,7 @@ gxs_function <- function(fn,
       indentation = indentation,
       strip = strip,
       tolerance = tolerance,
+      round_to_tolerance = round_to_tolerance,
       envir = envir,
       sample_n = sample_n,
       add_test_comments = add_test_comments,

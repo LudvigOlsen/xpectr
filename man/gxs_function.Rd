@@ -10,6 +10,7 @@ gxs_function(
   check_nulls = TRUE,
   indentation = 0,
   tolerance = "1e-4",
+  round_to_tolerance = TRUE,
   strip = TRUE,
   sample_n = 30,
   envir = NULL,
@@ -41,7 +42,11 @@ unless it should be the baseline value.}
 
 \item{indentation}{Indentation of the selection. (Numeric)}
 
-\item{tolerance}{The tolerance for numeric tests as a string. (Character)}
+\item{tolerance}{The tolerance for numeric tests as a string, like \code{"1e-4"}. (Character)}
+
+\item{round_to_tolerance}{Whether to round numeric elements to the specified tolerance. (Logical)
+
+This is currently applied to numeric columns and vectors.}
 
 \item{strip}{Whether to insert
 \code{\link[xpectr:strip]{strip_msg()}} and
