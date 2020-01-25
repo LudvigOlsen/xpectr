@@ -31,7 +31,8 @@ element_classes(l, keep_names = TRUE)
 \seealso{
 Other element descriptors: 
 \code{\link{element_lengths}()},
-\code{\link{element_types}()}
+\code{\link{element_types}()},
+\code{\link{num_total_elements}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

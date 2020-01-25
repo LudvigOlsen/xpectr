@@ -88,3 +88,38 @@ element_classes <- function(x, keep_names = FALSE){
   unlist(lapply(x, class), use.names = keep_names)
 }
 
+
+##  .................. #< 16b58b1186e423259991634cf27c01de ># ..................
+##  Total number of elements                                                ####
+
+#' @title Total number of elements
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  Unlists \code{x} recursively and finds the total number of elements.
+#' @param x List with elements.
+#' @param deduplicated Whether to only count the unique elements. (Logical)
+#' @family element descriptors
+#' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @export
+#' @details
+#'  Simple wrapper for
+#'  \code{length(unlist(x, recursive = TRUE, use.names = FALSE))}.
+#' @examples
+#' # Attach packages
+#' library(xpectr)
+#'
+#' l <- list(list(list(1, 2, 3), list(2, list(3, 2))),
+#'           list(1, list(list(2, 4), list(7, 1, list(3, 8)))),
+#'           list(list(2, 7, 8), list(10, 2, list(18, 1, 4))))
+#'
+#' num_total_elements(l)
+#' num_total_elements(l, deduplicated = TRUE)
+num_total_elements <- function(x, deduplicated = FALSE){
+  elems <- unlist(x, recursive = TRUE, use.names = FALSE)
+  if (isTRUE(deduplicated))
+    elems <- unique(elems)
+  length(elems)
+}
+
+
