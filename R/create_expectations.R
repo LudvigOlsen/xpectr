@@ -395,6 +395,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     }
 
     y <- capture.output(dput(data))
+
     # In case dput spanned multiple lines
     # we collapse them to one string
     y <- collapse_strings(y)
