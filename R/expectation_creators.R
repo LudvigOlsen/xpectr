@@ -518,18 +518,21 @@ create_test_comment <- function(what, section = "test",
                                 create_comment = TRUE){
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_string(x = what, add = assert_collection)
-  checkmate::assert_count(x = indentation, add = assert_collection)
-  checkmate::assert_choice(x = section,
-                           choices = c("intro","outro","test"),
-                           add = assert_collection)
   checkmate::assert_flag(x = create_comment, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-  # End of argument checks ####
-
+  # No need to check things if we won't be using them
   if (!isTRUE(create_comment)){
     return(NULL)
   }
+  checkmate::assert_string(x = what, add = assert_collection)
+  checkmate::assert_count(x = indentation, add = assert_collection)
+  checkmate::assert_choice(x = section,
+                           choices = c("intro","outro","test","manual"),
+                           add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+
 
   if (indentation > 40){
     warning("indentation > 40 characters is ignored.")
@@ -553,7 +556,9 @@ create_test_comment <- function(what, section = "test",
   # We only quote in the intro and outro
   quote_string <- ifelse(section == "test", "", "'")
 
-  if (section == "outro"){
+  if (section == "manual"){
+    comment <- paste0("# ", what)
+  } else if (section == "outro"){
     comment <- paste0("## Finished testing ",
                       quote_string, what, quote_string,
                       multihashtags)

@@ -111,27 +111,36 @@ gxs_function <- function(fn,
   }
 
   # Generate function call fn(arg = value) strings
-  fn_call_strings <- generate_function_strings(fn_name = fn_name,
+  fn_calls <- generate_function_strings(fn_name = fn_name,
                                                args_values_substituted = arg_call,
                                                check_nulls = check_nulls)
 
   if (is.null(envir)) envir <- parent.frame()
 
-  expectations <- plyr::llply(fn_call_strings, function(string){
-    c(create_test_comment(string, create_comment = add_test_comments),
-    gxs_selection(
-      selection = string,
-      indentation = indentation,
-      strip = strip,
-      tolerance = tolerance,
-      round_to_tolerance = round_to_tolerance,
-      envir = envir,
-      sample_n = sample_n,
-      add_test_comments = add_test_comments,
-      add_wrapper_comments = FALSE,
-      assign_output = assign_output,
-      out = "return"
-    ), "")
+  expectations <- plyr::llply(seq_len(nrow(fn_calls)), function(r){
+
+    current_call <- fn_calls[r,]
+    call_string <- current_call[["call"]][[1]]
+    changed_arg <- current_call[["changed"]][[1]]
+    comment_change <- isTRUE(add_test_comments) && !is.na(changed_arg)
+
+    c(create_test_comment(call_string, create_comment = add_test_comments),
+      create_test_comment(paste0("Changed from baseline: ", changed_arg),
+                          section = "manual", create_comment = comment_change),
+      gxs_selection(
+        selection = call_string,
+        indentation = indentation,
+        strip = strip,
+        tolerance = tolerance,
+        round_to_tolerance = round_to_tolerance,
+        envir = envir,
+        sample_n = sample_n,
+        add_test_comments = add_test_comments,
+        add_wrapper_comments = FALSE,
+        assign_output = assign_output,
+        out = "return"
+      ), ""
+    )
   }) %>% unlist(recursive = TRUE)
 
   # Add comments
@@ -189,10 +198,12 @@ generate_function_strings <- function(fn_name,
   }) %>% dplyr::filter(.data$index != 0)
 
   default_values <- tibbled_args_values %>%
-    dplyr::filter(.data$index == 1)
+    dplyr::filter(.data$index == 1) %>%
+    dplyr::mutate(is_default = TRUE)
 
   non_default_values <- tibbled_args_values %>%
-    dplyr::filter(.data$index != 1)
+    dplyr::filter(.data$index != 1) %>%
+    dplyr::mutate(is_default = FALSE)
 
   # Generate the combinations of argument values
   combinations <- plyr::ldply(seq_len(nrow(non_default_values)), function(r){
@@ -214,6 +225,7 @@ generate_function_strings <- function(fn_name,
         return(NULL)
       }
       d[d[["arg_name"]] == an, "value"] <- "NULL" # TODO check if this can go wrong?
+      d[d[["arg_name"]] == an, "is_default"] <- FALSE
       d %>% dplyr::mutate(combination = an)
     })
 
@@ -230,13 +242,30 @@ generate_function_strings <- function(fn_name,
       by = "arg_name"
     )
 
-  function_call_strings <- combinations %>%
+  # Find the non-default arguments per combination
+  changed_arg <- combinations %>%
+    dplyr::filter(!.data$is_default) %>%
+    dplyr::select(.data$combination, .data$arg_name)
+
+  # Create function calls
+  function_calls <- combinations %>%
     dplyr::mutate(name_value = paste0(.data$arg_name," = ", .data$value)) %>%
     dplyr::group_by(.data$combination) %>%
     dplyr::summarise(call_strings = paste0(
       fn_name,"(", paste0(.data$name_value, collapse = ", "), ")")) %>%
-    dplyr::pull(.data$call_strings) %>%
-    unique()
+    dplyr::left_join(changed_arg, by="combination") %>%
+    dplyr::arrange(arg_name)
 
-  function_call_strings
+  # Move default first
+  function_calls <- dplyr::bind_rows(
+    function_calls[nrow(function_calls),],
+    function_calls[1:(nrow(function_calls)-1),])
+
+  # Prepare output tibble
+  function_calls %>%
+    dplyr::select(-.data$combination) %>%
+    dplyr::distinct() %>%
+    dplyr::rename(call = .data$call_strings,
+                  changed = .data$arg_name)
+
 }
