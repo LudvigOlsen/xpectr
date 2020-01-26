@@ -182,7 +182,7 @@ generate_function_strings <- function(fn_name,
   # Create a tibble of the substituted values
   tibbled_args_values <- plyr::ldply(arg_names, function(an){
     plyr::llply(args_values_substituted[[an]], function(av){
-      deparse(av)
+      paste0(deparse(av), collapse = "\n")
     }) %>% tibble::enframe(name = "index") %>%
       dplyr::mutate(arg_name = an,
                     index = .data$index - 1)

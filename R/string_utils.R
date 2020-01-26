@@ -21,6 +21,7 @@ escape_metacharacters <- function(string) {
   string <- gsub("\t", "\\t", string, fixed = TRUE)
   string <- gsub("\v", "\\v", string, fixed = TRUE)
   string <- gsub("\f", "\\f", string, fixed = TRUE)
+  string <- gsub("\"", "'", string, fixed = TRUE) # TODO Make this step clear in docs
   string
 }
 

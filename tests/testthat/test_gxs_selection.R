@@ -1,19 +1,6 @@
 library(xpectr)
 context("gxs_selection()")
 
-test_that("expectations are created properly with gxs_selection()", {
-  df1 <- tibble::tibble("a" = c(1, 2, 3, 4), "b" = c("a", "f", "g", "s"))
-  df1$c <- list(list(1, 2, 3), list(2, 3, 4, 5), list(2, 3, 7, 21, 2), list(2))
-  df1[["d"]] <- list(a = list(2, 4), b = list(3), c = list(1), d = list(2, 3))
-  # Add factor
-  df1$f <- factor(df1$a)
-
-  # We're not getting it from parent environment
-  # so we supply current environment
-  current_envir <- sys.frame(which = sys.nframe())
-
-})
-
 test_that("data frame expectations are created properly with gxs_selection()", {
 
   set_test_seed(1)
@@ -215,7 +202,7 @@ test_that("vector expectations are created properly with gxs_selection()", {
 
 })
 
-test_that("vector expectations are created properly with gxs_selection()", {
+test_that("factor expectations are created properly with gxs_selection()", {
 
   fact_1 <- factor(as.character(c(1,2,3,4,5,6,NA)))
 

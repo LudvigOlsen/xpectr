@@ -485,6 +485,11 @@ create_test_comment <- function(what, section = "test",
     indentation <- 40
   }
 
+  # Remove newlines with more from 'what'
+  what <- gsub("[\r\n\t\f]", "", what)
+  # Reduce multiple consequtive whitespaces
+  what <- gsub("[[:blank:]]+", " ", what)
+
   # Shorten too long calls from intro and outro comments
   if (nchar(what) > 49 - indentation){
     what <- paste0(substring(what, 1, 46 - indentation), "...")
