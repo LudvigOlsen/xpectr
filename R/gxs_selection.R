@@ -200,6 +200,12 @@ gxs_selection <- function(selection,
                                                  add_wrapper_comments = add_wrapper_comments,
                                                  add_test_comments = add_test_comments,
                                                  evaluate_once = evaluate_once)
+    } else if (is.function(obj)) {
+      expectations <- create_expectations_function(obj, name = selection,
+                                                   indentation = indentation,
+                                                   sample_n = sample_n,
+                                                   add_wrapper_comments = add_wrapper_comments,
+                                                   add_test_comments = add_test_comments)
     } else {
       stop(paste0("The selection is not of a currently supported class: ",
                   class(obj)))

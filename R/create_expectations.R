@@ -5,14 +5,11 @@
 #   Create expectations for NULL                                            ####
 
 create_expectations_null <- function(name = selection,
-                                     indentation = indentation,
-                                     add_wrapper_comments = add_wrapper_comments,
-                                     add_test_comments = add_test_comments) {
+                                     indentation = 0,
+                                     add_wrapper_comments = TRUE,
+                                     add_test_comments = TRUE) {
 
-##  .................. #< 2271fda988ae80e314ffc80ad1364070 ># ..................
-##  Assert arguments                                                        ####
-
-
+  # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   add_create_exps_checks(
     collection = assert_collection,
@@ -22,10 +19,7 @@ create_expectations_null <- function(name = selection,
     add_test_comments = add_test_comments,
   )
   checkmate::reportAssertions(assert_collection)
-
-
-##  .................. #< 2da3e73be55460e78db79bd7977467c9 ># ..................
-##  Create expectation                                                      ####
+  # End of argument checks ####
 
   # Create test
   null_expectation <- create_expect_true(
@@ -47,6 +41,76 @@ create_expectations_null <- function(name = selection,
 
   expectations
 }
+
+
+
+#   ____________________________________________________________________________
+#   Create expectations for function                                        ####
+
+create_expectations_function <- function(data, name = NULL, indentation = 0,
+                                         sample_n = 30,
+                                         add_wrapper_comments = TRUE,
+                                         add_test_comments = TRUE) {
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_function(x = data, add = assert_collection)
+  add_create_exps_checks(
+    collection = assert_collection,
+    name = name,
+    indentation = indentation,
+    sample_n = sample_n,
+    add_wrapper_comments = add_wrapper_comments,
+    add_test_comments = add_test_comments
+  )
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # Create test
+  is_fn_expectation <- create_expect_true(
+    x = paste0("is.function(", name, ")"),
+    spaces = indentation + 2
+  )
+
+  # Test the formals (arguments' names and default values)
+  formals_expectation <- create_fn_formals_expectation(
+    data = data,
+    name = name,
+    sample_n = sample_n,
+    indentation = indentation
+  )
+
+  # Test the function string
+  definition_expectation <- create_deparse_expectation(
+    data = data,
+    name = name,
+    sample_n = sample_n,
+    indentation = indentation
+  )
+
+  # Collect expectations and add comments
+  expectations <-
+    c(create_test_comment(name, section = "intro",
+                          indentation = indentation,
+                          create_comment = add_wrapper_comments),
+      create_test_comment("is function", indentation = indentation,
+                          create_comment = add_test_comments),
+      is_fn_expectation,
+      create_test_comment("argument names and default values",
+                          indentation = indentation,
+                          create_comment = add_test_comments),
+      formals_expectation,
+      create_test_comment("function definition", indentation = indentation,
+                          create_comment = add_test_comments),
+      definition_expectation,
+      create_test_comment(name, section = "outro", indentation = indentation,
+                          create_comment = add_wrapper_comments)
+    )
+
+  expectations
+}
+
+
 
 
 #   __________________ #< 2451d1703a5d7b006fa4e72e2dcc59ed ># __________________

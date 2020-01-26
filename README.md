@@ -34,13 +34,18 @@ Note: `gxs` stands for `generate expectations`.
   - `gxs_selection()`
   - `gxs_function()`
 
-### Helper functions
+### Functions for use in tests
 
   - `strip()`
   - `strip_msg()`
   - `smpl()`
+  - `simplified_formals()`
   - `element_lengths()`, `element_types()`, `element_classes()`
+  - `num_total_elements()`
   - `set_test_seed()`
+
+### Helper functions
+
   - `prepare_insertion()`
   - `capture_side_effects()`
   - `capture_parse_eval_side_effects()`

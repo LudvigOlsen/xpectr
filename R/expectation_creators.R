@@ -312,6 +312,57 @@ create_element_classes_expectation <- function(data, name,
   )
 }
 
+
+#   __________________ #< 55b9eab5a484e7388a1bf336aac64ff8 ># __________________
+#   Create function formals expectation                                     ####
+
+
+create_fn_formals_expectation <- function(data, name,
+                                          sample_n = NULL,
+                                          indentation = 0) {
+
+  pref_suff <- add_smpl_string(
+    condition = !is.null(sample_n) && length(formals(data)) > sample_n,
+    prefix = "xpectr::simplified_formals(",
+    suffix = ")",
+    sample_n = sample_n)
+
+  create_equality_expectation(
+    data = data,
+    name = name,
+    prefix = pref_suff[["prefix"]],
+    suffix = pref_suff[["suffix"]],
+    add_fixed = TRUE,
+    indentation = indentation
+  )
+}
+
+
+#   __________________ #< 5f01ff7be6d77ad1ae8986bca271e1bc ># __________________
+#   Create deparse expectation                                              ####
+
+
+create_deparse_expectation <- function(data, name,
+                                       sample_n = NULL,
+                                       indentation = 0) {
+
+  pref_suff <- add_smpl_string(
+    condition = !is.null(sample_n) && length(deparse(data)) > sample_n,
+    prefix = "deparse(",
+    suffix = ")",
+    sample_n = sample_n)
+
+  create_equality_expectation(
+    data = data,
+    name = name,
+    prefix = pref_suff[["prefix"]],
+    suffix = pref_suff[["suffix"]],
+    add_fixed = TRUE,
+    indentation = indentation
+  )
+}
+
+
 #   __________________ #< b3caa9bbc4f32ccc4aa583dfb8bc7a47 ># __________________
 #   Create expect equal                                                     ####
 
