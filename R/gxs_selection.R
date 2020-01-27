@@ -206,6 +206,11 @@ gxs_selection <- function(selection,
                                                    sample_n = sample_n,
                                                    add_wrapper_comments = add_wrapper_comments,
                                                    add_test_comments = add_test_comments)
+    } else if (rlang::is_formula(obj)) {
+      expectations <- create_expectations_formula(obj, name = selection,
+                                                  indentation = indentation,
+                                                  add_wrapper_comments = add_wrapper_comments,
+                                                  add_test_comments = add_test_comments)
     } else {
       stop(paste0("The selection is not of a currently supported class: ",
                   class(obj)))

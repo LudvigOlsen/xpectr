@@ -1,5 +1,5 @@
 
-
+# For overview: cmd-alt-o
 
 #   __________________ #< a728fc4a8cf823f5d1f50ada4565aa66 ># __________________
 #   Create expectations for NULL                                            ####
@@ -742,6 +742,59 @@ create_expectations_factor <- function(data, name = NULL,
                           create_comment = add_test_comments),
       levels_expectation,
       create_test_comment(call_name, section = "outro", indentation = indentation,
+                          create_comment = add_wrapper_comments)
+    )
+
+  expectations
+}
+
+
+#   __________________ #< b696d526380be550b639f9efdbb1ac91 ># __________________
+#   Create expectations formula                                             ####
+
+
+create_expectations_formula <- function(data, name = NULL, indentation = 0,
+                                        add_wrapper_comments = TRUE,
+                                        add_test_comments = TRUE) {
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_formula(x = data, add = assert_collection)
+  add_create_exps_checks(
+    collection = assert_collection,
+    name = name,
+    indentation = indentation,
+    add_wrapper_comments = add_wrapper_comments,
+    add_test_comments = add_test_comments
+  )
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # Create is_formula test
+  is_formula_expectation <- create_expect_true(
+    x = paste0("rlang::is_formula(", name, ")"),
+    spaces = indentation + 2
+  )
+
+  # Test the formula
+  formula_expectation <- create_formula_expectation(
+    data = data,
+    name = name,
+    indentation = indentation
+  )
+
+  # Collect expectations and add comments
+  expectations <-
+    c(create_test_comment(name, section = "intro",
+                          indentation = indentation,
+                          create_comment = add_wrapper_comments),
+      create_test_comment("is formula", indentation = indentation,
+                          create_comment = add_test_comments),
+      is_formula_expectation,
+      create_test_comment("formula", indentation = indentation,
+                          create_comment = add_test_comments),
+      formula_expectation,
+      create_test_comment(name, section = "outro", indentation = indentation,
                           create_comment = add_wrapper_comments)
     )
 

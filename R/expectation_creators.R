@@ -363,6 +363,30 @@ create_deparse_expectation <- function(data, name,
 }
 
 
+#   __________________ #< 7e5326977a07eccfa83a9397413e7ea4 ># __________________
+#   Create formula expectation                                              ####
+
+
+create_formula_expectation <- function(data, name,
+                                       indentation = 0) {
+
+  # Create x
+  x <- name
+  # Create y
+  # Note: It's possible that deparse() would suffice, but this way
+  # we ensure that it will fail if data is not a valid formula
+  y <- paste0("as.formula(\"", collapse_strings(deparse(data)), "\")")
+  y <- apply_capture(y, fn = dput)
+
+  # Create test
+  create_expect_equal(
+    x = x,
+    y = y,
+    spaces = indentation + 2
+  )
+}
+
+
 #   __________________ #< b3caa9bbc4f32ccc4aa583dfb8bc7a47 ># __________________
 #   Create expect equal                                                     ####
 
