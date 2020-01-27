@@ -183,6 +183,15 @@ gxs_selection <- function(selection,
                                                      add_wrapper_comments = add_wrapper_comments,
                                                      add_test_comments = add_test_comments,
                                                      evaluate_once = evaluate_once)
+    } else if (is.matrix(obj)) {
+      expectations <- create_expectations_matrix(obj, name = selection,
+                                                 indentation = indentation,
+                                                 tolerance = tolerance,
+                                                 round_to_tolerance = round_to_tolerance,
+                                                 sample_n = sample_n,
+                                                 add_wrapper_comments = add_wrapper_comments,
+                                                 add_test_comments = add_test_comments,
+                                                 evaluate_once = evaluate_once)
     } else if (is.vector(obj)) {
       expectations <- create_expectations_vector(obj, name = selection,
                                                  indentation = indentation,

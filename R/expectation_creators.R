@@ -125,6 +125,38 @@ create_names_expectation <- function(data, name, sample_n = NULL, indentation = 
   )
 }
 
+create_colnames_expectation <- function(data, name, sample_n = NULL, indentation = 0) {
+
+  pref_suff <- add_smpl_string(
+    condition = !is.null(sample_n) && ncol(data) > sample_n,
+    sample_n = sample_n)
+
+  create_equality_expectation(
+    data = data,
+    name = name,
+    prefix = paste0("colnames(", pref_suff[["prefix"]]),
+    suffix = paste0(pref_suff[["suffix"]],")"),
+    add_fixed = TRUE,
+    indentation = indentation
+  )
+}
+
+create_rownames_expectation <- function(data, name, sample_n = NULL, indentation = 0) {
+
+  pref_suff <- add_smpl_string(
+    condition = !is.null(sample_n) && nrow(data) > sample_n,
+    sample_n = sample_n)
+
+  create_equality_expectation(
+    data = data,
+    name = name,
+    prefix = paste0("rownames(", pref_suff[["prefix"]]),
+    suffix = paste0(pref_suff[["suffix"]],")"),
+    add_fixed = TRUE,
+    indentation = indentation
+  )
+}
+
 
 ##  .................. #< cad874f32d32a8eae09090d2894d7ad5 ># ..................
 ##  Create dimensions expectation                                           ####
@@ -312,6 +344,20 @@ create_element_classes_expectation <- function(data, name,
   )
 }
 
+
+#   __________________ #< abd5e8f22decefad01cca729a155076c ># __________________
+#   Create symmetry expectation                                             ####
+
+
+create_is_symmetric_expectation <- function(data, name, indentation = 0) {
+  negator <- ifelse(isSymmetric(data), "", "!")
+  create_condition_expectation(
+    name = name,
+    prefix = paste0(negator, "isSymmetric("),
+    suffix = ")",
+    indentation = indentation
+  )
+}
 
 #   __________________ #< 55b9eab5a484e7388a1bf336aac64ff8 ># __________________
 #   Create function formals expectation                                     ####

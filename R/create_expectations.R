@@ -290,6 +290,178 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
 }
 
 
+#   __________________ #< 64bfa943afd1c6099390df317edf6e8a ># __________________
+#   Create expectations matrix                                              ####
+
+
+create_expectations_matrix <- function(data, name = NULL, indentation = 0,
+                                       sample_n = 30,
+                                       tolerance = "1e-4",
+                                       round_to_tolerance = TRUE,
+                                       add_wrapper_comments = TRUE,
+                                       add_test_comments = TRUE,
+                                       evaluate_once = FALSE) {
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_matrix(x = data, add = assert_collection)
+  add_create_exps_checks(
+    collection = assert_collection,
+    name = name,
+    indentation = indentation,
+    tolerance = tolerance,
+    sample_n = sample_n,
+    add_wrapper_comments = add_wrapper_comments,
+    add_test_comments = add_test_comments,
+    evaluate_once = evaluate_once,
+    round_to_tolerance = round_to_tolerance
+  )
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  if (is.null(name)) {
+    name <- trimws(deparse(substitute(data)))
+  }
+
+  # Make a copy
+  # Used when assigning the call's output to var
+  call_name <- name
+  if (isTRUE(evaluate_once)){
+    name <- create_output_var_name()
+  }
+  # Create assignment string
+  assign_string <- create_assignment_strings(
+    call_name = call_name, new_name = name,
+    evaluate_once = evaluate_once)
+
+  # Create expectations
+  # NOTE: Some must come before sampling!
+  class_expectation <- create_class_expectation(name = name,
+                                                data = data,
+                                                indentation = indentation)
+  type_expectation <- create_type_expectation(name = name,
+                                              type = typeof(data),
+                                              indentation = indentation)
+  colnames_expectation <- create_colnames_expectation(data = data, name = name,
+                                                   indentation = indentation)
+  rownames_expectation <- create_rownames_expectation(data = data, name = name,
+                                                      indentation = indentation)
+  dim_expectation <- create_dim_expectation(data = data, name = name,
+                                            indentation = indentation)
+  symmetry_expectation <- create_is_symmetric_expectation(data = data, name = name,
+                                                          indentation = indentation)
+
+  # Find digits for rounding
+  if (isTRUE(round_to_tolerance) && is.numeric(data)){
+    numeric_tolerance <- as.numeric(tolerance)
+    digits <- ndigits(1/numeric_tolerance) # tolerance + 1
+    data <- round(data, digits = digits)
+  }
+
+  # Whether to sample data
+  sample_data <- !is.null(sample_n) && max(dim(data)) > sample_n
+  row_indices <- seq_len(nrow(data))
+  col_indices <- seq_len(ncol(data))
+
+  # Sample data (TODO Specify axis!!)
+  if (isTRUE(sample_data)){
+    if (min(dim(data)) > sample_n){
+      slice_axis <- "column"
+    } else {
+      slice_axis <- ifelse(ncol(data) > nrow(data), "row", "column")
+    }
+    row_indices <- smpl(data = row_indices, n = sample_n,
+                        keep_order = TRUE)
+    col_indices <- smpl(data = col_indices, n = sample_n,
+                        keep_order = TRUE)
+  } else {
+    # Whether to test columns or rows
+    slice_axis <- ifelse(ncol(data) > nrow(data), "row", "column")
+  }
+
+  if (slice_axis == "row"){
+    slice_indices <- row_indices
+    data <- data[, col_indices]
+  } else if (slice_axis == "column"){
+    slice_indices <- col_indices
+    data <- data[row_indices, ]
+  }
+
+  # Create expect_equal expectations
+  slice_expectations <- plyr::llply(slice_indices, function(i) {
+
+    # Get current slice
+    if (slice_axis == "row"){
+      current_slice <- data[i, ]
+      x <- paste0(name, "[", i, ", ]")
+    } else if (slice_axis == "column"){
+      current_slice <- data[, i]
+      x <- paste0(name, "[, ", i, "]")
+    } else {
+      stop("'slice_axis' must be 'row' or 'column'.")
+    }
+
+    # Left side of expectation
+
+    if (isTRUE(sample_data)){
+      x <- paste0("xpectr::smpl(", x, ", n = ", sample_n, ")")
+    }
+
+    # Right side of expectation
+    y <- capture.output(dput(current_slice))
+    # In case dput spanned multiple lines
+    # we collapse them to one string
+    y <- collapse_strings(y)
+
+    # Sanity check
+    if (length(y) != 1) {
+      return(NULL)
+    }
+
+    # Create expect_equal text
+    create_expect_equal(x, y,
+                        add_tolerance = is.numeric(current_slice),
+                        add_fixed = is.character(current_slice),
+                        spaces = 2 + indentation,
+                        tolerance = tolerance)
+  })
+
+  # Collect expectations and add comments
+  expectations <-
+    c(
+      create_test_comment(call_name, section = "intro",
+                          indentation = indentation,
+                          create_comment = add_wrapper_comments),
+      assign_string,
+      create_test_comment("class", indentation = indentation,
+                          create_comment = add_test_comments),
+      class_expectation,
+      create_test_comment("type", indentation = indentation,
+                          create_comment = add_test_comments),
+      type_expectation,
+      create_test_comment(paste0(slice_axis, " values"), indentation = indentation,
+                          create_comment = add_test_comments),
+      slice_expectations,
+      create_test_comment("column names", indentation = indentation,
+                          create_comment = add_test_comments),
+      colnames_expectation,
+      create_test_comment("row names", indentation = indentation,
+                          create_comment = add_test_comments),
+      rownames_expectation,
+      create_test_comment("dimensions", indentation = indentation,
+                          create_comment = add_test_comments),
+      dim_expectation,
+      create_test_comment("symmetry", indentation = indentation,
+                          create_comment = add_test_comments),
+      symmetry_expectation,
+      create_test_comment(call_name, section = "outro", indentation = indentation,
+                          create_comment = add_wrapper_comments)
+    )
+
+  expectations
+}
+
+
 #   __________________ #< 57651c0852811eeaef463b8c09390020 ># __________________
 #   Create expectations vector                                              ####
 
