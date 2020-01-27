@@ -104,6 +104,10 @@ gxs_selection <- function(selection,
                           assign_output = TRUE,
                           out = "insert"){
 
+  # Save random seed state
+  if (exists(x = ".Random.seed"))
+    initial_seed_state <- .Random.seed
+
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(x = selection, add = assert_collection)
@@ -140,9 +144,18 @@ gxs_selection <- function(selection,
   } else {
 
     # Parse and evaluate the selection
-    obj <- tryCatch(
-      eval_string(selection, envir = envir),
-      error = function(e) {
+    obj <- tryCatch({
+      # Reset seed
+      # Note: Only seems to work when setting it in globalenv
+      # but it's the seed we started with, so it shouldn't be a problem?
+      if (exists(x = ".Random.seed")){
+        assign(x = ".Random.seed",
+               value = initial_seed_state,
+               envir = globalenv())
+      }
+      # Evaluate string
+      eval_string(selection, envir = envir)
+    }, error = function(e) {
         stop(paste0("Could not parse and evaluate the selection. Threw error:",
                     e))
       },
