@@ -30,7 +30,7 @@ Not intended for other purposes.
 Wraps \code{\link[base:sample.int]{sample.int()}}. Data frames are sampled rowwise.
 
 The seed is set within the function with \code{sample.kind} as \code{"Rounding"}
-for compatibility with R versions \code{< 3.6.0}.
+for compatibility with R versions \code{< 3.6.0}. On exit, the random state is restored.
 }
 \examples{
 # Attach packages

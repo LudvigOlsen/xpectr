@@ -275,7 +275,7 @@ generate_function_strings <- function(fn_name,
     dplyr::summarise(call_strings = paste0(
       fn_name,"(", paste0(.data$name_value, collapse = ", "), ")")) %>%
     dplyr::left_join(changed_arg, by="combination") %>%
-    dplyr::arrange(arg_name)
+    dplyr::arrange(.data$arg_name)
 
   # Move default first
   function_calls <- dplyr::bind_rows(

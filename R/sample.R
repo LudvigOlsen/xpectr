@@ -14,7 +14,7 @@
 #'  Wraps \code{\link[base:sample.int]{sample.int()}}. Data frames are sampled rowwise.
 #'
 #'  The seed is set within the function with \code{sample.kind} as \code{"Rounding"}
-#'  for compatibility with R versions \code{< 3.6.0}.
+#'  for compatibility with R versions \code{< 3.6.0}. On exit, the random state is restored.
 #' @param data Vector or data frame. (Logical)
 #' @param n Number of elements/rows to sample.
 #'
@@ -37,6 +37,10 @@ smpl <- function(data,
                  n,
                  keep_order = TRUE,
                  seed = 42) {
+
+  if (exists(".Random.seed"))
+    initial_random_state <- .Random.seed
+
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_count(x = n,
@@ -90,6 +94,9 @@ smpl <- function(data,
   } else {
     stop("Only vectors, factors and data frames are currently supported.")
   }
+
+  # Reassign the previous random state
+  assign_random_state(initial_random_state, check_existence = TRUE)
 
   data
 

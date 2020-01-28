@@ -4,7 +4,7 @@
 #   __________________ #< a728fc4a8cf823f5d1f50ada4565aa66 ># __________________
 #   Create expectations for NULL                                            ####
 
-create_expectations_null <- function(name = selection,
+create_expectations_null <- function(name = NULL,
                                      indentation = 0,
                                      add_comments = TRUE) {
 

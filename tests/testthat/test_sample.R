@@ -136,3 +136,19 @@ test_that("smpl() samples correctly", {
 
 
 })
+
+test_that("smpl() restores random state correctly", {
+
+  # Vectors
+  vec_1 <- c(1,2,3,4,5)
+
+  set_test_seed(98)
+  current_random_state <- head(.Random.seed, 10)
+
+  expect_equal(smpl(vec_1, 2), c(4, 5))
+
+  exist_random_state <- head(.Random.seed, 10)
+
+  expect_equal(current_random_state, exist_random_state)
+
+})
