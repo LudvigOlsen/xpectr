@@ -66,6 +66,7 @@
 #' @importFrom utils capture.output head tail
 #' @importFrom rlang := .data
 #' @importFrom dplyr %>%
+#' @importFrom stats runif
 insertExpectationsAddin <- function(selection = NULL, insert = TRUE, indentation = 0) {
 
 
