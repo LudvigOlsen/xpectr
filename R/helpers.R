@@ -10,30 +10,11 @@
 # accessing-same-named-list-elements-of-the-list-of-lists-in-r/5936077#5936077
 
 
-# Skips testthat test, if the R version is below 3.6.0
-# WHY? Due to the change in the random sampling generator
-# tests fail on R versions below 3.6.0.
-# It is possible to fix this by using the old generator for
-# unit tests, but that would take a long time to convert,
-# and most likely the code works the same on v3.5
-skip_test_if_old_R_version <- function(min_R_version = "3.6") {
-  if (getRversion()$minor < strsplit(
-    min_R_version, ".", fixed = TRUE)[[1]][[2]]) {
-    testthat::skip(message = paste0(
-      "Skipping test as R version is < ", min_R_version, "."))
-  }
-}
-
 # Remove NAs and empty "" names
 non_empty_names <- function(x) {
   ns <- names(x)
   ns <- ns[!is.na(ns)]
   ns[nzchar(ns, keepNA = TRUE)]
-}
-
-# Never used, but removes R CMD check NOTEs
-rcmd_import_handler <- function(){
-  lifecycle::deprecate_soft()
 }
 
 # Programmatic subset function

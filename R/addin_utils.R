@@ -25,8 +25,8 @@ eval_string <- function(string, envir = NULL) {
 }
 
 # Evaluate string and capture output
-capture <- function(string) {
-  apply_capture(string, identity)
+capture <- function(string, envir = NULL) {
+  apply_capture(string, identity,envir = envir)
 }
 
 

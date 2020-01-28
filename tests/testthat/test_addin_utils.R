@@ -15,6 +15,11 @@ test_that("apply_capture() works as expected", {
     "c(1, 2, 3, 4)"
   )
   expect_equal(
+    capture("a_vec", envir = current_envir),
+    "[1] 1 2 3 4"
+  )
+
+  expect_equal(
     apply_capture("a_vec", function(x) {
       x + 3
     }, envir = current_envir),

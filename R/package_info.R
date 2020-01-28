@@ -10,3 +10,8 @@ NULL
 
 # R CMD check NOTE handling
 if (getRversion() >= "2.15.1") utils::globalVariables(c("."))
+
+# Never used, but removes R CMD check NOTEs
+rcmd_import_handler <- function(){
+  lifecycle::deprecate_soft()
+}

@@ -13,6 +13,8 @@ test_that("smpl() samples correctly", {
                c(1, 2, 4))
   expect_equal(smpl(as.character(vec_1), n = 3),
                c("1", "4", "5"))
+  expect_equal(smpl(as.character(vec_1), n = 3, keep_order = FALSE),
+               c("5", "4", "1"))
 
   # lists (are vectors)
   ## Testing 'smpl(list(1,2,4,2,1,4,6,1,3,3), n = 3)'                       ####
