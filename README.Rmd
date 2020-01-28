@@ -4,13 +4,27 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  dpi = 92,
+  fig.retina = 2
 )
+
+# Get minimum R requirement 
+dep <- as.vector(read.dcf('DESCRIPTION')[, 'Depends'])
+rvers <- substring(dep, 7, nchar(dep)-1)
+# m <- regexpr('R *\\\\(>= \\\\d+.\\\\d+.\\\\d+\\\\)', dep)
+# rm <- regmatches(dep, m)
+# rvers <- gsub('.*(\\\\d+.\\\\d+.\\\\d+).*', '\\\\1', dep)
+
+# Function for TOC
+# https://gist.github.com/gadenbuie/c83e078bf8c81b035e32c3fc0cf04ee8
+
+
 ```
 
 # xpectr
@@ -18,6 +32,12 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/xpectr)](https://CRAN.R-project.org/package=xpectr)
+[![metacran downloads](https://cranlogs.r-pkg.org/badges/xpectr)](https://cran.r-project.org/package=xpectr)
+[![minimal R version](https://img.shields.io/badge/R%3E%3D-`r rvers`-6666ff.svg)](https://cran.r-project.org/)
+[![Codecov test coverage](https://codecov.io/gh/ludvigolsen/xpectr/branch/master/graph/badge.svg)](https://codecov.io/gh/ludvigolsen/xpectr?branch=master)
+[![Travis build status](https://travis-ci.org/LudvigOlsen/xpectr.svg?branch=master)](https://travis-ci.org/LudvigOlsen/xpectr)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/xpectr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/xpectr)
+<!-- [![DOI](https://zenodo.org/badge/71063931.svg)](https://zenodo.org/badge/latestdoi/71063931) -->
 <!-- badges: end -->
 
 `xpectr` provides a set of utilities and RStudio addins for generating tests for testthat unit testing.
@@ -74,6 +94,12 @@ This allows you to use it in unit tests and users aren't required to have it ins
 
 NOTE: This won't work on CRAN before it is released there.
 
+## Table of Contents {#toc}
+
+```{r toc, echo=FALSE}
+xpectr:::render_toc("README.Rmd", toc_depth = 5)
+```
+
 ## Examples
 
 ```{r warning=FALSE, message=FALSE}
@@ -116,13 +142,13 @@ fn <- function(raise = FALSE){
 }
 ```
 
-### `gxs_selection()`
+### gxs_selection
 
 Note: `gxs_selection()` can be used with the `Insert Expectations` addin. See `?insertExpectationsAddin` for instructions on how to set up a key command.
 
 #### Selection is a vector
 
-Numeric vector:
+##### Numeric vector
 
 ```{r}
 # Inspect num_vec
@@ -169,7 +195,7 @@ expect_equal(
 
 ```
 
-Character vector:
+##### Character vector
 
 ```{r}
 # Inspect char_vec
@@ -216,7 +242,7 @@ expect_equal(
 
 ```
 
-Factor:
+##### Factor
 
 ```{r}
 # Inspect a_factor
@@ -262,7 +288,7 @@ expect_equal(
 
 ```
 
-Long vector (currently > 30 elements) adds `smpl()`:
+##### Long vector (currently > 30 elements) adds `smpl()` {#long-vector}
 
 ```{r}
 # Inspect long_vec
@@ -451,7 +477,7 @@ expect_error(
 
 ```
 
-### `gxs_function()`
+### gxs_function
 
 Based on a set of supplied values for each function argument, a set of `testthat` `expect_*` statements are generated.
 
@@ -652,7 +678,7 @@ expect_error(
 ```
 
 
-### `wrapStringAddin()`
+### wrapStringAddin
 
 This addin splits long strings and wraps them with `paste0()`.
 

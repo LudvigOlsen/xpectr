@@ -1,0 +1,18 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+cache: packages
+
+matrix:
+  include:
+  - r: devel
+  - r: release
+    after_success:
+    - Rscript -e 'covr::codecov()'
+  - r: release
+    name: tidyr-devel
+    before_script: Rscript -e "remotes::install_github('tidyverse/tidyr')"
+  - r: release
+    os: osx
+    name: release osx
+  - r: oldrel

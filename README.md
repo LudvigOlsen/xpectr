@@ -9,6 +9,17 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/xpectr)](https://CRAN.R-project.org/package=xpectr)
+[![metacran
+downloads](https://cranlogs.r-pkg.org/badges/xpectr)](https://cran.r-project.org/package=xpectr)
+[![minimal R
+version](https://img.shields.io/badge/R%3E%3D-3.2.0-6666ff.svg)](https://cran.r-project.org/)
+[![Codecov test
+coverage](https://codecov.io/gh/ludvigolsen/xpectr/branch/master/graph/badge.svg)](https://codecov.io/gh/ludvigolsen/xpectr?branch=master)
+[![Travis build
+status](https://travis-ci.org/LudvigOlsen/xpectr.svg?branch=master)](https://travis-ci.org/LudvigOlsen/xpectr)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/xpectr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/xpectr)
+<!-- [![DOI](https://zenodo.org/badge/71063931.svg)](https://zenodo.org/badge/latestdoi/71063931) -->
 <!-- badges: end -->
 
 `xpectr` provides a set of utilities and RStudio addins for generating
@@ -70,6 +81,30 @@ aren’t required to have it installed.
 
 NOTE: This won’t work on CRAN before it is released there.
 
+## Table of Contents
+
+  - [xpectr](#xpectr)
+      - [Installation](#installation)
+      - [Main functions](#main-functions)
+          - [Generator functions](#generator-functions)
+          - [Functions for use in tests](#functions-for-use-in-tests)
+          - [Helper functions](#helper-functions)
+      - [Addins](#addins)
+      - [Using in packages](#using-in-packages)
+      - [Examples](#examples)
+          - [gxs\_selection](#gxs_selection)
+              - [Selection is a vector](#selection-is-a-vector)
+                  - [Numeric vector](#numeric-vector)
+                  - [Character vector](#character-vector)
+                  - [Factor](#factor)
+                  - [Long vector (currently \> 30 elements) adds
+                    `smpl()`](#long-vector)
+              - [Selection is a data frame](#selection-is-a-data-frame)
+              - [Selection is a function call with side
+                effects](#selection-is-a-function-call-with-side-effects)
+          - [gxs\_function](#gxs_function)
+          - [wrapStringAddin](#wrapstringaddin)
+
 ## Examples
 
 ``` r
@@ -112,7 +147,7 @@ fn <- function(raise = FALSE){
 }
 ```
 
-### `gxs_selection()`
+### gxs\_selection
 
 Note: `gxs_selection()` can be used with the `Insert Expectations`
 addin. See `?insertExpectationsAddin` for instructions on how to set up
@@ -120,7 +155,7 @@ a key command.
 
 #### Selection is a vector
 
-Numeric vector:
+##### Numeric vector
 
 ``` r
 # Inspect num_vec
@@ -167,7 +202,7 @@ expect_equal(
 ## Finished testing 'num_vec'                                               ####
 ```
 
-Character vector:
+##### Character vector
 
 ``` r
 # Inspect char_vec
@@ -214,7 +249,7 @@ expect_equal(
 ## Finished testing 'char_vec'                                              ####
 ```
 
-Factor:
+##### Factor
 
 ``` r
 # Inspect a_factor
@@ -261,7 +296,7 @@ expect_equal(
 ## Finished testing 'a_factor'                                              ####
 ```
 
-Long vector (currently \> 30 elements) adds `smpl()`:
+##### Long vector (currently \> 30 elements) adds `smpl()`
 
 ``` r
 # Inspect long_vec
@@ -473,7 +508,7 @@ expect_error(
 ## Finished testing 'fn(raise = TRUE)'                                      ####
 ```
 
-### `gxs_function()`
+### gxs\_function
 
 Based on a set of supplied values for each function argument, a set of
 `testthat` `expect_*` statements are generated.
@@ -677,7 +712,7 @@ expect_error(
 ## Finished testing 'fn'                                                    ####
 ```
 
-### `wrapStringAddin()`
+### wrapStringAddin
 
 This addin splits long strings and wraps them with
 `paste0()`.
