@@ -130,18 +130,38 @@ gxs_selection <- function(selection,
   # Check for side effects
   side_effects <- capture_parse_eval_side_effects(selection, envir)
   has_side_effects <- side_effects[["has_side_effects"]]
+  has_error <- !is.null(side_effects[["error"]])
+
+  intro_comment <- create_test_comment(
+    selection,
+    section = "intro",
+    indentation = indentation,
+    create_comment = add_wrapper_comments
+  )
+  outro_comment <-  create_test_comment(
+    selection,
+    section = "outro",
+    indentation = indentation,
+    create_comment = add_wrapper_comments
+  )
+
+  expectations <- c()
+  sfx_expectations <- c()
 
   if (isTRUE(has_side_effects)) {
 
     # Create expectations for error, warnings, and messages
-    expectations <- create_expectations_side_effect(
+    sfx_expectations <- create_expectations_side_effect(
       side_effects, name = selection,
       indentation = indentation,
-      strip = strip,
-      add_wrapper_comments = add_wrapper_comments,
-      add_test_comments = add_test_comments)
+      add_comments = add_test_comments,
+      strip = strip)
 
-  } else {
+    selection <- paste0("xpectr::suppress_mw(", selection, ")")
+
+  }
+
+  if (!isTRUE(has_error)) {
 
     # Parse and evaluate the selection
     obj <- tryCatch({
@@ -172,7 +192,8 @@ gxs_selection <- function(selection,
     # we might prefer to assign it once
     assign_once <- nchar(selection) > 30 ||
       (grepl("[\\(\\)]", selection) &&
-         !checkmate::test_string(x = obj))
+         !(checkmate::test_string(x = obj) &&
+             add_quotation_marks(obj) == selection))
 
     # If selection is a function call
     if (isTRUE(assign_output) && assign_once){
@@ -185,16 +206,14 @@ gxs_selection <- function(selection,
     if (is.null(obj)) {
       expectations <- create_expectations_null(name = selection,
                                                indentation = indentation,
-                                               add_wrapper_comments = add_wrapper_comments,
-                                               add_test_comments = add_test_comments)
+                                               add_comments = add_test_comments)
     } else if (is.data.frame(obj)) {
       expectations <- create_expectations_data_frame(obj, name = selection,
                                                      indentation = indentation,
                                                      tolerance = tolerance,
                                                      round_to_tolerance = round_to_tolerance,
                                                      sample_n = sample_n,
-                                                     add_wrapper_comments = add_wrapper_comments,
-                                                     add_test_comments = add_test_comments,
+                                                     add_comments = add_test_comments,
                                                      evaluate_once = evaluate_once)
     } else if (is.matrix(obj)) {
       expectations <- create_expectations_matrix(obj, name = selection,
@@ -202,8 +221,7 @@ gxs_selection <- function(selection,
                                                  tolerance = tolerance,
                                                  round_to_tolerance = round_to_tolerance,
                                                  sample_n = sample_n,
-                                                 add_wrapper_comments = add_wrapper_comments,
-                                                 add_test_comments = add_test_comments,
+                                                 add_comments = add_test_comments,
                                                  evaluate_once = evaluate_once)
     } else if (is.vector(obj)) {
       expectations <- create_expectations_vector(obj, name = selection,
@@ -211,33 +229,36 @@ gxs_selection <- function(selection,
                                                  tolerance = tolerance,
                                                  round_to_tolerance = round_to_tolerance,
                                                  sample_n = sample_n,
-                                                 add_wrapper_comments = add_wrapper_comments,
-                                                 add_test_comments = add_test_comments,
+                                                 add_comments = add_test_comments,
                                                  evaluate_once = evaluate_once)
     } else if (is.factor(obj)) {
       expectations <- create_expectations_factor(obj, name = selection,
                                                  indentation = indentation,
                                                  tolerance = tolerance,
                                                  sample_n = sample_n,
-                                                 add_wrapper_comments = add_wrapper_comments,
-                                                 add_test_comments = add_test_comments,
+                                                 add_comments = add_test_comments,
                                                  evaluate_once = evaluate_once)
     } else if (is.function(obj)) {
       expectations <- create_expectations_function(obj, name = selection,
                                                    indentation = indentation,
                                                    sample_n = sample_n,
-                                                   add_wrapper_comments = add_wrapper_comments,
-                                                   add_test_comments = add_test_comments)
+                                                   add_comments = add_test_comments,
+                                                   evaluate_once = evaluate_once)
     } else if (rlang::is_formula(obj)) {
       expectations <- create_expectations_formula(obj, name = selection,
                                                   indentation = indentation,
-                                                  add_wrapper_comments = add_wrapper_comments,
-                                                  add_test_comments = add_test_comments)
+                                                  add_comments = add_test_comments,
+                                                  evaluate_once = evaluate_once)
     } else {
       stop(paste0("The selection is not of a currently supported class: ",
                   class(obj)))
     }
   }
+
+  expectations <- c(intro_comment,
+                    sfx_expectations,
+                    expectations,
+                    outro_comment)
 
   if (out == "insert")
     insert_code(expectations, prepare = TRUE, indentation = indentation)
