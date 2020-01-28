@@ -73,3 +73,14 @@ ndigits <- function(x){
 
 }
 
+# assign .Random.seed in global environment
+assign_random_state <- function(state, envir = globalenv(), check_existence = TRUE){
+  if (!isTRUE(check_existence) ||
+      exists(x = ".Random.seed")){
+      assign(x = ".Random.seed",
+             value = state,
+             envir = envir)
+    }
+}
+
+

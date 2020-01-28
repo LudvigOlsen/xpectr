@@ -47,8 +47,7 @@ strip_msg <- function(x, remove_spaces = FALSE, remove_numbers = FALSE){
   # Needed with direct message() calls
   x <- substitute(x)
   # Create function that evaluates x in the parent to this function
-  fn <- function(){eval(x, envir = parent.frame(3))}
-  side_effects <- capture_side_effects(fn)
+  side_effects <- capture_side_effects(eval(x, envir = parent.frame(4)))
   stripper <- function(msg) {
     strip(msg, remove_spaces = remove_spaces,
           remove_numbers = remove_numbers)

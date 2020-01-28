@@ -5,33 +5,60 @@
 
 #' @title Capture side effects
 #' @description
-#'  Captures errors, warnings, and messages from running a given function.
+#'  Captures errors, warnings, and messages from an expression.
 #'
-#'  When the function throws an error, no other side effects are captured.
+#'  In case of an error, no other side effects are captured.
 #'
 #'  Simple wrapper for testthat's
 #'  \code{\link[testthat:capture_error]{capture_error()}},
 #'  \code{\link[testthat:capture_warnings]{capture_warnings()}} and
 #'  \code{\link[testthat:capture_messages]{capture_messages()}}.
-#' @param fn Function to evaluate.
-#' @param ... Arguments for \code{fn}.
+#' @param expr Expression.
+#' @param envir Environment to evaluate expression in.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @return Named list with the side effects.
 #' @export
-capture_side_effects <- function(fn, ...) {
+#' @examples
+#' # Attach packages
+#' library(xpectr)
+#'
+#' fn <- function(raise = FALSE){
+#'   message("Hi! I'm Kevin, your favorite message!")
+#'   warning("G'Day Mam! I'm a warning to the world!")
+#'   message("Kevin is ma name! Yesss!")
+#'   warning("Hopefully the whole world will see me :o")
+#'   if (isTRUE(raise)){
+#'     stop("Lord Evil Error has arrived! Yeehaaa")
+#'   }
+#'   "the output"
+#' }
+#' \donttest{
+#' capture_side_effects(fn())
+#' capture_side_effects(fn(raise = TRUE))
+#' }
+capture_side_effects <- function(expr, envir = NULL) {
 
-  # Check arguments ####
-  assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_function(x = fn, add = assert_collection)
-  checkmate::reportAssertions(assert_collection)
-  # End of argument checks ####
+  # We cannot rely on lazy evaluation
+  # as it would only be called in the first call (capture_error)
+  sexpr <- substitute(expr)
+
+  if (is.null(envir))
+    envir <- parent.frame()
+
+  if (exists(".Random.seed"))
+    initial_random_state <- .Random.seed
 
   # Capture error
-  error <- testthat::capture_error(suppressMessages(suppressWarnings(fn(...))))
+  error <- testthat::capture_error(suppressMessages(suppressWarnings(
+    eval(sexpr, envir = envir))))
   # If no error, capture messages and warnings
   if (is.null(error)) {
-    messages <- testthat::capture_messages(suppressWarnings(fn(...)))
-    warnings <- testthat::capture_warnings(suppressMessages(fn(...)))
+    assign_random_state(initial_random_state, check_existence = FALSE)
+    messages <- testthat::capture_messages(suppressWarnings(
+      eval(sexpr, envir = envir)))
+    assign_random_state(initial_random_state, check_existence = FALSE)
+    warnings <- testthat::capture_warnings(suppressMessages(
+      eval(sexpr, envir = envir)))
   } else {
     error <- error$message
     messages <- NULL
@@ -93,7 +120,7 @@ capture_parse_eval_side_effects <- function(string, envir = NULL) {
   # that it cannot find capture_side_effects
   catcher_string <- paste0(
     "xpectr::capture_side_effects(",
-    "function(){", string, "}",
+    string,
     ")"
   )
 

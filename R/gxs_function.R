@@ -18,10 +18,7 @@
 #'  create tests for each of the supplied values, where the other arguments
 #'  have their baseline value.
 #'
-#'  Currently, supported tests are of side effects (error, warnings, messages),
-#'  data frames, vectors, and factors. List columns in data frames (like nested tibbles) are skipped.
-#'
-#'  \strong{N.B.} This function is undergoing active development!
+#'  See supported objects in \code{details}.
 #' @param fn Function to create tests for.
 #' @param args_values The arguments and the values to create tests for.
 #'  Should be supplied as a named list of lists, like the following:
@@ -36,12 +33,13 @@
 #'  This is currently necessary.
 #' @param check_nulls Whether to try all arguments with \code{NULL}. (Logical)
 #'
-#'  Note: With this enabled, you don't need to add \code{NULL} to your \code{args_values},
+#'  When enabled, you don't need to add \code{NULL} to your \code{args_values},
 #'  unless it should be the baseline value.
 #' @inheritParams gxs_selection
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family expectation generators
 #' @export
+#' @inherit gxs_selection details
 #' @examples
 #' # Attach packages
 #' library(xpectr)
@@ -73,6 +71,7 @@ gxs_function <- function(fn,
                          add_wrapper_comments = TRUE,
                          add_test_comments = TRUE,
                          assign_output = TRUE,
+                         seed = 42,
                          out = "insert"){
 
   # Check arguments ####
@@ -90,6 +89,7 @@ gxs_function <- function(fn,
   checkmate::assert_flag(x = round_to_tolerance, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_count(x = seed, null.ok = TRUE, add = assert_collection)
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   checkmate::assert_names(x = names(args_values), what = "argnames",
@@ -112,11 +112,30 @@ gxs_function <- function(fn,
 
   # Generate function call fn(arg = value) strings
   fn_calls <- generate_function_strings(fn_name = fn_name,
-                                               args_values_substituted = arg_call,
-                                               check_nulls = check_nulls)
+                                        args_values_substituted = arg_call,
+                                        check_nulls = check_nulls)
 
+  # Create unique test IDs
+  # Make sure not to disturb the random state
+  if (exists(".Random.seed"))
+    initial_seed_state <- .Random.seed
+
+  if (nrow(fn_calls) > 1000){
+    id_max <- 40000
+  } else id_max <- 20000
+
+  test_ids <- head(unique(floor(runif(
+    nrow(fn_calls) * 4, # times 4 to ensure enough unique IDs
+    min = 10000, id_max
+  ))), nrow(fn_calls))
+
+  # Reset random state
+  assign_random_state(initial_seed_state)
+
+  # Get parent environment
   if (is.null(envir)) envir <- parent.frame()
 
+  # Create tests for each combination
   expectations <- plyr::llply(seq_len(nrow(fn_calls)), function(r){
 
     current_call <- fn_calls[r,]
@@ -138,6 +157,8 @@ gxs_function <- function(fn,
         add_test_comments = add_test_comments,
         add_wrapper_comments = FALSE,
         assign_output = assign_output,
+        seed = seed,
+        test_id = test_ids[[r]],
         out = "return"
       ), ""
     )

@@ -4,25 +4,44 @@
 \alias{capture_side_effects}
 \title{Capture side effects}
 \usage{
-capture_side_effects(fn, ...)
+capture_side_effects(expr, envir = NULL)
 }
 \arguments{
-\item{fn}{Function to evaluate.}
+\item{expr}{Expression.}
 
-\item{...}{Arguments for \code{fn}.}
+\item{envir}{Environment to evaluate expression in.}
 }
 \value{
 Named list with the side effects.
 }
 \description{
-Captures errors, warnings, and messages from running a given function.
+Captures errors, warnings, and messages from an expression.
 
-When the function throws an error, no other side effects are captured.
+In case of an error, no other side effects are captured.
 
 Simple wrapper for testthat's
 \code{\link[testthat:capture_error]{capture_error()}},
 \code{\link[testthat:capture_warnings]{capture_warnings()}} and
 \code{\link[testthat:capture_messages]{capture_messages()}}.
+}
+\examples{
+# Attach packages
+library(xpectr)
+
+fn <- function(raise = FALSE){
+  message("Hi! I'm Kevin, your favorite message!")
+  warning("G'Day Mam! I'm a warning to the world!")
+  message("Kevin is ma name! Yesss!")
+  warning("Hopefully the whole world will see me :o")
+  if (isTRUE(raise)){
+    stop("Lord Evil Error has arrived! Yeehaaa")
+  }
+  "the output"
+}
+\donttest{
+capture_side_effects(fn())
+capture_side_effects(fn(raise = TRUE))
+}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

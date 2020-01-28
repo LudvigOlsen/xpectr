@@ -43,7 +43,8 @@ create_expectations_null <- function(name = selection,
 create_expectations_function <- function(data, name = NULL, indentation = 0,
                                          sample_n = 30,
                                          evaluate_once = FALSE,
-                                         add_comments = TRUE) {
+                                         add_comments = TRUE,
+                                         test_id = 10000) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -54,7 +55,8 @@ create_expectations_function <- function(data, name = NULL, indentation = 0,
     indentation = indentation,
     sample_n = sample_n,
     evaluate_once = evaluate_once,
-    add_comments = add_comments
+    add_comments = add_comments,
+    test_id = test_id
   )
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -63,7 +65,7 @@ create_expectations_function <- function(data, name = NULL, indentation = 0,
   # Used when assigning the call's output to var
   call_name <- name
   if (isTRUE(evaluate_once)){
-    name <- create_output_var_name()
+    name <- create_output_var_name(id = test_id)
   }
   # Create assignment string
   assign_string <- create_assignment_strings(
@@ -122,7 +124,8 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
                                            tolerance = "1e-4",
                                            round_to_tolerance = TRUE,
                                            add_comments = TRUE,
-                                           evaluate_once = FALSE) {
+                                           evaluate_once = FALSE,
+                                           test_id = NULL) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -135,7 +138,8 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     sample_n = sample_n,
     add_comments = add_comments,
     evaluate_once = evaluate_once,
-    round_to_tolerance = round_to_tolerance
+    round_to_tolerance = round_to_tolerance,
+    test_id = test_id
   )
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -148,7 +152,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
   # Used when assigning the call's output to var
   call_name <- name
   if (isTRUE(evaluate_once)){
-    name <- create_output_var_name()
+    name <- create_output_var_name(id = test_id)
   }
   # Create assignment string
   assign_string <- create_assignment_strings(
@@ -283,7 +287,8 @@ create_expectations_matrix <- function(data, name = NULL, indentation = 0,
                                        tolerance = "1e-4",
                                        round_to_tolerance = TRUE,
                                        add_comments = TRUE,
-                                       evaluate_once = FALSE) {
+                                       evaluate_once = FALSE,
+                                       test_id = NULL) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -296,7 +301,8 @@ create_expectations_matrix <- function(data, name = NULL, indentation = 0,
     sample_n = sample_n,
     add_comments = add_comments,
     evaluate_once = evaluate_once,
-    round_to_tolerance = round_to_tolerance
+    round_to_tolerance = round_to_tolerance,
+    test_id = test_id
   )
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -309,7 +315,7 @@ create_expectations_matrix <- function(data, name = NULL, indentation = 0,
   # Used when assigning the call's output to var
   call_name <- name
   if (isTRUE(evaluate_once)){
-    name <- create_output_var_name()
+    name <- create_output_var_name(id = test_id)
   }
   # Create assignment string
   assign_string <- create_assignment_strings(
@@ -449,7 +455,8 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
                                        tolerance = "1e-4",
                                        round_to_tolerance = TRUE,
                                        add_comments = TRUE,
-                                       evaluate_once = FALSE) {
+                                       evaluate_once = FALSE,
+                                       test_id = NULL) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -462,7 +469,8 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
     sample_n = sample_n,
     add_comments = add_comments,
     evaluate_once = evaluate_once,
-    round_to_tolerance = round_to_tolerance
+    round_to_tolerance = round_to_tolerance,
+    test_id = test_id
   )
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -475,7 +483,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
   # Used when assigning the call's output to var
   call_name <- name
   if (isTRUE(evaluate_once)){
-    name <- create_output_var_name()
+    name <- create_output_var_name(id = test_id)
   }
   # Create assignment string
   assign_string <- create_assignment_strings(
@@ -558,7 +566,18 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
       current_elem <- data[[elem_name]]
       # Left side of expectation
       x <- paste0(name, "[[\"", elem_name, "\"]]")
-      if (isTRUE(sample_data)){ # TODO are the elements themselves sampled? is this correct????
+
+      # Determine whether to sample element
+      if (is.data.frame(current_elem))
+        sample_slice <- !is.null(sample_n) && nrow(current_elem) > sample_n
+      else if (is.vector(current_elem))
+        sample_slice <- !is.null(sample_n) && length(current_elem) > sample_n
+      else
+        sample_slice <- FALSE
+
+      # Sample element
+      if (isTRUE(sample_slice)){
+        current_elem <- smpl(current_elem, n = sample_n, keep_order = TRUE)
         x <- paste0("xpectr::smpl(", x, ", n = ", sample_n, ")")
       }
 
@@ -683,8 +702,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
 
 create_expectations_side_effect <- function(side_effects, name = NULL,
                                             indentation = 0, strip = TRUE,
-                                            add_comments,
-                                            evaluate_once = FALSE) {
+                                            add_comments, test_id = 10000) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -728,44 +746,38 @@ create_expectations_side_effect <- function(side_effects, name = NULL,
       )
     ))
   } else {
-    if (!is.null(side_effects$warnings)) {
 
-      # Suppress messages if they're there!
-      if (!is.null(side_effects$messages)){
-        w_name <- paste0("suppressMessages(", name ,")")
-      } else w_name <- name
+    call_name <- name
+    name <- create_output_var_name("side_effects_", test_id)
 
-      expectations <- c(
-        expectations,
-        plyr::llply(side_effects$warnings, function(w) {
-          create_expect_side_effect(
-            w_name, w,
-            side_effect_type = "warning",
-            spaces = 2 + indentation,
-            strip = strip
-          )
-        })
-      )
-    }
-    if (!is.null(side_effects$messages)) {
+    # Create assignment string
+    assign_string <- create_assignment_strings(
+      call_name = paste0("xpectr::capture_side_effects(", call_name, ")"),
+      new_name = name,
+      evaluate_once = TRUE,
+      comment = "# Assigning side effects")
 
-      # Suppress warnings if they're there!
-      if (!is.null(side_effects$warnings)){
-        m_name <- paste0("suppressWarnings(", name ,")")
-      } else m_name <- name
+    msg_expectation <- create_equality_expectation(
+      data = side_effects, name = name,
+      prefix = "",
+      suffix = "[['messages']]",
+      add_strip = strip,
+      add_fixed = TRUE, indentation = indentation
+    )
 
-      expectations <- c(
-        expectations,
-        plyr::llply(side_effects$messages, function(m) {
-          create_expect_side_effect(
-            m_name, m,
-            side_effect_type = "message",
-            spaces = 2 + indentation,
-            strip = strip
-          )
-        })
-      )
-    }
+    warns_expectation <- create_equality_expectation(
+      data = side_effects, name = name,
+      prefix = "",
+      suffix = "[['warnings']]",
+      add_strip = strip,
+      add_fixed = TRUE, indentation = indentation
+    )
+
+    expectations <- c(
+      expectations,
+      assign_string,
+      warns_expectation,
+      msg_expectation)
   }
 
   # TODO add expectation of side effect counts (for warnings and messages at least)
@@ -787,7 +799,8 @@ create_expectations_factor <- function(data, name = NULL,
                                        sample_n = 30,
                                        tolerance = "1e-4",
                                        add_comments = TRUE,
-                                       evaluate_once = FALSE) {
+                                       evaluate_once = FALSE,
+                                       test_id = NULL) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -799,7 +812,8 @@ create_expectations_factor <- function(data, name = NULL,
     tolerance = tolerance,
     sample_n = sample_n,
     add_comments = add_comments,
-    evaluate_once = evaluate_once
+    evaluate_once = evaluate_once,
+    test_id = test_id
   )
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -812,7 +826,7 @@ create_expectations_factor <- function(data, name = NULL,
   # Used when assigning the call's output to var
   call_name <- name
   if (isTRUE(evaluate_once)){
-    name <- create_output_var_name()
+    name <- create_output_var_name(id = test_id)
   }
   # Create assignment string
   assign_string <- create_assignment_strings(
@@ -872,7 +886,8 @@ create_expectations_factor <- function(data, name = NULL,
 
 create_expectations_formula <- function(data, name = NULL, indentation = 0,
                                         add_comments = TRUE,
-                                        evaluate_once = FALSE) {
+                                        evaluate_once = FALSE,
+                                        test_id = NULL) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -882,7 +897,8 @@ create_expectations_formula <- function(data, name = NULL, indentation = 0,
     name = name,
     indentation = indentation,
     add_comments = add_comments,
-    evaluate_once = evaluate_once
+    evaluate_once = evaluate_once,
+    test_id = test_id
   )
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -891,7 +907,7 @@ create_expectations_formula <- function(data, name = NULL, indentation = 0,
   # Used when assigning the call's output to var
   call_name <- name
   if (isTRUE(evaluate_once)){
-    name <- create_output_var_name()
+    name <- create_output_var_name(id = test_id)
   }
   # Create assignment string
   assign_string <- create_assignment_strings(
@@ -926,6 +942,81 @@ create_expectations_formula <- function(data, name = NULL, indentation = 0,
 }
 
 
+
+#   __________________ #< 1a04985673e4647d6eb888d8bf7e76c1 ># __________________
+#   Create expectation fallback                                             ####
+
+create_expectations_fallback <- function(data,
+                                         name = NULL,
+                                         indentation = 0,
+                                         add_comments = TRUE,
+                                         evaluate_once = FALSE,
+                                         test_id = NULL) {
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  add_create_exps_checks(
+    collection = assert_collection,
+    name = name,
+    indentation = indentation,
+    add_comments = add_comments,
+    evaluate_once = evaluate_once,
+    test_id = test_id
+  )
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # Make a copy
+  # Used when assigning the call's output to var
+  call_name <- name
+  if (isTRUE(evaluate_once)){
+    name <- create_output_var_name(id = test_id)
+  }
+
+  # Create assignment string
+  assign_string <- create_assignment_strings(
+    call_name = call_name, new_name = name,
+    evaluate_once = evaluate_once)
+
+  class_expectation <- create_class_expectation(name = name,
+                                                data = data,
+                                                indentation = indentation)
+  type_expectation <- create_type_expectation(name = name,
+                                               type = typeof(data),
+                                               indentation = indentation)
+  names_expectation <- create_names_expectation(data = data, name = name,
+                                                indentation = indentation)
+
+  dput_expectation <- create_equality_expectation(data = data,
+                                                  name = name,
+                                                  prefix = "",
+                                                  suffix = "",
+                                                  indentation = indentation)
+
+  # Collect expectations and add comments
+  expectations <-
+    c(create_test_comment("Unsupported class: using fallback tests",
+                          indentation = indentation,
+                          section = "manual",
+                          create_comment = add_comments),
+      assign_string,
+      create_test_comment("class", indentation = indentation,
+                          create_comment = add_comments),
+      class_expectation,
+      create_test_comment("type", indentation = indentation,
+                          create_comment = add_comments),
+      type_expectation,
+      create_test_comment("names", indentation = indentation,
+                          create_comment = add_comments),
+      names_expectation,
+      create_test_comment("dput() content", indentation = indentation,
+                          create_comment = add_comments),
+      dput_expectation
+    )
+
+  expectations
+}
+
 #   __________________ #< 3feae1f2a76409360ca8e7fa286cbdf9 ># __________________
 #   Common arg checks                                                       ####
 
@@ -940,7 +1031,8 @@ add_create_exps_checks <- function(collection,
                                    add_wrapper_comments = TRUE,
                                    add_test_comments = TRUE,
                                    add_comments = TRUE,
-                                   evaluate_once = FALSE) {
+                                   evaluate_once = FALSE,
+                                   test_id = NULL) {
 
   checkmate::assert_string(
     x = name, min.chars = 1, null.ok = TRUE,
@@ -949,6 +1041,7 @@ add_create_exps_checks <- function(collection,
   checkmate::assert_string(x = tolerance, add = collection)
   checkmate::assert_count(x = indentation, add = collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = collection)
+  checkmate::assert_count(x = test_id, null.ok = TRUE, positive = TRUE, add = collection)
   checkmate::assert_flag(x = add_wrapper_comments, add = collection)
   checkmate::assert_flag(x = add_test_comments, add = collection)
   checkmate::assert_flag(x = add_comments, add = collection)
@@ -961,8 +1054,10 @@ add_create_exps_checks <- function(collection,
 #   __________________ #< 8a79652e81ccaedb871a49e1f8421c1c ># __________________
 #   Create output name                                                      ####
 
-create_output_var_name <- function(prefix = "output_"){
-  paste0(prefix, floor(runif(1, 10000, 19999)))
+create_output_var_name <- function(prefix = "output_", id = NULL){
+  if (is.null(id))
+    id <- floor(runif(1, 10000, 19999))
+  paste0(prefix, id)
 }
 
 
@@ -970,7 +1065,8 @@ create_output_var_name <- function(prefix = "output_"){
 #   Create assignment strings                                               ####
 
 
-create_assignment_strings <- function(call_name, new_name, evaluate_once){
+create_assignment_strings <- function(call_name, new_name, evaluate_once,
+                                      comment = "# Assigning output"){
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -982,7 +1078,7 @@ create_assignment_strings <- function(call_name, new_name, evaluate_once){
 
   if (isTRUE(evaluate_once)){
     assign_string <- c(
-      "# Assigning output",
+      comment,
       paste0(new_name, " <- ", call_name))
   } else {
     assign_string <- NULL

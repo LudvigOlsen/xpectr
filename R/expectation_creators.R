@@ -13,6 +13,7 @@ create_equality_expectation <- function(data,
                                         name,
                                         prefix,
                                         suffix,
+                                        add_strip = FALSE,
                                         add_tolerance = FALSE,
                                         add_fixed = FALSE,
                                         indentation = 0) {
@@ -32,6 +33,10 @@ create_equality_expectation <- function(data,
     envir = current_envir)
   y <- collapse_strings(y)
 
+  # Add strips
+  y <- add_strip(y, strip = add_strip)
+  x <- add_strip(x, strip = add_strip)
+
   # Create test
   create_expect_equal(
     x = x,
@@ -41,6 +46,8 @@ create_equality_expectation <- function(data,
     spaces = indentation + 2
   )
 }
+
+
 
 
 ##  .................. #< fe7d19065058acccdc4ac9d5067ca9ae ># ..................
@@ -551,17 +558,6 @@ create_expect_side_effect <- function(x, y,
     TRUE ~ "" # Won't get here anyway
   )
 
-  add_strip_msg <- function(x, strip) {
-    if (isTRUE(strip))
-      x <- paste0("xpectr::strip_msg(", x, ")")
-    x
-  }
-  add_strip <- function(x, strip) {
-    if (isTRUE(strip))
-      x <- paste0("xpectr::strip(", x, ")")
-    x
-  }
-
   y <- escape_metacharacters(y)
   y <- split_to_paste0(y, spaces = spaces)
 
@@ -577,6 +573,18 @@ create_expect_side_effect <- function(x, y,
     "fixed = TRUE",
     ")"
   )
+}
+
+add_strip_msg <- function(x, strip) {
+  if (isTRUE(strip))
+    x <- paste0("xpectr::strip_msg(", x, ")")
+  x
+}
+
+add_strip <- function(x, strip) {
+  if (isTRUE(strip))
+    x <- paste0("xpectr::strip(", x, ")")
+  x
 }
 
 

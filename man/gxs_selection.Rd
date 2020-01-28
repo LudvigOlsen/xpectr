@@ -15,6 +15,8 @@ gxs_selection(
   add_wrapper_comments = TRUE,
   add_test_comments = TRUE,
   assign_output = TRUE,
+  seed = 42,
+  test_id = NULL,
   out = "insert"
 )
 }
@@ -29,7 +31,7 @@ E.g. \code{"stop('This gives an expect_error test')"}.}
 
 \item{round_to_tolerance}{Whether to round numeric elements to the specified tolerance. (Logical)
 
-This is currently applied to numeric columns and vectors.}
+This is currently applied to numeric columns and vectors (excluding some lists).}
 
 \item{strip}{Whether to insert
 \code{\link[xpectr:strip]{strip_msg()}} and
@@ -66,6 +68,12 @@ A selection with more than 30 characters will be assigned as well.
 The tests themselves can be more difficult to interpret, as you will
 have to look at the assignment to see the object that is being tested.}
 
+\item{seed}{Seed to set. (Whole number)}
+
+\item{test_id}{Number to append to assignment names. (Whole number)
+
+For instance used to create the "output_" name: \code{output_<test_id>}.}
+
 \item{out}{Either \code{"insert"} or \code{"return"}.
 
 \subsection{"insert" (Default)}{
@@ -87,14 +95,35 @@ statements are generated.
 
 Example: If the selected code is the name of a data frame object,
 it will create an \code{\link[testthat:expect_equal]{expect_equal}}
-test for each column, along with a test of the column names.
+test for each column, along with a test of the column names,
+types and classes, dimensions, grouping keys, etc.
 
-Currently supports side effects (error, warnings, messages),
-data frames, vectors, and factors.
+See supported objects in \code{details}.
 
-List columns in data frames (like nested tibbles) are currently skipped.
+Feel free to suggest useful tests etc. in a GitHub issue!
 
 Addin: \code{\link[xpectr:insertExpectationsAddin]{insertExpectationsAddin()}}
+}
+\details{
+The following "types" are currently supported or intended to be supported in the future.
+Please suggest more types and tests in a GitHub issue!
+
+Note: A set of fallback tests will be generated for unsupported objects.
+
+\tabular{rrr}{
+\strong{Type} \tab \strong{Supported} \tab \strong{Notes} \cr
+Side effects \tab Yes \tab Errors, warnings, and messages. \cr
+Vector \tab Yes \tab Lists are treated differently, depending on their structure. \cr
+Factor \tab Yes \tab \cr
+Data Frame \tab Yes \tab List columns (like nested tibbles) are currently skipped. \cr
+Matrix \tab Yes \tab Supported but could be improved. \cr
+Formula \tab Yes \tab \cr
+Function \tab Yes \tab \cr
+\code{NULL} \tab Yes \tab \cr
+Array \tab No \tab \cr
+Dates \tab No \tab Base and \code{lubridate}. \cr
+ggplot2 \tab No \tab This may be a challenge, but would be cool!\cr
+}
 }
 \examples{
 # Attach packages
@@ -105,8 +134,8 @@ df <- data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'),
                  stringsAsFactors = FALSE)
 
 gxs_selection("stop('This gives an expect_error test!')")
-gxs_selection("warning('This gives an expect_warning test!')")
-gxs_selection("message('This gives an expect_message test!')")
+gxs_selection("warning('This gives a set of side effect tests!')")
+gxs_selection("message('This also gives a set of side effect tests!')")
 gxs_selection("stop('This: tests the -> punctuation!')", strip = FALSE)
 gxs_selection("sum(1, 2, 3, 4)")
 gxs_selection("df")

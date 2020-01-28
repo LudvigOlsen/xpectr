@@ -13,12 +13,12 @@
 #'
 #'  Example: If the selected code is the name of a data frame object,
 #'  it will create an \code{\link[testthat:expect_equal]{expect_equal}}
-#'  test for each column, along with a test of the column names.
+#'  test for each column, along with a test of the column names,
+#'  types and classes, dimensions, grouping keys, etc.
 #'
-#'  Currently supports side effects (error, warnings, messages),
-#'  data frames, vectors, and factors.
+#'  See supported objects in \code{details}.
 #'
-#'  List columns in data frames (like nested tibbles) are currently skipped.
+#'  Feel free to suggest useful tests etc. in a GitHub issue!
 #'
 #'  Addin: \code{\link[xpectr:insertExpectationsAddin]{insertExpectationsAddin()}}
 #' @param selection String of code. (Character)
@@ -28,7 +28,7 @@
 #' @param tolerance The tolerance for numeric tests as a string, like \code{"1e-4"}. (Character)
 #' @param round_to_tolerance Whether to round numeric elements to the specified tolerance. (Logical)
 #'
-#'  This is currently applied to numeric columns and vectors.
+#'  This is currently applied to numeric columns and vectors (excluding some lists).
 #' @param sample_n The number of elements/rows to sample. Set to \code{NULL} to avoid sampling.
 #'
 #'  Inserts \code{\link[xpectr:strip]{smpl()}} in the generated tests when sampling was used. A seed is
@@ -57,6 +57,10 @@
 #'
 #'  The tests themselves can be more difficult to interpret, as you will
 #'  have to look at the assignment to see the object that is being tested.
+#' @param seed Seed to set. (Whole number)
+#' @param test_id Number to append to assignment names. (Whole number)
+#'
+#'  For instance used to create the "output_" name: \code{output_<test_id>}.
 #' @param envir Environment to evaluate in.
 #' @param out Either \code{"insert"} or \code{"return"}.
 #'
@@ -70,6 +74,26 @@
 #'  These can be prepared for insertion with
 #'  \code{\link[xpectr:prepare_insertion]{prepare_insertion()}}.
 #'  }
+#' @details
+#'  The following "types" are currently supported or intended to be supported in the future.
+#'  Please suggest more types and tests in a GitHub issue!
+#'
+#'  Note: A set of fallback tests will be generated for unsupported objects.
+#'
+#'  \tabular{rrr}{
+#'   \strong{Type} \tab \strong{Supported} \tab \strong{Notes} \cr
+#'   Side effects \tab Yes \tab Errors, warnings, and messages. \cr
+#'   Vector \tab Yes \tab Lists are treated differently, depending on their structure. \cr
+#'   Factor \tab Yes \tab \cr
+#'   Data Frame \tab Yes \tab List columns (like nested tibbles) are currently skipped. \cr
+#'   Matrix \tab Yes \tab Supported but could be improved. \cr
+#'   Formula \tab Yes \tab \cr
+#'   Function \tab Yes \tab \cr
+#'   \code{NULL} \tab Yes \tab \cr
+#'   Array \tab No \tab \cr
+#'   Dates \tab No \tab Base and \code{lubridate}. \cr
+#'   ggplot2 \tab No \tab This may be a challenge, but would be cool!\cr
+#'  }
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family expectation generators
 #' @export
@@ -82,8 +106,8 @@
 #'                  stringsAsFactors = FALSE)
 #'
 #' gxs_selection("stop('This gives an expect_error test!')")
-#' gxs_selection("warning('This gives an expect_warning test!')")
-#' gxs_selection("message('This gives an expect_message test!')")
+#' gxs_selection("warning('This gives a set of side effect tests!')")
+#' gxs_selection("message('This also gives a set of side effect tests!')")
 #' gxs_selection("stop('This: tests the -> punctuation!')", strip = FALSE)
 #' gxs_selection("sum(1, 2, 3, 4)")
 #' gxs_selection("df")
@@ -102,11 +126,26 @@ gxs_selection <- function(selection,
                           add_wrapper_comments = TRUE,
                           add_test_comments = TRUE,
                           assign_output = TRUE,
+                          seed = 42,
+                          test_id = NULL,
                           out = "insert"){
 
   # Save random seed state
   if (exists(x = ".Random.seed"))
     initial_seed_state <- .Random.seed
+
+  if (is.null(test_id))
+    test_id <- floor(runif(1, 10000, 20000))
+
+  # Note: Don't want to use checkmate here
+  if (!is.null(seed) && is.numeric(seed) && length(seed) == 1){
+    # Set initial seed
+    set_test_seed(seed)
+    # Save random seed state
+    initial_seed_state <- .Random.seed
+  } else {
+    assign_random_state(initial_seed_state, check_existence = TRUE)
+  }
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -120,7 +159,11 @@ gxs_selection <- function(selection,
   checkmate::assert_flag(x = round_to_tolerance, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_count(x = seed, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_count(x = test_id, add = assert_collection)
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  checkmate::assert_number(x = as.numeric(tolerance), upper = 1, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
@@ -144,6 +187,7 @@ gxs_selection <- function(selection,
     indentation = indentation,
     create_comment = add_wrapper_comments
   )
+  seed_setting_string <- paste0("xpectr::set_test_seed(", seed, ")")
 
   expectations <- c()
   sfx_expectations <- c()
@@ -155,7 +199,8 @@ gxs_selection <- function(selection,
       side_effects, name = selection,
       indentation = indentation,
       add_comments = add_test_comments,
-      strip = strip)
+      strip = strip,
+      test_id = test_id)
 
     selection <- paste0("xpectr::suppress_mw(", selection, ")")
 
@@ -168,11 +213,8 @@ gxs_selection <- function(selection,
       # Reset seed
       # Note: Only seems to work when setting it in globalenv
       # but it's the seed we started with, so it shouldn't be a problem?
-      if (exists(x = ".Random.seed")){
-        assign(x = ".Random.seed",
-               value = initial_seed_state,
-               envir = globalenv())
-      }
+      assign_random_state(initial_seed_state, check_existence = TRUE)
+
       # Evaluate string
       eval_string(selection, envir = envir)
     }, error = function(e) {
@@ -187,75 +229,100 @@ gxs_selection <- function(selection,
       }
     )
 
-    # TODO perhaps assign_once and evaluate_once aren't the most descriptive var names?
-    # If the selection is a very long string
-    # we might prefer to assign it once
-    assign_once <- nchar(selection) > 30 ||
-      (grepl("[\\(\\)]", selection) &&
-         !(checkmate::test_string(x = obj) &&
-             add_quotation_marks(obj) == selection))
-
-    # If selection is a function call
-    if (isTRUE(assign_output) && assign_once){
-      evaluate_once <- TRUE
+    # Check if object is a side effect string
+    # This happens when the warning/message is called last in a function
+    if (isTRUE(has_side_effects)){
+      obj_is_side_effect_string <- checkmate::test_string(obj) &&
+        obj %in% unlist(side_effects[c("error", "warnings", "messages")],
+                        recursive = TRUE, use.names = FALSE)
     } else {
-      evaluate_once <- FALSE
+      obj_is_side_effect_string <- FALSE
     }
 
-    # Create expectations based on the type of the objects
-    if (is.null(obj)) {
-      expectations <- create_expectations_null(name = selection,
-                                               indentation = indentation,
-                                               add_comments = add_test_comments)
-    } else if (is.data.frame(obj)) {
-      expectations <- create_expectations_data_frame(obj, name = selection,
-                                                     indentation = indentation,
-                                                     tolerance = tolerance,
-                                                     round_to_tolerance = round_to_tolerance,
-                                                     sample_n = sample_n,
-                                                     add_comments = add_test_comments,
-                                                     evaluate_once = evaluate_once)
-    } else if (is.matrix(obj)) {
-      expectations <- create_expectations_matrix(obj, name = selection,
+    if (!isTRUE(obj_is_side_effect_string)){
+
+      # TODO perhaps assign_once and evaluate_once aren't the most descriptive var names?
+      # If the selection is a very long string
+      # we might prefer to assign it once
+      assign_once <- nchar(selection) > 30 ||
+        (grepl("[\\(\\)]", selection) &&
+           !(checkmate::test_string(x = obj) &&
+               add_quotation_marks(obj) == selection))
+
+      # If selection is a function call
+      if (isTRUE(assign_output) && assign_once){
+        evaluate_once <- TRUE
+      } else {
+        evaluate_once <- FALSE
+      }
+
+      # Create expectations based on the type of the objects
+      if (is.null(obj)) {
+        expectations <- create_expectations_null(name = selection,
                                                  indentation = indentation,
-                                                 tolerance = tolerance,
-                                                 round_to_tolerance = round_to_tolerance,
-                                                 sample_n = sample_n,
-                                                 add_comments = add_test_comments,
-                                                 evaluate_once = evaluate_once)
-    } else if (is.vector(obj)) {
-      expectations <- create_expectations_vector(obj, name = selection,
-                                                 indentation = indentation,
-                                                 tolerance = tolerance,
-                                                 round_to_tolerance = round_to_tolerance,
-                                                 sample_n = sample_n,
-                                                 add_comments = add_test_comments,
-                                                 evaluate_once = evaluate_once)
-    } else if (is.factor(obj)) {
-      expectations <- create_expectations_factor(obj, name = selection,
-                                                 indentation = indentation,
-                                                 tolerance = tolerance,
-                                                 sample_n = sample_n,
-                                                 add_comments = add_test_comments,
-                                                 evaluate_once = evaluate_once)
-    } else if (is.function(obj)) {
-      expectations <- create_expectations_function(obj, name = selection,
+                                                 add_comments = add_test_comments)
+      } else if (is.data.frame(obj)) {
+        expectations <- create_expectations_data_frame(obj, name = selection,
+                                                       indentation = indentation,
+                                                       tolerance = tolerance,
+                                                       round_to_tolerance = round_to_tolerance,
+                                                       sample_n = sample_n,
+                                                       add_comments = add_test_comments,
+                                                       evaluate_once = evaluate_once,
+                                                       test_id = test_id)
+      } else if (is.matrix(obj)) {
+        expectations <- create_expectations_matrix(obj, name = selection,
                                                    indentation = indentation,
+                                                   tolerance = tolerance,
+                                                   round_to_tolerance = round_to_tolerance,
                                                    sample_n = sample_n,
                                                    add_comments = add_test_comments,
-                                                   evaluate_once = evaluate_once)
-    } else if (rlang::is_formula(obj)) {
-      expectations <- create_expectations_formula(obj, name = selection,
-                                                  indentation = indentation,
-                                                  add_comments = add_test_comments,
-                                                  evaluate_once = evaluate_once)
-    } else {
-      stop(paste0("The selection is not of a currently supported class: ",
-                  class(obj)))
+                                                   evaluate_once = evaluate_once,
+                                                   test_id = test_id)
+      } else if (is.vector(obj)) {
+        expectations <- create_expectations_vector(obj, name = selection,
+                                                   indentation = indentation,
+                                                   tolerance = tolerance,
+                                                   round_to_tolerance = round_to_tolerance,
+                                                   sample_n = sample_n,
+                                                   add_comments = add_test_comments,
+                                                   evaluate_once = evaluate_once,
+                                                   test_id = test_id)
+      } else if (is.factor(obj)) {
+        expectations <- create_expectations_factor(obj, name = selection,
+                                                   indentation = indentation,
+                                                   tolerance = tolerance,
+                                                   sample_n = sample_n,
+                                                   add_comments = add_test_comments,
+                                                   evaluate_once = evaluate_once,
+                                                   test_id = test_id)
+      } else if (is.function(obj)) {
+        expectations <- create_expectations_function(obj, name = selection,
+                                                     indentation = indentation,
+                                                     sample_n = sample_n,
+                                                     add_comments = add_test_comments,
+                                                     evaluate_once = evaluate_once,
+                                                     test_id = test_id)
+      } else if (rlang::is_formula(obj)) {
+        expectations <- create_expectations_formula(obj, name = selection,
+                                                    indentation = indentation,
+                                                    add_comments = add_test_comments,
+                                                    evaluate_once = evaluate_once,
+                                                    test_id = test_id)
+      } else {
+        warning(paste0("The selection is not of a currently supported class '",
+                       class(obj),"'. Will generate fallback tests."))
+        expectations <- create_expectations_fallback(obj, name = selection,
+                                                    indentation = indentation,
+                                                    add_comments = add_test_comments,
+                                                    evaluate_once = evaluate_once,
+                                                    test_id = test_id)
+      }
     }
   }
 
   expectations <- c(intro_comment,
+                    seed_setting_string,
                     sfx_expectations,
                     expectations,
                     outro_comment)

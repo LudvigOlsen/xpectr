@@ -17,6 +17,7 @@ gxs_function(
   add_wrapper_comments = TRUE,
   add_test_comments = TRUE,
   assign_output = TRUE,
+  seed = 42,
   out = "insert"
 )
 }
@@ -37,7 +38,7 @@ This is currently necessary.}
 
 \item{check_nulls}{Whether to try all arguments with \code{NULL}. (Logical)
 
-Note: With this enabled, you don't need to add \code{NULL} to your \code{args_values},
+When enabled, you don't need to add \code{NULL} to your \code{args_values},
 unless it should be the baseline value.}
 
 \item{indentation}{Indentation of the selection. (Numeric)}
@@ -46,7 +47,7 @@ unless it should be the baseline value.}
 
 \item{round_to_tolerance}{Whether to round numeric elements to the specified tolerance. (Logical)
 
-This is currently applied to numeric columns and vectors.}
+This is currently applied to numeric columns and vectors (excluding some lists).}
 
 \item{strip}{Whether to insert
 \code{\link[xpectr:strip]{strip_msg()}} and
@@ -83,6 +84,8 @@ A selection with more than 30 characters will be assigned as well.
 The tests themselves can be more difficult to interpret, as you will
 have to look at the assignment to see the object that is being tested.}
 
+\item{seed}{Seed to set. (Whole number)}
+
 \item{out}{Either \code{"insert"} or \code{"return"}.
 
 \subsection{"insert" (Default)}{
@@ -107,10 +110,28 @@ is considered the \emph{valid baseline} value. For each argument, we
 create tests for each of the supplied values, where the other arguments
 have their baseline value.
 
-Currently, supported tests are of side effects (error, warnings, messages),
-data frames, vectors, and factors. List columns in data frames (like nested tibbles) are skipped.
+See supported objects in \code{details}.
+}
+\details{
+The following "types" are currently supported or intended to be supported in the future.
+Please suggest more types and tests in a GitHub issue!
 
-\strong{N.B.} This function is undergoing active development!
+Note: A set of fallback tests will be generated for unsupported objects.
+
+\tabular{rrr}{
+\strong{Type} \tab \strong{Supported} \tab \strong{Notes} \cr
+Side effects \tab Yes \tab Errors, warnings, and messages. \cr
+Vector \tab Yes \tab Lists are treated differently, depending on their structure. \cr
+Factor \tab Yes \tab \cr
+Data Frame \tab Yes \tab List columns (like nested tibbles) are currently skipped. \cr
+Matrix \tab Yes \tab Supported but could be improved. \cr
+Formula \tab Yes \tab \cr
+Function \tab Yes \tab \cr
+\code{NULL} \tab Yes \tab \cr
+Array \tab No \tab \cr
+Dates \tab No \tab Base and \code{lubridate}. \cr
+ggplot2 \tab No \tab This may be a challenge, but would be cool!\cr
+}
 }
 \examples{
 # Attach packages
