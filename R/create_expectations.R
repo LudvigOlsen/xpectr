@@ -324,8 +324,12 @@ create_expectations_matrix <- function(data, name = NULL, indentation = 0,
 
   # Create expectations
   # NOTE: Some must come before sampling!
+
+  # Add [[1]] to class expectation as matrices also inherit from arrays
+  # in the devel version of R!
   class_expectation <- create_class_expectation(name = name,
                                                 data = data,
+                                                suffix = ")[[1]]",
                                                 indentation = indentation)
   type_expectation <- create_type_expectation(name = name,
                                               type = typeof(data),
