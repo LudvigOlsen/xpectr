@@ -12,7 +12,7 @@
 #'
 #'  2) (Disabled by default): Remove numbers.
 #'
-#'  3) Reduces multiple consequtive whitespaces to a single whitespace and trims ends.
+#'  3) Reduces multiple consecutive whitespaces to a single whitespace and trims ends.
 #'
 #'  Can for instance be used to simplify error messages before checking them.
 #' @param strings Vector of strings. (Character)
@@ -77,7 +77,7 @@ strip <- function(strings,
     strings <- gsub('[0-9]+', '', strings)
   }
 
-  # Reduce multiple consequtive whitespaces
+  # Reduce multiple consecutive whitespaces
   # to a single whitespace (or non if specified)
   strings <- gsub("[[:blank:]]+", ifelse(isTRUE(remove_spaces), "", " "), strings)
 

@@ -52,7 +52,7 @@
 #' @param assign_output Whether to assign the output of a function call or long selection
 #'  to a variable. This will avoid recalling the function and decrease cluttering. (Logical)
 #'
-#'  Heuristic: when the \code{selection} isn't of a string and contains a paranthesis, it is considered a function call.
+#'  Heuristic: when the \code{selection} isn't of a string and contains a parenthesis, it is considered a function call.
 #'  A selection with more than 30 characters will be assigned as well.
 #'
 #'  The tests themselves can be more difficult to interpret, as you will

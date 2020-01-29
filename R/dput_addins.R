@@ -53,11 +53,7 @@
 #'  }
 dputSelectedAddin <- function(selection = NULL, insert = TRUE, indentation = 0) {
 
-
-##  .................. #< 77b3c0bc8b0a30167e1b89a3be7bde9b ># ..................
-##  Check arguments                                                         ####
-
-
+  # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(x = selection, null.ok = TRUE,
                            add = assert_collection)
@@ -65,11 +61,7 @@ dputSelectedAddin <- function(selection = NULL, insert = TRUE, indentation = 0) 
   checkmate::assert_number(x = indentation, lower = 0,
                            add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-
-
-##  .................. #< f34845fedc4295698e16ba5f0f9dda2a ># ..................
-##  Get selection and context                                               ####
-
+  # End of argument checks ####
 
   # Get the selection and indentation
   if (is.null(selection)){
@@ -80,14 +72,18 @@ dputSelectedAddin <- function(selection = NULL, insert = TRUE, indentation = 0) 
   # Get parent environment
   parent_envir <- parent.frame()
 
-
-##  .................. #< b90fb3672aa530f3ffe4f5bbf90ea625 ># ..................
-##  dput() the selection                                                    ####
-
-
+  # dput() and insert/return
   if (selection != "") {
     dput_out <- apply_capture(selection, dput, envir = parent_envir)
-    insert_code(dput_out, indentation = indentation)
+
+    if (!isTRUE(insert)) {
+      # Return the expectations instead of inserting them
+      return(dput_out)
+    } else {
+      # Insert the expectations
+      insert_code(dput_out, indentation = indentation)
+    }
+
   }
 
   invisible()

@@ -27,7 +27,7 @@ for compatibility with R versions \code{< 3.6.0}.}
 Sample a vector, factor or data frame. Useful to reduce size of testthat \code{expect_*} tests.
 Not intended for other purposes.
 
-Wraps \code{\link[base:sample.int]{sample.int()}}. Data frames are sampled rowwise.
+Wraps \code{\link[base:sample.int]{sample.int()}}. Data frames are sampled row-wise.
 
 The seed is set within the function with \code{sample.kind} as \code{"Rounding"}
 for compatibility with R versions \code{< 3.6.0}. On exit, the random state is restored.

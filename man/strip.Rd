@@ -29,7 +29,7 @@ to contain \code{NA}s. (Logical)}
 \enumerate{
 \item Removes any character that is not alphanumeric or a space.
 \item (Disabled by default): Remove numbers.
-\item Reduces multiple consequtive whitespaces to a single whitespace and trims ends.
+\item Reduces multiple consecutive whitespaces to a single whitespace and trims ends.
 }
 
 Can for instance be used to simplify error messages before checking them.

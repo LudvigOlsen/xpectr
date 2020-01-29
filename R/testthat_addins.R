@@ -69,11 +69,7 @@
 #' @importFrom stats runif
 insertExpectationsAddin <- function(selection = NULL, insert = TRUE, indentation = 0) {
 
-
-##  .................. #< b0cdec1a6600a8fd8cd7906a8d9db6b7 ># ..................
-##  Check arguments                                                         ####
-
-
+  # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(x = selection, null.ok = TRUE,
                            add = assert_collection)
@@ -81,11 +77,7 @@ insertExpectationsAddin <- function(selection = NULL, insert = TRUE, indentation
   checkmate::assert_number(x = indentation, lower = 0,
                            add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-
-
-##  .................. #< 862c178b529c00056dfd2fd58c0695d5 ># ..................
-##  Get selection and context                                               ####
-
+  # End of argument checks ####
 
   # Get the selection and indentation
   if (is.null(selection)){
@@ -96,10 +88,7 @@ insertExpectationsAddin <- function(selection = NULL, insert = TRUE, indentation
   # Get parent environment
   parent_envir <- parent.frame()
 
-
-##  .................. #< ecd748064e6b56931e034e2b083657a7 ># ..................
-##  Create expectations                                                     ####
-
+  #  Create expectations
 
   if (selection != "") {
 

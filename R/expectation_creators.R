@@ -559,7 +559,7 @@ create_expect_side_effect <- function(x, y,
   )
 
   y <- escape_metacharacters(y)
-  y <- split_to_paste0(y, spaces = spaces)
+  y <- split_to_paste0(y, spaces = ifelse(isTRUE(strip), spaces + 14, spaces))
 
   paste0(
     expect_fn, "(\n",
