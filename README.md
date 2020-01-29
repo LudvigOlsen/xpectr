@@ -5,8 +5,6 @@
 
 <!-- badges: start -->
 
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/xpectr)](https://CRAN.R-project.org/package=xpectr)
 [![metacran
@@ -19,7 +17,7 @@ coverage](https://codecov.io/gh/ludvigolsen/xpectr/branch/master/graph/badge.svg
 status](https://travis-ci.org/LudvigOlsen/xpectr.svg?branch=master)](https://travis-ci.org/LudvigOlsen/xpectr)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/xpectr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/xpectr)
-<!-- [![DOI](https://zenodo.org/badge/71063931.svg)](https://zenodo.org/badge/latestdoi/71063931) -->
+[![DOI](https://zenodo.org/badge/234099679.svg)](https://zenodo.org/badge/latestdoi/234099679)
 <!-- badges: end -->
 
 `xpectr` provides a set of utilities and RStudio addins for generating
@@ -27,6 +25,9 @@ tests for testthat unit testing.
 
 **Author:** [Ludvig R. Olsen](http://ludvigolsen.dk/) (
 <r-pkgs@ludvigolsen.dk> ) <br/> **Started:** January 2020
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
 ## Installation
 
