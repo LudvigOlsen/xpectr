@@ -87,7 +87,7 @@ dputSelectedAddin <- function(selection = NULL, insert = TRUE, indentation = 0) 
 
   if (selection != "") {
     dput_out <- apply_capture(selection, dput, envir = parent_envir)
-    insert_code(dput_out)
+    insert_code(dput_out, indentation = indentation)
   }
 
   invisible()
