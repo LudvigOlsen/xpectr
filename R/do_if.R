@@ -182,6 +182,7 @@ identity_if <- function(condition, x, otherwise = invisible()) {
   if (condition) {
     return(x)
   }
+
   otherwise
 }
 
@@ -202,5 +203,6 @@ do_if <- function(condition, fn, ..., otherwise = invisible()) {
   if (condition) {
     return(fn(...))
   }
+
   otherwise
 }
