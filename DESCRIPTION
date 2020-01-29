@@ -1,12 +1,14 @@
 Package: xpectr
-Title: Generates expectations for testthat unit testing
-Version: 0.0.0.9000
+Title: Generates Expectations for 'testthat' Unit Testing
+Version: 0.1.0
 Authors@R: 
     person(given = "Ludvig Renbo",
            family = "Olsen",
            role = c("aut", "cre"),
            email = "r-pkgs@ludvigolsen.dk")
-Description: Provides tools for generating testthat expectations.
+Description: Helps systematize and ease the process of 
+    building unit tests with the 'testthat' package by providing 
+    tools for generating expectations.
 License: MIT + file LICENSE
 URL: https://github.com/ludvigolsen/xpectr
 BugReports: https://github.com/ludvigolsen/xpectr/issues
