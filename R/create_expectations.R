@@ -22,7 +22,7 @@ create_expectations_null <- function(name = NULL,
   # Create test
   null_expectation <- create_expect_true(
     x = paste0("is.null(", name, ")"),
-    spaces = indentation + 2
+    spaces = 2
   )
 
   # Collect expectations and add comments
@@ -75,7 +75,7 @@ create_expectations_function <- function(data, name = NULL, indentation = 0,
   # Create test
   is_fn_expectation <- create_expect_true(
     x = paste0("is.function(", name, ")"),
-    spaces = indentation + 2
+    spaces = 2
   )
 
   # Test the formals (arguments' names and default values)
@@ -228,7 +228,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     create_expect_equal(x, y,
                         add_tolerance = is.numeric(current_col),
                         add_fixed = is.character(current_col),
-                        spaces = 2 + indentation,
+                        spaces = 2,
                         tolerance = tolerance)
   })
 
@@ -414,7 +414,7 @@ create_expectations_matrix <- function(data, name = NULL, indentation = 0,
     create_expect_equal(x, y,
                         add_tolerance = is.numeric(current_slice),
                         add_fixed = is.character(current_slice),
-                        spaces = 2 + indentation,
+                        spaces = 2,
                         tolerance = tolerance)
   })
 
@@ -605,7 +605,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
       create_expect_equal(x, y,
                           add_tolerance = is.numeric(current_elem),
                           add_fixed = is.character(current_elem),
-                          spaces = indentation + 2,
+                          spaces = 2,
                           tolerance = tolerance)
     })
 
@@ -631,7 +631,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
         x, y,
         add_tolerance = is.numeric(data),
         add_fixed = is.character(data),
-        spaces = indentation + 2,
+        spaces = 2,
         tolerance = tolerance
       )
     )
@@ -745,7 +745,7 @@ create_expectations_side_effect <- function(side_effects, name = NULL,
       create_expect_side_effect(
         name, side_effects$error,
         side_effect_type = "error",
-        spaces = 2 + indentation,
+        spaces = 2,
         strip = strip
       )
     ))
@@ -921,7 +921,7 @@ create_expectations_formula <- function(data, name = NULL, indentation = 0,
   # Create is_formula test
   is_formula_expectation <- create_expect_true(
     x = paste0("rlang::is_formula(", name, ")"),
-    spaces = indentation + 2
+    spaces = 2
   )
 
   # Test the formula

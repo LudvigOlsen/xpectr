@@ -18,9 +18,9 @@ As returned with \code{gxs_*} functions with \code{out = "return"}.}
 
 \item{indentation}{Indentation to add. (Numeric)}
 
-\item{trim_left}{Whether to trim whitespaces from the beginning of the string. (Logical)}
+\item{trim_left}{Whether to trim whitespaces from the beginning of the collapsed string. (Logical)}
 
-\item{trim_right}{Whether to trim whitespaces from the end of the string. (Logical)}
+\item{trim_right}{Whether to trim whitespaces from the end of the collapsed string. (Logical)}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

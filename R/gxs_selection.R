@@ -74,6 +74,7 @@
 #'  These can be prepared for insertion with
 #'  \code{\link[xpectr:prepare_insertion]{prepare_insertion()}}.
 #'  }
+#' @param start_with_newline,end_with_newline Whether to have a newline in the beginning/end. (Logical)
 #' @details
 #'  The following "types" are currently supported or intended to be supported in the future.
 #'  Please suggest more types and tests in a GitHub issue!
@@ -123,11 +124,13 @@ gxs_selection <- function(selection,
                           strip = TRUE,
                           sample_n = 30,
                           envir = NULL,
-                          add_wrapper_comments = TRUE,
-                          add_test_comments = TRUE,
                           assign_output = TRUE,
                           seed = 42,
                           test_id = NULL,
+                          add_wrapper_comments = TRUE,
+                          add_test_comments = TRUE,
+                          start_with_newline = TRUE,
+                          end_with_newline = TRUE,
                           out = "insert"){
 
   # Save random seed state
@@ -155,6 +158,8 @@ gxs_selection <- function(selection,
   checkmate::assert_flag(x = strip, add = assert_collection)
   checkmate::assert_flag(x = add_wrapper_comments, add = assert_collection)
   checkmate::assert_flag(x = add_test_comments, add = assert_collection)
+  checkmate::assert_flag(x = start_with_newline, add = assert_collection)
+  checkmate::assert_flag(x = end_with_newline, add = assert_collection)
   checkmate::assert_flag(x = assign_output, add = assert_collection)
   checkmate::assert_flag(x = round_to_tolerance, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
@@ -327,9 +332,16 @@ gxs_selection <- function(selection,
                     expectations,
                     outro_comment)
 
-  if (out == "insert")
+  # Add newlines before and after test block
+  if (isTRUE(start_with_newline))
+    expectations <- c(" ", expectations)
+  if (isTRUE(end_with_newline))
+    expectations <- c(expectations, " ")
+
+
+  if (out == "insert"){
     insert_code(expectations, prepare = TRUE, indentation = indentation)
-  else {
+  } else {
     return(expectations)
   }
 

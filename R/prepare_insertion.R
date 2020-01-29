@@ -13,8 +13,8 @@
 #'
 #'  As returned with \code{gxs_*} functions with \code{out = "return"}.
 #' @param indentation Indentation to add. (Numeric)
-#' @param trim_left Whether to trim whitespaces from the beginning of the string. (Logical)
-#' @param trim_right Whether to trim whitespaces from the end of the string. (Logical)
+#' @param trim_left Whether to trim whitespaces from the beginning of the collapsed string. (Logical)
+#' @param trim_right Whether to trim whitespaces from the end of the collapsed string. (Logical)
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family inserters
 #' @export
@@ -50,6 +50,12 @@ prepare_insertion <- function(strings,
 
   # Create string of spaces
   spaces_string <- create_space_string(n = indentation)
+
+  # Split by newline
+  strings <- unlist(strsplit(strings, split = "\n"), recursive = TRUE, use.names = FALSE)
+
+  # Empty single space strings
+  strings <- gsub("^ $", "", strings)
 
   # Collapse strings
   string <- paste(strings, collapse = paste0("\n", spaces_string))

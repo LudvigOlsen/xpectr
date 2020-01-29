@@ -68,10 +68,12 @@ gxs_function <- function(fn,
                          strip = TRUE,
                          sample_n = 30,
                          envir = NULL,
-                         add_wrapper_comments = TRUE,
-                         add_test_comments = TRUE,
                          assign_output = TRUE,
                          seed = 42,
+                         add_wrapper_comments = TRUE,
+                         add_test_comments = TRUE,
+                         start_with_newline = TRUE,
+                         end_with_newline = TRUE,
                          out = "insert"){
 
   # Check arguments ####
@@ -85,6 +87,8 @@ gxs_function <- function(fn,
   checkmate::assert_flag(x = strip, add = assert_collection)
   checkmate::assert_flag(x = add_wrapper_comments, add = assert_collection)
   checkmate::assert_flag(x = add_test_comments, add = assert_collection)
+  checkmate::assert_flag(x = start_with_newline, add = assert_collection)
+  checkmate::assert_flag(x = end_with_newline, add = assert_collection)
   checkmate::assert_flag(x = assign_output, add = assert_collection)
   checkmate::assert_flag(x = round_to_tolerance, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
@@ -116,21 +120,7 @@ gxs_function <- function(fn,
                                         check_nulls = check_nulls)
 
   # Create unique test IDs
-  # Make sure not to disturb the random state
-  if (exists(".Random.seed"))
-    initial_seed_state <- .Random.seed
-
-  if (nrow(fn_calls) > 1000){
-    id_max <- 40000
-  } else id_max <- 20000
-
-  test_ids <- head(unique(floor(runif(
-    nrow(fn_calls) * 4, # times 4 to ensure enough unique IDs
-    min = 10000, id_max
-  ))), nrow(fn_calls))
-
-  # Reset random state
-  assign_random_state(initial_seed_state)
+  test_ids <- generate_test_ids(n = nrow(fn_calls))
 
   # Get parent environment
   if (is.null(envir)) envir <- parent.frame()
@@ -154,13 +144,15 @@ gxs_function <- function(fn,
         round_to_tolerance = round_to_tolerance,
         envir = envir,
         sample_n = sample_n,
-        add_test_comments = add_test_comments,
-        add_wrapper_comments = FALSE,
         assign_output = assign_output,
         seed = seed,
         test_id = test_ids[[r]],
+        add_test_comments = add_test_comments,
+        add_wrapper_comments = FALSE,
+        start_with_newline = FALSE,
+        end_with_newline = FALSE,
         out = "return"
-      ), ""
+      ), " "
     )
   }) %>% unlist(recursive = TRUE)
 
@@ -169,10 +161,16 @@ gxs_function <- function(fn,
                                         create_comment = add_wrapper_comments),
                     create_test_comment("different combinations of argument values",
                                         create_comment = add_test_comments),
-                    "",
+                    " ",
                     expectations,
                     create_test_comment(fn_name, section = "outro",
                                         create_comment = add_wrapper_comments))
+
+  # Add newlines before and after test block
+  if (isTRUE(start_with_newline))
+    expectations <- c(" ", expectations)
+  if (isTRUE(end_with_newline))
+    expectations <- c(expectations, " ")
 
   if (out == "insert")
     insert_code(expectations, prepare = TRUE, indentation = indentation)
@@ -289,4 +287,29 @@ generate_function_strings <- function(fn_name,
     dplyr::rename(call = .data$call_strings,
                   changed = .data$arg_name)
 
+}
+
+
+#   __________________ #< 60cfc78f594e5611a6eaaf34a2b212ae ># __________________
+#   Generate test IDs                                                       ####
+
+generate_test_ids <- function(n, min = 10000, max = 20000){
+  # Create unique test IDs
+  # Make sure not to disturb the random state
+  if (exists(".Random.seed"))
+    initial_seed_state <- .Random.seed
+
+  if (n > 1000){
+    max <- max * 3
+  }
+
+  test_ids <- head(unique(floor(runif(
+    n * 4, # times 4 to ensure enough unique IDs
+    min = min, max = max
+  ))), n)
+
+  # Reset random state
+  assign_random_state(initial_seed_state)
+
+  test_ids
 }

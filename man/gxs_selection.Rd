@@ -12,11 +12,13 @@ gxs_selection(
   strip = TRUE,
   sample_n = 30,
   envir = NULL,
-  add_wrapper_comments = TRUE,
-  add_test_comments = TRUE,
   assign_output = TRUE,
   seed = 42,
   test_id = NULL,
+  add_wrapper_comments = TRUE,
+  add_test_comments = TRUE,
+  start_with_newline = TRUE,
+  end_with_newline = TRUE,
   out = "insert"
 )
 }
@@ -55,10 +57,6 @@ When testing a big data frame, sampling the rows can help keep the test files so
 
 \item{envir}{Environment to evaluate in.}
 
-\item{add_wrapper_comments}{Whether to add intro and outro comments. (Logical)}
-
-\item{add_test_comments}{Whether to add comments for each test. (Logical)}
-
 \item{assign_output}{Whether to assign the output of a function call or long selection
 to a variable. This will avoid recalling the function and decrease cluttering. (Logical)
 
@@ -73,6 +71,12 @@ have to look at the assignment to see the object that is being tested.}
 \item{test_id}{Number to append to assignment names. (Whole number)
 
 For instance used to create the "output_" name: \code{output_<test_id>}.}
+
+\item{add_wrapper_comments}{Whether to add intro and outro comments. (Logical)}
+
+\item{add_test_comments}{Whether to add comments for each test. (Logical)}
+
+\item{start_with_newline, end_with_newline}{Whether to have a newline in the beginning/end. (Logical)}
 
 \item{out}{Either \code{"insert"} or \code{"return"}.
 

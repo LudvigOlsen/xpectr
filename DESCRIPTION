@@ -11,7 +11,7 @@ License: MIT + file LICENSE
 URL: https://github.com/ludvigolsen/xpectr
 BugReports: https://github.com/ludvigolsen/xpectr/issues
 Depends:
-    R (>= 3.2.0)
+    R (>= 3.5.0)
 Imports: 
     rstudioapi (>= 0.10),
     testthat (>= 2.3.1),
