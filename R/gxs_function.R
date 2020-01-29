@@ -57,7 +57,7 @@
 #' gxs_function(fn,
 #'              list("x" = list(2, 4, NA),
 #'                   "y" = list(0, -1),
-#'                   "z" = list(5, 10, 15)))
+#'                   "z" = list(5, 10)))
 #' }
 gxs_function <- function(fn,
                          args_values,
