@@ -124,6 +124,7 @@ warn_if <- function(condition, message = NULL, sys.parent.n = 0L) {
         message,
         call = if (p <- sys.parent(sys.parent.n+1)) sys.call(p)))
   }
+
   invisible()
 }
 
