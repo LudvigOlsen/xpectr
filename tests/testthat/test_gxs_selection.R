@@ -1067,6 +1067,12 @@ test_that("formula expectations are created properly with gxs_selection()", {
 
 test_that("matrix expectations are created properly with gxs_selection()", {
 
+  # TODO Once you can get access to R 4.0.0 (or devel from after 01-28-2020)
+  # Make sure this works on that version of R as well!
+  if (getRversion()$major > 3 || getRversion()$minor > 6){
+    testthat::skip("skipping due to breaking changes in R 4.0.0")
+  }
+
   set_test_seed(1)
   m_num <- matrix(runif(12), 4, 3)
   m_char <- matrix(as.character(runif(12)), 3, 4)
