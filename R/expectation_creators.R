@@ -476,7 +476,7 @@ create_expect_equal <- function(x, y,
                                  indentation = spaces)
   }
 
-
+  # Build expect_equal test
   paste0(
     "expect_equal(\n",
     spaces_string,
