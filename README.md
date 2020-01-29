@@ -51,6 +51,7 @@ Note: `gxs` stands for `generate expectations`.
   - `strip()`
   - `strip_msg()`
   - `suppress_mw()`
+  - `capture_side_effects()`
   - `smpl()`
   - `simplified_formals()`
   - `element_lengths()`, `element_types()`, `element_classes()`
@@ -60,14 +61,13 @@ Note: `gxs` stands for `generate expectations`.
 ### Helper functions
 
   - `prepare_insertion()`
-  - `capture_side_effects()`
   - `capture_parse_eval_side_effects()`
   - `stop_if()`, `warn_if()`, `message_if()`
 
 ## Addins
 
   - `Insert Expectations` : generates `testthat` `expect_*` tests from
-    selected code
+    selected code (with `gxs_selection()`)
   - `dput() selected` : applies `dput()` to selected code
   - `Insert checkmate AssertCollection code` : inserts code for
     initializing and reporting a checkmate AssertCollection
@@ -76,9 +76,8 @@ Note: `gxs` stands for `generate expectations`.
 
 ## Using in packages
 
-It is suggested to add `xpectr` in the `Suggests` field in the
-`DESCRIPTION` file. This allows you to use it in unit tests and users
-aren’t required to have it installed.
+Suggestion: Add `xpectr` in the `Suggests` field in the `DESCRIPTION`
+file.
 
 NOTE: This won’t work on CRAN before it is released there.
 
