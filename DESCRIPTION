@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "r-pkgs@ludvigolsen.dk")
 Description: Provides tools for generating testthat expectations.
-License: GPL-3
+License: MIT + file LICENSE
 URL: https://github.com/ludvigolsen/xpectr
 BugReports: https://github.com/ludvigolsen/xpectr/issues
 Depends:
