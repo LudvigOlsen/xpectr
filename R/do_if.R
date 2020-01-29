@@ -10,7 +10,7 @@
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
 #'  If the \code{condition} is \code{TRUE},
-#'  generate error/warning/message from the supplied message.
+#'  generate error/warning/message with the supplied message.
 #' @param condition The condition to check. (Logical)
 #' @param message Message. (Character)
 #'

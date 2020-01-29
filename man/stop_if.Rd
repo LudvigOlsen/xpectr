@@ -25,7 +25,7 @@ Note: If \code{NULL}, the \code{condition} will be used as message.}
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
 If the \code{condition} is \code{TRUE},
-generate error/warning/message from the supplied message.
+generate error/warning/message with the supplied message.
 }
 \details{
 When \code{condition} is \code{FALSE}, they return \code{NULL} invisibly.
