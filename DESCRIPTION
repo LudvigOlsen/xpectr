@@ -26,7 +26,7 @@ Imports:
     rlang,
     utils,
     stats,
-    checkmate,
+    checkmate (>= 2.0.0),
     lifecycle
 Suggests: 
     knitr,
