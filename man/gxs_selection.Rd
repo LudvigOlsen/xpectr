@@ -91,6 +91,9 @@ These can be prepared for insertion with
 \code{\link[xpectr:prepare_insertion]{prepare_insertion()}}.
 }}
 }
+\value{
+Either \code{NULL} or the unprepared expectations as a character vector.
+}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 

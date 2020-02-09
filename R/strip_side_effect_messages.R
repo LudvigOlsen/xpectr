@@ -21,7 +21,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family strippers
 #' @export
-#' @return Returns NULL invisibly.
+#' @return Returns \code{NULL} invisibly.
 #' @examples
 #' # Attach packages
 #' library(xpectr)

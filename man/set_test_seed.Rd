@@ -11,6 +11,9 @@ set_test_seed(seed = 42, ...)
 
 \item{...}{Named arguments to \code{\link[base:set.seed]{set.seed()}}.}
 }
+\value{
+\code{NULL}.
+}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 

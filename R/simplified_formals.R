@@ -12,6 +12,7 @@
 #'  formats them as an easily testable character vector.
 #' @param fn Function.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @return A character vector with the simplified formals.
 #' @export
 #' @examples
 #' # Attach packages

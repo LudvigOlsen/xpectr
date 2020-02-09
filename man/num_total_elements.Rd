@@ -11,6 +11,9 @@ num_total_elements(x, deduplicated = FALSE)
 
 \item{deduplicated}{Whether to only count the unique elements. (Logical)}
 }
+\value{
+The total number of elements in \code{x}.
+}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 

@@ -10,6 +10,7 @@
 #' @param ... Named arguments to \code{\link[base:set.seed]{set.seed()}}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @author R. Mark Sharp
+#' @return \code{NULL}.
 #' @export
 #' @details
 #'  Initially contributed by R. Mark Sharp (github: @@rmsharp).

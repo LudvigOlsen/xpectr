@@ -24,6 +24,9 @@ strip(
 \item{allow_na}{Whether to allow \code{strings}
 to contain \code{NA}s. (Logical)}
 }
+\value{
+The stripped strings.
+}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 \enumerate{

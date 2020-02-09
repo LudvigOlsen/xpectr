@@ -11,6 +11,9 @@ element_lengths(x, keep_names = FALSE)
 
 \item{keep_names}{Whether to keep names. (Logical)}
 }
+\value{
+The length of each element.
+}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 

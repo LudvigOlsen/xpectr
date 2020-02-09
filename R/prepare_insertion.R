@@ -17,6 +17,7 @@
 #' @param trim_right Whether to trim whitespaces from the end of the collapsed string. (Logical)
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family inserters
+#' @return A string for insertion with \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}.
 #' @export
 #' @examples
 #' # Attach packages

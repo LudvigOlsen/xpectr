@@ -14,6 +14,7 @@
 #' @param expr Any expression to run within \code{\link[base:suppressMessages]{suppressMessages()}} and
 #'  \code{\link[base:suppressWarnings]{suppressWarnings()}}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @return The output of \code{expr}.
 #' @details
 #' \code{suppressWarnings(suppressMessages(expr))}
 #' @export

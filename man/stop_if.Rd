@@ -21,6 +21,9 @@ Note: If \code{NULL}, the \code{condition} will be used as message.}
 
 \item{sys.parent.n}{The number of generations to go back when calling message function.}
 }
+\value{
+Returns \code{NULL} invisibly.
+}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 

@@ -17,6 +17,7 @@
 #'  Note: If \code{NULL}, the \code{condition} will be used as message.
 #' @param sys.parent.n The number of generations to go back when calling message function.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @return Returns \code{NULL} invisibly.
 #' @details
 #' When \code{condition} is \code{FALSE}, they return \code{NULL} invisibly.
 #'

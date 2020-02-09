@@ -14,7 +14,7 @@ strip_msg(x, remove_spaces = FALSE, remove_numbers = FALSE)
 \item{remove_numbers}{Whether to remove all numbers. (Logical)}
 }
 \value{
-Returns NULL invisibly.
+Returns \code{NULL} invisibly.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

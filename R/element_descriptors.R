@@ -17,6 +17,7 @@
 #' @param keep_names Whether to keep names. (Logical)
 #' @family element descriptors
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @return The length of each element.
 #' @export
 #' @details
 #'  Simple wrapper for \code{unlist(lapply(x, length))}.
@@ -46,6 +47,7 @@ element_lengths <- function(x, keep_names = FALSE){
 #' @family element descriptors
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
+#' @return The type of each element.
 #' @details
 #'  Simple wrapper for \code{unlist(lapply(x, typeof))}.
 #' @examples
@@ -74,6 +76,7 @@ element_types <- function(x, keep_names = FALSE){
 #' @family element descriptors
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
+#' @return The class of each element.
 #' @details
 #'  Simple wrapper for \code{unlist(lapply(x, class))}.
 #' @examples
@@ -102,6 +105,7 @@ element_classes <- function(x, keep_names = FALSE){
 #' @family element descriptors
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
+#' @return The total number of elements in \code{x}.
 #' @details
 #'  Simple wrapper for
 #'  \code{length(unlist(x, recursive = TRUE, use.names = FALSE))}.

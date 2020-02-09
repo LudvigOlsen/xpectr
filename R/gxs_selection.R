@@ -75,6 +75,7 @@
 #'  \code{\link[xpectr:prepare_insertion]{prepare_insertion()}}.
 #'  }
 #' @param start_with_newline,end_with_newline Whether to have a newline in the beginning/end. (Logical)
+#' @return Either \code{NULL} or the unprepared expectations as a character vector.
 #' @details
 #'  The following "types" are currently supported or intended to be supported in the future.
 #'  Please suggest more types and tests in a GitHub issue!

@@ -10,6 +10,9 @@ suppress_mw(expr)
 \item{expr}{Any expression to run within \code{\link[base:suppressMessages]{suppressMessages()}} and
 \code{\link[base:suppressWarnings]{suppressWarnings()}}.}
 }
+\value{
+The output of \code{expr}.
+}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 

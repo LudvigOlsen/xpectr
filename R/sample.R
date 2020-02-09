@@ -26,6 +26,8 @@
 #'  The seed is set with \code{sample.kind = "Rounding"}
 #'  for compatibility with R versions \code{< 3.6.0}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @return When \code{data} has \code{<=n} elements, \code{data} is returned.
+#'  Otherwise, \code{data} is sampled and returned.
 #' @export
 #' @examples
 #' # Attach packages

@@ -23,6 +23,7 @@
 #' @param remove_numbers Whether to remove all numbers. (Logical)
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family strippers
+#' @return The stripped strings.
 #' @export
 #' @details
 #' 1) \code{gsub("[^[:alnum:][:blank:]]", replacement, strings))}

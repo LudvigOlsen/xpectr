@@ -2,10 +2,13 @@ Package: xpectr
 Title: Generates Expectations for 'testthat' Unit Testing
 Version: 0.1.0
 Authors@R: 
-    person(given = "Ludvig Renbo",
-           family = "Olsen",
-           role = c("aut", "cre"),
-           email = "r-pkgs@ludvigolsen.dk")
+    c(person(given = "Ludvig Renbo",
+             family = "Olsen",
+             role = c("aut", "cre"),
+             email = "r-pkgs@ludvigolsen.dk"),
+      person(given = "R. Mark",
+             family = "Sharp",
+             role = c("ctb")))
 Description: Helps systematize and ease the process of 
     building unit tests with the 'testthat' package by providing 
     tools for generating expectations.

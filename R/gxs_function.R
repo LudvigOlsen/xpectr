@@ -38,6 +38,7 @@
 #' @inheritParams gxs_selection
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family expectation generators
+#' @return Either \code{NULL} or the unprepared expectations as a character vector.
 #' @export
 #' @inherit gxs_selection details
 #' @examples

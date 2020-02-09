@@ -9,6 +9,9 @@ simplified_formals(fn)
 \arguments{
 \item{fn}{Function.}
 }
+\value{
+A character vector with the simplified formals.
+}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
