@@ -34,7 +34,7 @@
 #' library(xpectr)
 #'
 #' smpl(c(1,2,3,4,5), n = 3)
-#' smpl(data.frame("a" = c(1,2,3,4,5), "b" = c(2,3,4,5,6)), n = 3)
+#' smpl(data.frame("a" = c(1,2,3,4,5), "b" = c(2,3,4,5,6), stringsAsFactors = FALSE), n = 3)
 smpl <- function(data,
                  n,
                  keep_order = TRUE,

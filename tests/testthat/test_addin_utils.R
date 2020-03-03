@@ -45,7 +45,9 @@ test_that("apply_capture() works as expected", {
   )
 
   # Create data frame
-  a_df <- data.frame("a" = c(1, 2, 3), "b" = c("c", "d", "e"))
+  a_df <- data.frame("a" = c(1, 2, 3),
+                     "b" = factor(c("c", "d", "e"),
+                                  levels = c("c","d","e")))
 
   expect_equal(
     apply_capture("a_df", dput, envir = current_envir),
