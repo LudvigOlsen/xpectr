@@ -9,12 +9,15 @@
 #'
 #'  In case of an error, no other side effects are captured.
 #'
-#'  Simple wrapper for testthat's
+#'  Simple wrapper for \code{testthat}'s
 #'  \code{\link[testthat:capture_error]{capture_error()}},
 #'  \code{\link[testthat:capture_warnings]{capture_warnings()}} and
 #'  \code{\link[testthat:capture_messages]{capture_messages()}}.
+#'
+#'  Note: Evaluates \code{expr} up to three times.
 #' @param expr Expression.
 #' @param envir Environment to evaluate expression in.
+#' @param reset_seed Whether to reset the random state on exit. (Logical)
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @return Named list with the side effects.
 #' @export
@@ -36,7 +39,14 @@
 #' capture_side_effects(fn())
 #' capture_side_effects(fn(raise = TRUE))
 #' }
-capture_side_effects <- function(expr, envir = NULL) {
+capture_side_effects <- function(expr, envir = NULL, reset_seed = FALSE) {
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_flag(x = reset_seed, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
 
   # We cannot rely on lazy evaluation
   # as it would only be called in the first call (capture_error)
@@ -45,17 +55,31 @@ capture_side_effects <- function(expr, envir = NULL) {
   if (is.null(envir))
     envir <- parent.frame()
 
-  if (exists(".Random.seed"))
-    initial_random_state <- .Random.seed
+  # We need a random state to be able to make the
+  # same computation for the three evaluations
+  if (!exists(".Random.seed")) {
+    xpectr::set_test_seed(floor(runif(1, 0, 100000)))
+    rm_seed <- TRUE
+  } else {
+    rm_seed <- FALSE
+  }
+
+  # Get current random state
+  initial_random_state <- .Random.seed
 
   # Capture error
-  error <- testthat::capture_error(suppressMessages(suppressWarnings(
-    eval(sexpr, envir = envir))))
+  error <- testthat::capture_error(suppress_mw(
+    eval(sexpr, envir = envir)))
+
   # If no error, capture messages and warnings
   if (is.null(error)) {
+
+    # Capture messages
     assign_random_state(initial_random_state, check_existence = FALSE)
     messages <- testthat::capture_messages(suppressWarnings(
       eval(sexpr, envir = envir)))
+
+    # Capture warnings
     assign_random_state(initial_random_state, check_existence = FALSE)
     warnings <- testthat::capture_warnings(suppressMessages(
       eval(sexpr, envir = envir)))
@@ -63,6 +87,13 @@ capture_side_effects <- function(expr, envir = NULL) {
     error <- error$message
     messages <- NULL
     warnings <- NULL
+  }
+
+  # Remove or reset random state
+  if (isTRUE(rm_seed)) {
+    rm(".Random.seed", envir = globalenv())
+  } else if (isTRUE(reset_seed)) {
+    assign_random_state(initial_random_state, check_existence = FALSE)
   }
 
   list(
