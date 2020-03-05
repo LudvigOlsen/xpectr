@@ -558,6 +558,8 @@ create_expect_side_effect <- function(x, y,
     TRUE ~ "" # Won't get here anyway
   )
 
+  y <- deparse(y)
+  y <- collapse_strings(y)
   y <- escape_metacharacters(y)
   y <- split_to_paste0(y, spaces = ifelse(isTRUE(strip), spaces + 14, spaces))
 
