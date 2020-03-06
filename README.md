@@ -445,7 +445,7 @@ gxs_selection("fn()")
 xpectr::set_test_seed(42)
 # Testing side effects
 # Assigning side effects
-side_effects_19148 <- xpectr::capture_side_effects(fn())
+side_effects_19148 <- xpectr::capture_side_effects(fn(), reset_seed = TRUE)
 expect_equal(
   xpectr::strip(side_effects_19148[['warnings']]),
   xpectr::strip(c("G'Day Mam! I'm a warning to the world!", "Hopefully the whole world will see me :o")),
@@ -607,7 +607,7 @@ expect_error(
 xpectr::set_test_seed(42)
 # Testing side effects
 # Assigning side effects
-side_effects_16417 <- xpectr::capture_side_effects(fn(x = 2, y = -1, z = 5))
+side_effects_16417 <- xpectr::capture_side_effects(fn(x = 2, y = -1, z = 5), reset_seed = TRUE)
 expect_equal(
   xpectr::strip(side_effects_16417[['warnings']]),
   xpectr::strip("'y'<0"),
@@ -660,7 +660,7 @@ expect_error(
 xpectr::set_test_seed(42)
 # Testing side effects
 # Assigning side effects
-side_effects_17365 <- xpectr::capture_side_effects(fn(x = 2, y = 0, z = 10))
+side_effects_17365 <- xpectr::capture_side_effects(fn(x = 2, y = 0, z = 10), reset_seed = TRUE)
 expect_equal(
   xpectr::strip(side_effects_17365[['warnings']]),
   xpectr::strip(character(0)),

@@ -1,4 +1,4 @@
-# xpectr 0.1.0.9000
+# xpectr 0.1.1
 
 * `capture_side_effects()` gains argument `reset_seed`. Whether to reset the random state on exit (default: `FALSE`).
 
