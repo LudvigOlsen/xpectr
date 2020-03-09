@@ -23,13 +23,17 @@
 #' @param args_values The arguments and the values to create tests for.
 #'  Should be supplied as a named list of lists, like the following:
 #'
-#'  \code{args_values = list(\cr
-#'  "x1" = list(1,2,3),\cr
-#'  "x2" = list("a","b","c")\cr
-#'  )}
+#'  \code{args_values = list(}
+#'
+#'  \code{"x1" = list(1,2,3),}
+#'
+#'  \code{"x2" = list("a","b","c")}
+#'
+#'  \code{)}
 #'
 #'  The first value for each argument (referred to as the 'baseline' value) should be valid
 #'  (not throw an error/message/warning).
+#'
 #'  \strong{N.B.} This is not checked but should lead to more meaningful tests.
 #'
 #'  \strong{N.B.} Please define the list directly in the function call.
@@ -39,14 +43,17 @@
 #'
 #'  E.g. the following two combinations:
 #'
-#'  \code{extra_combinations = list(\cr
-#'  list("x1" = 4, "x2" = "b"),\cr
-#'  list("x1" = 7, "x2" = "c")\cr
-#'  )}
+#'  \code{extra_combinations = list(}
+#'
+#'  \code{list("x1" = 4, "x2" = "b"),}
+#'
+#'  \code{list("x1" = 7, "x2" = "c")}
+#'
+#'  \code{)}
 #'
 #'  \strong{N.B.} Unspecified arguments gets the baseline value.
 #'
-#'  \strong{N.B.} If you find yourself adding many combinations,
+#'  If you find yourself adding many combinations,
 #'  an additional \code{gxs_function()} call with different baseline values
 #'  might be preferable.
 #' @param check_nulls Whether to try all arguments with \code{NULL}. (Logical)
@@ -350,17 +357,6 @@ generate_function_strings <- function(fn_name,
     by = "arg_name"
   )
 
-  # Function for shortening too long values in the
-  # changed_string below
-  shorten_string <- function(s, len){
-    plyr::llply(s, function(si){
-      if (nchar(si) > len+3){
-        return(paste0(substring(si, first = 1, last = len), "..."))
-      }
-      si
-    }) %>% unlist()
-  }
-
   # Find the non-default arguments per combination
   changed_arg <- combinations %>%
     dplyr::filter(!.data$is_default) %>%
@@ -370,9 +366,9 @@ generate_function_strings <- function(fn_name,
                                           collapse = ", "),
                   changed_string_name_only = paste0(.data$arg_name, collapse = ", "),
                   num_changed = dplyr::n(),
-                  changed_string = ifelse(num_changed > 1,
-                                          changed_string_name_only,
-                                          changed_string_valued)) %>%
+                  changed_string = ifelse(.data$num_changed > 1,
+                                          .data$changed_string_name_only,
+                                          .data$changed_string_valued)) %>%
     dplyr::filter(dplyr::row_number() == 1) %>%
     dplyr::select(.data$combination, .data$num_changed,
                   .data$arg_name,
