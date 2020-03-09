@@ -30,13 +30,17 @@ gxs_function(
 \item{args_values}{The arguments and the values to create tests for.
 Should be supplied as a named list of lists, like the following:
 
-\code{args_values = list(\cr
- "x1" = list(1,2,3),\cr
- "x2" = list("a","b","c")\cr
- )}
+\code{args_values = list(}
+
+\code{"x1" = list(1,2,3),}
+
+\code{"x2" = list("a","b","c")}
+
+\code{)}
 
 The first value for each argument (referred to as the 'baseline' value) should be valid
 (not throw an error/message/warning).
+
 \strong{N.B.} This is not checked but should lead to more meaningful tests.
 
 \strong{N.B.} Please define the list directly in the function call.
@@ -47,14 +51,17 @@ each combination is a named sublist.
 
 E.g. the following two combinations:
 
-\code{extra_combinations = list(\cr
- list("x1" = 4, "x2" = "b"),\cr
- list("x1" = 7, "x2" = "c")\cr
- )}
+\code{extra_combinations = list(}
+
+\code{list("x1" = 4, "x2" = "b"),}
+
+\code{list("x1" = 7, "x2" = "c")}
+
+\code{)}
 
 \strong{N.B.} Unspecified arguments gets the baseline value.
 
-\strong{N.B.} If you find yourself adding many combinations,
+If you find yourself adding many combinations,
 an additional \code{gxs_function()} call with different baseline values
 might be preferable.}
 
