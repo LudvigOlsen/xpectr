@@ -10,8 +10,10 @@ matrix:
     after_success:
     - Rscript -e 'covr::codecov()'
   - r: release
-    name: tidyr-devel
-    before_script: Rscript -e "remotes::install_github('tidyverse/tidyr')"
+    name: pgk-devs-devel
+    before_script:
+      - Rscript -e "remotes::install_github(paste0('tidyverse/', c('tibble','dplyr')))"
+      - Rscript -e "remotes::install_github(paste0('mllg/', c('checkmate')))"
   - r: release
     os: osx
     name: release osx

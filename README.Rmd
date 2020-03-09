@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
   fig.retina = 2
 )
 
+xpectr::set_test_seed(1)
+
 # Get minimum R requirement 
 dep <- as.vector(read.dcf('DESCRIPTION')[, 'Depends'])
 rvers <- substring(dep, 7, nchar(dep)-1)

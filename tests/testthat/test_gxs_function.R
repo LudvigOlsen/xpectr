@@ -3,8 +3,6 @@ context("gxs_function()")
 
 test_that("gxs_function() works", {
 
-
-
   # Some arbitrary function
   # Have constraints on the arguments
   # and will output slightly different things depending on
