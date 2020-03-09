@@ -99,6 +99,7 @@ These functions are used for *generating expectations* (gxs).
 
   - `Insert Expectations` : generates `testthat` `expect_*` tests from
     selected code (with `gxs_selection()`)
+  - `Initialize test_that()` : inserts `testthat::test_that()` code
   - `dput() selected` : applies `dput()` to selected code
   - `Wrap string with paste0` : splits selected string every n
     characters and wraps in `paste0` call
@@ -132,6 +133,9 @@ file.
                 effects](#selection-is-a-function-call-with-side-effects)
           - [gxs\_function](#gxs_function)
           - [wrapStringAddin](#wrapstringaddin)
+          - [initializeTestthatAddin](#initializetestthataddin)
+          - [assertCollectionAddin](#assertcollectionaddin)
+          - [dputSelectedAddin](#dputselectedaddin)
 
 ## Examples
 
@@ -576,7 +580,7 @@ expect_equal(
   1L)
 
 # Testing fn(x = 4, y = 0, z = 5)
-# Changed from baseline: x
+# Changed from baseline: x = 4
 xpectr::set_test_seed(42)
 # Testing side effects
 expect_error(
@@ -585,7 +589,7 @@ expect_error(
   fixed = TRUE)
 
 # Testing fn(x = NA, y = 0, z = 5)
-# Changed from baseline: x
+# Changed from baseline: x = NA
 xpectr::set_test_seed(42)
 # Testing side effects
 expect_error(
@@ -594,7 +598,7 @@ expect_error(
   fixed = TRUE)
 
 # Testing fn(x = NULL, y = 0, z = 5)
-# Changed from baseline: x
+# Changed from baseline: x = NULL
 xpectr::set_test_seed(42)
 # Testing side effects
 expect_error(
@@ -603,7 +607,7 @@ expect_error(
   fixed = TRUE)
 
 # Testing fn(x = 2, y = -1, z = 5)
-# Changed from baseline: y
+# Changed from baseline: y = -1
 xpectr::set_test_seed(42)
 # Testing side effects
 # Assigning side effects
@@ -647,7 +651,7 @@ expect_equal(
   1L)
 
 # Testing fn(x = 2, y = NULL, z = 5)
-# Changed from baseline: y
+# Changed from baseline: y = NULL
 xpectr::set_test_seed(42)
 # Testing side effects
 expect_error(
@@ -656,7 +660,7 @@ expect_error(
   fixed = TRUE)
 
 # Testing fn(x = 2, y = 0, z = 10)
-# Changed from baseline: z
+# Changed from baseline: z = 10
 xpectr::set_test_seed(42)
 # Testing side effects
 # Assigning side effects
@@ -700,7 +704,7 @@ expect_equal(
   1L)
 
 # Testing fn(x = 2, y = 0, z = NULL)
-# Changed from baseline: z
+# Changed from baseline: z = NULL
 xpectr::set_test_seed(42)
 # Testing side effects
 expect_error(
@@ -723,4 +727,45 @@ wrapStringAddin("This is a fairly long sentence that we would very very much lik
 
 paste0("This is a fairly long sentence that we would very very much ",
        "like to make shorter in our test file!")
+```
+
+### initializeTestthatAddin
+
+``` r
+initializeTestthatAddin()
+
+# Inserts the following:
+
+test_that("testing ...()", {
+  xpectr::set_test_seed(42)
+
+  # ...
+
+})
+```
+
+### assertCollectionAddin
+
+``` r
+assertCollectionAddin()
+
+# Inserts the following:
+
+# Check arguments ####
+assert_collection <- checkmate::makeAssertCollection()
+# checkmate::assert_ , add = assert_collection)
+checkmate::reportAssertions(assert_collection)
+# End of argument checks ####
+```
+
+### dputSelectedAddin
+
+``` r
+v <- c(1, 2, 3)
+
+dputSelectedAddin("v")  # "v" is the selected code
+
+# Inserts the following:
+
+c(1, 2, 3)
 ```

@@ -5,7 +5,10 @@
 
 
 #' @title Replaces selected code with its dput() output
-#' @description RStudio Addin:
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  RStudio Addin:
 #'  Runs \code{\link[base:dput]{dput()}} on the selected code and inserts
 #'  it instead of the selection.
 #'
@@ -58,22 +61,27 @@ dputSelectedAddin <- function(selection = NULL, insert = TRUE, indentation = 0) 
   checkmate::assert_string(x = selection, null.ok = TRUE,
                            add = assert_collection)
   checkmate::assert_flag(x = insert, add = assert_collection)
-  checkmate::assert_number(x = indentation, lower = 0,
-                           add = assert_collection)
+  checkmate::assert_integerish(x = indentation, lower = 0,
+                               any.missing = FALSE,
+                               null.ok = TRUE,
+                               add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
   # Get the selection and indentation
   if (is.null(selection)){
-    selection <- get_selection()
-    indentation <- get_indentation()
+    selection <- tryCatch(get_selection(),
+                          error = function(e){return("")},
+                          message = function(m){return("")})
+    indentation <- tryCatch(get_indentation(),
+                            error = function(e){return(0)})
   }
 
   # Get parent environment
   parent_envir <- parent.frame()
 
   # dput() and insert/return
-  if (selection != "") {
+  if (!is.null(selection) && selection != "") {
     dput_out <- apply_capture(selection, dput, envir = parent_envir)
 
     if (!isTRUE(insert)) {

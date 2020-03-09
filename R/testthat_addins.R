@@ -5,7 +5,10 @@
 
 
 #' @title Creates testthat tests for selected code
-#' @description Inserts relevant \code{expect_*} tests based
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  Inserts relevant \code{expect_*} tests based
 #'  on the evaluation of the selected code.
 #'
 #'  Example: If the selected code is the name of a data frame object,
@@ -74,15 +77,27 @@ insertExpectationsAddin <- function(selection = NULL, insert = TRUE, indentation
   checkmate::assert_string(x = selection, null.ok = TRUE,
                            add = assert_collection)
   checkmate::assert_flag(x = insert, add = assert_collection)
-  checkmate::assert_number(x = indentation, lower = 0,
-                           add = assert_collection)
+  checkmate::assert_integerish(x = indentation, lower = 0,
+                               any.missing = FALSE,
+                               null.ok = TRUE,
+                               add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
   # Get the selection and indentation
   if (is.null(selection)){
-    selection <- get_selection()
-    indentation <- get_indentation()
+    selection <- tryCatch(
+      get_selection(),
+      error = function(e) {
+        return("")
+      }
+    )
+    indentation <- tryCatch(
+      get_indentation(),
+      error = function(e) {
+        return(0)
+      }
+    )
   }
 
   # Get parent environment
