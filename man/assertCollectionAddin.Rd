@@ -4,7 +4,7 @@
 \alias{assertCollectionAddin}
 \title{Inserts code for a checkmate assert collection}
 \usage{
-assertCollectionAddin(add_comments = TRUE)
+assertCollectionAddin(add_comments = TRUE, insert = TRUE, indentation = NULL)
 }
 \arguments{
 \item{add_comments}{Whether to add comments around. (Logical)
@@ -31,6 +31,8 @@ Inserts the following (excluding the \code{----}):
 Returns \code{NULL} invisibly.
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+
 RStudio Addin:
 Inserts code for initializing and reporting a
 \code{\link[checkmate:AssertCollection]{checkmate assert collection}}.
@@ -57,6 +59,7 @@ Press \code{Execute}.
 \seealso{
 Other addins: 
 \code{\link{dputSelectedAddin}()},
+\code{\link{initializeTestthatAddin}()},
 \code{\link{insertExpectationsAddin}()},
 \code{\link{wrapStringAddin}()}
 }

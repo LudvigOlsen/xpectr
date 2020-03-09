@@ -30,6 +30,8 @@ unit tests for the selected code.
 Returns \code{NULL} invisibly.
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+
 Inserts relevant \code{expect_*} tests based
 on the evaluation of the selected code.
 
@@ -77,6 +79,7 @@ Other expectation generators:
 Other addins: 
 \code{\link{assertCollectionAddin}()},
 \code{\link{dputSelectedAddin}()},
+\code{\link{initializeTestthatAddin}()},
 \code{\link{wrapStringAddin}()}
 }
 \author{

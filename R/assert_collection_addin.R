@@ -1,8 +1,11 @@
 
 #' @title Inserts code for a checkmate assert collection
-#' @description RStudio Addin:
-#'   Inserts code for initializing and reporting a
-#'   \code{\link[checkmate:AssertCollection]{checkmate assert collection}}.
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  RStudio Addin:
+#'  Inserts code for initializing and reporting a
+#'  \code{\link[checkmate:AssertCollection]{checkmate assert collection}}.
 #'
 #'  See \code{Details} for how to set a key command.
 #' @param add_comments Whether to add comments around. (Logical)
@@ -44,9 +47,28 @@
 #'
 #'  Press \code{Execute}.
 #'  }
-assertCollectionAddin <- function(add_comments = TRUE){
+assertCollectionAddin <- function(add_comments = TRUE, insert = TRUE, indentation = NULL){
 
-  indentation <- get_indentation()
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_flag(x = add_comments, add = assert_collection)
+  checkmate::assert_flag(x = insert, add = assert_collection)
+  checkmate::assert_integerish(x = indentation, lower = 0,
+                               any.missing = FALSE,
+                               null.ok = TRUE,
+                               add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # Get the indentation
+  if (is.null(indentation)){
+    indentation <- tryCatch(
+      get_indentation(),
+      error = function(e) {
+        return(0)
+      }
+    )
+  }
 
   to_insert <- c(
     "assert_collection <- checkmate::makeAssertCollection()",
@@ -63,10 +85,11 @@ assertCollectionAddin <- function(add_comments = TRUE){
     )
   }
 
-  # Insert the code
-  insert_code(to_insert,
-              prepare = TRUE,
-              indentation = indentation)
+  if (isTRUE(insert)){
+    insert_code(to_insert, prepare = TRUE, indentation = indentation)
+  } else {
+    return(to_insert)
+  }
 
   invisible()
 

@@ -49,6 +49,8 @@ Inserts the following (with newlines and correct indentation):
 Returns \code{NULL} invisibly.
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+
 Splits the selection every n characters
 and inserts it in a \code{\link[base:paste0]{paste0()}} call.
 
@@ -76,6 +78,7 @@ Press \code{Execute}.
 Other addins: 
 \code{\link{assertCollectionAddin}()},
 \code{\link{dputSelectedAddin}()},
+\code{\link{initializeTestthatAddin}()},
 \code{\link{insertExpectationsAddin}()}
 }
 \author{
