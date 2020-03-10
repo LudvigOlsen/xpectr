@@ -63,6 +63,7 @@ Press \code{Execute}.
 \seealso{
 Other addins: 
 \code{\link{assertCollectionAddin}()},
+\code{\link{initializeGXSFunctionAddin}()},
 \code{\link{initializeTestthatAddin}()},
 \code{\link{insertExpectationsAddin}()},
 \code{\link{wrapStringAddin}()}

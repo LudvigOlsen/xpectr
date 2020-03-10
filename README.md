@@ -100,6 +100,8 @@ These functions are used for *generating expectations* (gxs).
   - `Insert Expectations` : generates `testthat` `expect_*` tests from
     selected code (with `gxs_selection()`)
   - `Initialize test_that()` : inserts `testthat::test_that()` code
+  - `Initialize gxs_function()` : initializes a `gxs_function()` call
+    with default values of a function
   - `dput() selected` : applies `dput()` to selected code
   - `Wrap string with paste0` : splits selected string every n
     characters and wraps in `paste0` call
@@ -132,10 +134,14 @@ file.
               - [Selection is a function call with side
                 effects](#selection-is-a-function-call-with-side-effects)
           - [gxs\_function](#gxs_function)
-          - [wrapStringAddin](#wrapstringaddin)
-          - [initializeTestthatAddin](#initializetestthataddin)
-          - [assertCollectionAddin](#assertcollectionaddin)
-          - [dputSelectedAddin](#dputselectedaddin)
+          - [RStudio Addins](#rstudio-addins)
+              - [How to set up a key command in
+                RStudio](#how-to-set-up-a-key-command-in-rstudio)
+              - [initializeGXSFunctionAddin](#initializegxsfunctionaddin)
+              - [wrapStringAddin](#wrapstringaddin)
+              - [initializeTestthatAddin](#initializetestthataddin)
+              - [assertCollectionAddin](#assertcollectionaddin)
+              - [dputSelectedAddin](#dputselectedaddin)
 
 ## Examples
 
@@ -524,7 +530,7 @@ important tests are missing.
 
 ``` r
 # Define a function with arguments
-fn <- function(x, y, z) {
+fn <- function(x, y, z = 10) {
   if (x > 3) stop("'x' > 3")
   if (y < 0) warning("'y'<0")
   if (z == 10) message("'z' was 10!")
@@ -715,10 +721,76 @@ expect_error(
 ## Finished testing 'fn'                                                    ####
 ```
 
-### wrapStringAddin
+### RStudio Addins
+
+Below, we present the set of `RStudio` addins. The intention is for you
+to set up key commands for the ones you’d like access to. Once you get
+used to using them, they will speed up your testing process.
+
+#### How to set up a key command in RStudio
+
+Here’s a small guide for setting up key comands in `RStudio`. We use the
+`Insert Expectations` addin as an example:
+
+After installing the package, go to:
+
+`Tools >> Addins >> Browse Addins >> Keyboard Shortcuts`.
+
+Find `"Insert Expectations"` and press its field under `Shortcut`.
+
+Press desired key command, e.g. `Alt+E`.
+
+Press `Apply`.
+
+Press `Execute`.
+
+#### initializeGXSFunctionAddin
+
+The `initializeGXSFunctionAddin` initializes the `gxs_function()` call
+with the argument names and default values of a selected function. We
+can then add the argument values and additional combinations we wish to
+test. Note, that we don’t need to use the default values as our baseline
+values.
+
+The `Tip` comment tells us to comment out the `gxs_function()` call
+after running it, instead of removing it. When you change your code,
+it’s often much quicker to regenerate the tests than to update them
+manually. You can then use a diff tool to check that only the intended
+changes were made.
+
+The `#` in the end helps the code be inserted right after the call to
+`gxs_function()`.
+
+Suggested keycommand: `Alt+F`
+
+``` r
+initializeGXSFunctionAddin("fn")
+
+# Inserts the following:
+
+# Generate expectations for 'fn'
+# Tip: comment out the gxs_function() call
+# so it is easy to regenerate the tests
+xpectr::set_test_seed(42)
+xpectr::gxs_function(
+  fn = fn,
+  args_values = list(
+    "x" = list(),
+    "y" = list(),
+    "z" = list(10)
+  )
+)
+
+#
+```
+
+#### wrapStringAddin
 
 The `wrapStringAddin` splits long strings and wraps them with
 `paste0()`.
+
+Suggested keycommand:
+`Alt+P`
 
 ``` r
 wrapStringAddin("This is a fairly long sentence that we would very very much like to make shorter in our test file!")
@@ -729,7 +801,9 @@ paste0("This is a fairly long sentence that we would very very much ",
        "like to make shorter in our test file!")
 ```
 
-### initializeTestthatAddin
+#### initializeTestthatAddin
+
+Suggested keycommand: `Alt+T`
 
 ``` r
 initializeTestthatAddin()
@@ -744,7 +818,9 @@ test_that("testing ...()", {
 })
 ```
 
-### assertCollectionAddin
+#### assertCollectionAddin
+
+Suggested keycommand: `Alt+C`
 
 ``` r
 assertCollectionAddin()
@@ -758,7 +834,9 @@ checkmate::reportAssertions(assert_collection)
 # End of argument checks ####
 ```
 
-### dputSelectedAddin
+#### dputSelectedAddin
+
+Suggested keycommand: `Alt+D`
 
 ``` r
 v <- c(1, 2, 3)

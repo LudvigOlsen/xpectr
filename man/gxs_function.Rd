@@ -205,6 +205,7 @@ gxs_function(fn,
 \seealso{
 Other expectation generators: 
 \code{\link{gxs_selection}()},
+\code{\link{initializeGXSFunctionAddin}()},
 \code{\link{insertExpectationsAddin}()}
 }
 \author{

@@ -38,7 +38,7 @@ Go to:
 
 \code{Tools >> Addins >> Browse Addins >> Keyboard Shortcuts}.
 
-Find \code{"Insert Expectations"} and press its field under \code{Shortcut}.
+Find \code{"Initialize test_that()"} and press its field under \code{Shortcut}.
 
 Press desired key command, e.g. \code{Alt+T}.
 
@@ -51,6 +51,7 @@ Press \code{Execute}.
 Other addins: 
 \code{\link{assertCollectionAddin}()},
 \code{\link{dputSelectedAddin}()},
+\code{\link{initializeGXSFunctionAddin}()},
 \code{\link{insertExpectationsAddin}()},
 \code{\link{wrapStringAddin}()}
 }

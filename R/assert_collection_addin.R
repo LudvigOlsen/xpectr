@@ -47,7 +47,7 @@
 #'
 #'  \code{Tools >> Addins >> Browse Addins >> Keyboard Shortcuts}.
 #'
-#'  Find \code{"dput() Selected"} and press its field under \code{Shortcut}.
+#'  Find \code{"Insert checkmate AssertCollection Code"} and press its field under \code{Shortcut}.
 #'
 #'  Press desired key command, e.g. \code{Alt+C}.
 #'
