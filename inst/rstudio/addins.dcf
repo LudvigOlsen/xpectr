@@ -13,6 +13,11 @@ Description: Inserts test_that() call
 Binding: initializeTestthatAddin
 Interactive: false
 
+Name: Initialize gxs_function()
+Description: Inserts gxs_function() call with a selected function's default values
+Binding: initializeGXSFunctionAddin
+Interactive: false
+
 Name: Wrap String with paste0()
 Description: Inserts the wrapped selection
 Binding: wrapStringAddin
@@ -22,3 +27,4 @@ Name: Insert checkmate AssertCollection code
 Description: Inserts checkmate AssertCollection initialization and reporting code
 Binding: assertCollectionAddin
 Interactive: false
+

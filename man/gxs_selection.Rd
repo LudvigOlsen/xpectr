@@ -155,6 +155,7 @@ rstudioapi::insertText(for_insertion)
 \seealso{
 Other expectation generators: 
 \code{\link{gxs_function}()},
+\code{\link{initializeGXSFunctionAddin}()},
 \code{\link{insertExpectationsAddin}()}
 }
 \author{

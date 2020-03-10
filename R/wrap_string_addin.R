@@ -52,7 +52,7 @@
 #'
 #'  \code{Tools >> Addins >> Browse Addins >> Keyboard Shortcuts}.
 #'
-#'  Find \code{"Insert Expectations"} and press its
+#'  Find \code{"Wrap String with paste0"} and press its
 #'  field under \code{Shortcut}.
 #'
 #'  Press desired key command, e.g. \code{Alt+P}.
