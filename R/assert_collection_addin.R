@@ -11,6 +11,14 @@
 #' @param add_comments Whether to add comments around. (Logical)
 #'
 #'  This makes it easy for a user to create their own addin without the comments.
+#' @param indentation Indentation of the code. (Numeric)
+#'
+#'  \strong{N.B.} Mainly intended for testing the addin programmatically.
+#' @param insert Whether to insert the code via
+#'  \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
+#'  or return it. (Logical)
+#'
+#'  \strong{N.B.} Mainly intended for testing the addin programmatically.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family addins

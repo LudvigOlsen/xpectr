@@ -10,6 +10,16 @@ assertCollectionAddin(add_comments = TRUE, insert = TRUE, indentation = NULL)
 \item{add_comments}{Whether to add comments around. (Logical)
 
 This makes it easy for a user to create their own addin without the comments.}
+
+\item{insert}{Whether to insert the code via
+\code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
+or return it. (Logical)
+
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
+
+\item{indentation}{Indentation of the code. (Numeric)
+
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
 }
 \value{
 Inserts the following (excluding the \code{----}):
