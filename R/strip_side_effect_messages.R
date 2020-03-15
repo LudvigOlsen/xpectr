@@ -3,7 +3,7 @@
 #   __________________ #< 29fde22ad2b6cc22736749f39cd5f41a ># __________________
 #   Strip message                                                           ####
 
-#' @title Strips messages of non-alphanumeric characters and rethrows them
+#' @title Strip side-effect messages of non-alphanumeric characters and rethrow them
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'

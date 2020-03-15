@@ -2,7 +2,7 @@
 % Please edit documentation in R/strip.R
 \name{strip}
 \alias{strip}
-\title{Strips strings of non-alphanumeric characters}
+\title{Strip strings of non-alphanumeric characters}
 \usage{
 strip(
   strings,
