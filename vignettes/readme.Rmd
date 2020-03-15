@@ -116,12 +116,6 @@ These functions are used to *generate expectations* (gxs).
 
 Suggestion: Add `xpectr` in the `Suggests` field in the `DESCRIPTION` file.
 
-## Table of Contents {#toc}
-
-```{r toc, echo=FALSE}
-xpectr:::render_toc("README.Rmd", toc_depth = 5)
-```
-
 ## Examples
 
 ```{r warning=FALSE, message=FALSE}
