@@ -2,3 +2,6 @@
 inst/doc
 
 .Rhistory
+
+revdep/checks.noindex/
+revdep/library.noindex/
