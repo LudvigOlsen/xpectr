@@ -62,9 +62,16 @@ send me a mail at <r-pkgs@ludvigolsen.dk>
 
 ## Installation
 
-You can install the development version with:
+Install the CRAN version with:
 
 ``` r
+install.packages("xpectr")
+```
+
+Install the development version with:
+
+``` r
+# install.packages("devtools")  
 devtools::install_github("ludvigolsen/xpectr")
 ```
 
@@ -72,41 +79,46 @@ devtools::install_github("ludvigolsen/xpectr")
 
 ### Generator functions
 
-These functions are used for *generating expectations* (gxs).
+These functions are used to *generate expectations*
+(gxs).
 
-  - `gxs_selection()`
-  - `gxs_function()`
+| Function          | Description                                                                            |
+| :---------------- | :------------------------------------------------------------------------------------- |
+| `gxs_selection()` | Generates `testthat::expect_*` statements from a selection (string of code)            |
+| `gxs_function()`  | Generates `testthat::expect_*` statements for combinations of supplied argument values |
 
 ### Functions for use in tests
 
-  - `strip()`
-  - `strip_msg()`
-  - `suppress_mw()`
-  - `capture_side_effects()`
-  - `smpl()`
-  - `simplified_formals()`
-  - `element_lengths()`, `element_types()`, `element_classes()`
-  - `num_total_elements()`
-  - `set_test_seed()`
+| Function                                                    | Description                                                                  |
+| :---------------------------------------------------------- | :--------------------------------------------------------------------------- |
+| `strip()`                                                   | Strips strings of non-alphanumeric characters                                |
+| `strip_msg()`                                               | Strips side-effect messages of non-alphanumeric characters and rethrows them |
+| `suppress_mw()`                                             | Suppresses warnings and messages                                             |
+| `capture_side_effects()`                                    | Captures errors, warnings, and messages from an expression                   |
+| `smpl()`                                                    | Samples a vector, factor or data frame with internal random seed             |
+| `simplified_formals()`                                      | Formats formals as easily testable character vector                          |
+| `element_lengths()`, `element_types()`, `element_classes()` | Gets the length/type/class of each element                                   |
+| `num_total_elements()`                                      | Unlists recursively and finds the total number of elements                   |
+| `set_test_seed()`                                           | Set random seed for unit tests compatible with `R < 3.6.0`                   |
 
 ### Helper functions
 
-  - `prepare_insertion()`
-  - `capture_parse_eval_side_effects()`
-  - `stop_if()`, `warn_if()`, `message_if()`
+| Function                                 | Description                                                               |
+| :--------------------------------------- | :------------------------------------------------------------------------ |
+| `prepare_insertion()`                    | Collapses a vector of expectation strings and adds indentation            |
+| `capture_parse_eval_side_effects()`      | Wraps string in `capture_side_effects()` before parsing and evaluating it |
+| `stop_if()`, `warn_if()`, `message_if()` | If `TRUE`, generate error/warning/message with the supplied message       |
 
 ## Addins
 
-  - `Insert Expectations` : generates `testthat` `expect_*` tests from
-    selected code (with `gxs_selection()`)
-  - `Initialize test_that()` : inserts `testthat::test_that()` code
-  - `Initialize gxs_function()` : initializes a `gxs_function()` call
-    with default values of a function
-  - `dput() selected` : applies `dput()` to selected code
-  - `Wrap string with paste0` : splits selected string every n
-    characters and wraps in `paste0` call
-  - `Insert checkmate AssertCollection code` : inserts code for
-    initializing and reporting a checkmate AssertCollection
+| Addin                                                                                            | Description                                                                       | Suggested Key Command |
+| :----------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------- | :-------------------- |
+| *Insert Expectations* </br><font size="2">`insertExpectationsAddin()`</font>                     | Generates `testthat` `expect_*` tests from selected code (with `gxs_selection()`) | `Alt+E`               |
+| *Initialize `test_that()`* </br><font size="2">`initializeTestthatAddin()`</font>                | Inserts `testthat::test_that()` code                                              | `Alt+T`               |
+| *Initialize `gxs_function()`* </br><font size="2">`initializeGXSFunctionAddin()`</font>          | Initializes a `gxs_function()` call with default values of a function             | `Alt+F`               |
+| *`dput()` selected* </br><font size="2">`dputSelectedAddin()`</font>                             | Applies `dput()` to selected code                                                 | `Alt+D`               |
+| *Wrap string with `paste0()`* </br><font size="2">`wrapStringAddin()`</font>                     | Splits selected string every n characters and wraps in `paste0()` call            | `Alt+P`               |
+| *Insert `checkmate` `AssertCollection`code* </br><font size="2">`assertCollectionAddin()`</font> | Inserts code for initializing and reporting a `checkmate` `AssertCollection`      | `Alt+C`               |
 
 ## Using in packages
 

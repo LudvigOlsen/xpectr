@@ -4,7 +4,7 @@
 #   strip                                                                   ####
 
 
-#' @title Strips strings of non-alphanumeric characters
+#' @title Strip strings of non-alphanumeric characters
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'

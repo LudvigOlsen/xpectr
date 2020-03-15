@@ -8,7 +8,7 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Sample a vector, factor or data frame. Useful to reduce size of testthat \code{expect_*} tests.
+#'  Samples a vector, factor or data frame. Useful to reduce size of testthat \code{expect_*} tests.
 #'  Not intended for other purposes.
 #'
 #'  Wraps \code{\link[base:sample.int]{sample.int()}}. Data frames are sampled row-wise.

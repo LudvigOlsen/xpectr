@@ -2,7 +2,7 @@
 % Please edit documentation in R/strip_side_effect_messages.R
 \name{strip_msg}
 \alias{strip_msg}
-\title{Strips messages of non-alphanumeric characters and rethrows them}
+\title{Strip side-effect messages of non-alphanumeric characters and rethrow them}
 \usage{
 strip_msg(x, remove_spaces = FALSE, remove_numbers = FALSE)
 }
