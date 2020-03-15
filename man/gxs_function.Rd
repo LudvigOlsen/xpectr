@@ -7,6 +7,7 @@
 gxs_function(
   fn,
   args_values,
+  extra_combinations = NULL,
   check_nulls = TRUE,
   indentation = 0,
   tolerance = "1e-4",
@@ -29,14 +30,40 @@ gxs_function(
 \item{args_values}{The arguments and the values to create tests for.
 Should be supplied as a named list of lists, like the following:
 
-\code{args_values = list("x1" = list(1,2,3), "x2" = list("a","b","c"))}
+\code{args_values = list(}
+
+\code{"x1" = list(1,2,3),}
+
+\code{"x2" = list("a","b","c")}
+
+\code{)}
 
 The first value for each argument (referred to as the 'baseline' value) should be valid
 (not throw an error/message/warning).
+
 \strong{N.B.} This is not checked but should lead to more meaningful tests.
 
 \strong{N.B.} Please define the list directly in the function call.
 This is currently necessary.}
+
+\item{extra_combinations}{Additional combinations to test. List of lists, where
+each combination is a named sublist.
+
+E.g. the following two combinations:
+
+\code{extra_combinations = list(}
+
+\code{list("x1" = 4, "x2" = "b"),}
+
+\code{list("x1" = 7, "x2" = "c")}
+
+\code{)}
+
+\strong{N.B.} Unspecified arguments gets the baseline value.
+
+If you find yourself adding many combinations,
+an additional \code{gxs_function()} call with different baseline values
+might be preferable.}
 
 \item{check_nulls}{Whether to try all arguments with \code{NULL}. (Logical)
 
@@ -157,14 +184,28 @@ fn <- function(x, y, z){
 # Create expectations
 # Note: define the list in the call
 gxs_function(fn,
-             list("x" = list(2, 4, NA),
-                  "y" = list(0, -1),
-                  "z" = list(5, 10)))
+             args_values = list(
+               "x" = list(2, 4, NA),
+               "y" = list(0, -1),
+               "z" = list(5, 10))
+             )
+
+# Add additional combinations
+gxs_function(fn,
+             args_values = list(
+               "x" = list(2, 4, NA),
+               "y" = list(0, -1),
+               "z" = list(5, 10)),
+             extra_combinations = list(
+               list("x" = 4, "z" = 10),
+               list("y" = 1, "z" = 10))
+             )
 }
 }
 \seealso{
 Other expectation generators: 
 \code{\link{gxs_selection}()},
+\code{\link{initializeGXSFunctionAddin}()},
 \code{\link{insertExpectationsAddin}()}
 }
 \author{

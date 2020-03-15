@@ -1,15 +1,25 @@
 Name: dput() Selected
-Description: Runs dput() on selected code.
+Description: Runs dput() on selected code
 Binding: dputSelectedAddin
 Interactive: false
 
 Name: Insert Expectations
-Description: Creates expect_* testthat tests from the selected code.
+Description: Creates expect_* testthat tests from the selected code
 Binding: insertExpectationsAddin
 Interactive: false
 
-Name: Wrap String with Paste0
-Description: Inserts the wrapped selection.
+Name: Initialize test_that()
+Description: Inserts test_that() call
+Binding: initializeTestthatAddin
+Interactive: false
+
+Name: Initialize gxs_function()
+Description: Inserts gxs_function() call with a selected function's default values
+Binding: initializeGXSFunctionAddin
+Interactive: false
+
+Name: Wrap String with paste0()
+Description: Inserts the wrapped selection
 Binding: wrapStringAddin
 Interactive: false
 
@@ -17,5 +27,4 @@ Name: Insert checkmate AssertCollection code
 Description: Inserts checkmate AssertCollection initialization and reporting code
 Binding: assertCollectionAddin
 Interactive: false
-
 

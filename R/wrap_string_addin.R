@@ -5,7 +5,10 @@
 
 
 #' @title Wraps the selection with paste0
-#' @description Splits the selection every n characters
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  Splits the selection every n characters
 #'  and inserts it in a \code{\link[base:paste0]{paste0()}} call.
 #'
 #'  See \code{Details} for how to set a key command.
@@ -49,7 +52,7 @@
 #'
 #'  \code{Tools >> Addins >> Browse Addins >> Keyboard Shortcuts}.
 #'
-#'  Find \code{"Insert Expectations"} and press its
+#'  Find \code{"Wrap String with paste0"} and press its
 #'  field under \code{Shortcut}.
 #'
 #'  Press desired key command, e.g. \code{Alt+P}.
@@ -72,8 +75,10 @@ wrapStringAddin <- function(selection = NULL, indentation = 0,
   checkmate::assert_string(x = selection, null.ok = TRUE,
                            add = assert_collection)
   checkmate::assert_flag(x = insert, add = assert_collection)
-  checkmate::assert_number(x = indentation, lower = 0,
-                           add = assert_collection)
+  checkmate::assert_integerish(x = indentation, lower = 0,
+                               any.missing = FALSE,
+                               null.ok = TRUE,
+                               add = assert_collection)
   checkmate::assert_count(x = every_n, positive = TRUE,
                           null.ok = TRUE,
                           add = assert_collection)

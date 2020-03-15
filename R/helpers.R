@@ -9,6 +9,10 @@
 # From http://stackoverflow.com/questions/5935673/
 # accessing-same-named-list-elements-of-the-list-of-lists-in-r/5936077#5936077
 
+# Not in
+`%ni%` <- function(x, table) {
+  !(x %in% table)
+}
 
 # Remove NAs and empty "" names
 non_empty_names <- function(x) {

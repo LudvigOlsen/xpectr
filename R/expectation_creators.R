@@ -612,8 +612,6 @@ create_test_comment <- function(what, section = "test",
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
-
-
   if (indentation > 40){
     warning("indentation > 40 characters is ignored.")
     indentation <- 40

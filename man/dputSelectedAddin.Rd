@@ -30,6 +30,8 @@ Inserts the output of running
 Does not return anything.
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+
 RStudio Addin:
 Runs \code{\link[base:dput]{dput()}} on the selected code and inserts
 it instead of the selection.
@@ -61,6 +63,8 @@ Press \code{Execute}.
 \seealso{
 Other addins: 
 \code{\link{assertCollectionAddin}()},
+\code{\link{initializeGXSFunctionAddin}()},
+\code{\link{initializeTestthatAddin}()},
 \code{\link{insertExpectationsAddin}()},
 \code{\link{wrapStringAddin}()}
 }

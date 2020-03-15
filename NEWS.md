@@ -1,4 +1,14 @@
-# xpectr 0.1.1.9000
+# xpectr 0.2.0
+
+* Adds `initializeGXSFunctionAddin()` addin for initializing a `gxs_function()` call for a selected function.
+
+* Adds `initializeTestthatAddin()` addin for inserting `testthat::test_that()` chunk.
+
+* `gxs_function()` gets argument `extra_combinations` for manually adding extra combinations of argument values. In some simple cases, this can help us avoid multiple calls to `gxs_function()` with different baseline values.
+
+* The `Changed from baseline:` comment adds the changed value when only one argument was changed. This makes it faster to see what is tested.
+
+* Tests are now properly ordered as the specified `args_values`. 
 
 # xpectr 0.1.1
 

@@ -62,9 +62,16 @@ send me a mail at <r-pkgs@ludvigolsen.dk>
 
 ## Installation
 
-You can install the development version with:
+Install the CRAN version with:
 
 ``` r
+install.packages("xpectr")
+```
+
+Install the development version with:
+
+``` r
+# install.packages("devtools")  
 devtools::install_github("ludvigolsen/xpectr")
 ```
 
@@ -72,38 +79,46 @@ devtools::install_github("ludvigolsen/xpectr")
 
 ### Generator functions
 
-These functions are used for *generating expectations* (gxs).
+These functions are used to *generate expectations*
+(gxs).
 
-  - `gxs_selection()`
-  - `gxs_function()`
+| Function          | Description                                                                            |
+| :---------------- | :------------------------------------------------------------------------------------- |
+| `gxs_selection()` | Generates `testthat::expect_*` statements from a selection (string of code)            |
+| `gxs_function()`  | Generates `testthat::expect_*` statements for combinations of supplied argument values |
 
 ### Functions for use in tests
 
-  - `strip()`
-  - `strip_msg()`
-  - `suppress_mw()`
-  - `capture_side_effects()`
-  - `smpl()`
-  - `simplified_formals()`
-  - `element_lengths()`, `element_types()`, `element_classes()`
-  - `num_total_elements()`
-  - `set_test_seed()`
+| Function                                                    | Description                                                                  |
+| :---------------------------------------------------------- | :--------------------------------------------------------------------------- |
+| `strip()`                                                   | Strips strings of non-alphanumeric characters                                |
+| `strip_msg()`                                               | Strips side-effect messages of non-alphanumeric characters and rethrows them |
+| `suppress_mw()`                                             | Suppresses warnings and messages                                             |
+| `capture_side_effects()`                                    | Captures errors, warnings, and messages from an expression                   |
+| `smpl()`                                                    | Samples a vector, factor or data frame with internal random seed             |
+| `simplified_formals()`                                      | Formats formals as easily testable character vector                          |
+| `element_lengths()`, `element_types()`, `element_classes()` | Gets the length/type/class of each element                                   |
+| `num_total_elements()`                                      | Unlists recursively and finds the total number of elements                   |
+| `set_test_seed()`                                           | Set random seed for unit tests compatible with `R < 3.6.0`                   |
 
 ### Helper functions
 
-  - `prepare_insertion()`
-  - `capture_parse_eval_side_effects()`
-  - `stop_if()`, `warn_if()`, `message_if()`
+| Function                                 | Description                                                               |
+| :--------------------------------------- | :------------------------------------------------------------------------ |
+| `prepare_insertion()`                    | Collapses a vector of expectation strings and adds indentation            |
+| `capture_parse_eval_side_effects()`      | Wraps string in `capture_side_effects()` before parsing and evaluating it |
+| `stop_if()`, `warn_if()`, `message_if()` | If `TRUE`, generate error/warning/message with the supplied message       |
 
 ## Addins
 
-  - `Insert Expectations` : generates `testthat` `expect_*` tests from
-    selected code (with `gxs_selection()`)
-  - `dput() selected` : applies `dput()` to selected code
-  - `Wrap string with paste0` : splits selected string every n
-    characters and wraps in `paste0` call
-  - `Insert checkmate AssertCollection code` : inserts code for
-    initializing and reporting a checkmate AssertCollection
+| Addin                                                                                            | Description                                                                       | Suggested Key Command |
+| :----------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------- | :-------------------- |
+| *Insert Expectations* </br><font size="2">`insertExpectationsAddin()`</font>                     | Generates `testthat` `expect_*` tests from selected code (with `gxs_selection()`) | `Alt+E`               |
+| *Initialize `test_that()`* </br><font size="2">`initializeTestthatAddin()`</font>                | Inserts `testthat::test_that()` code                                              | `Alt+T`               |
+| *Initialize `gxs_function()`* </br><font size="2">`initializeGXSFunctionAddin()`</font>          | Initializes a `gxs_function()` call with default values of a function             | `Alt+F`               |
+| *`dput()` selected* </br><font size="2">`dputSelectedAddin()`</font>                             | Applies `dput()` to selected code                                                 | `Alt+D`               |
+| *Wrap string with `paste0()`* </br><font size="2">`wrapStringAddin()`</font>                     | Splits selected string every n characters and wraps in `paste0()` call            | `Alt+P`               |
+| *Insert `checkmate` `AssertCollection`code* </br><font size="2">`assertCollectionAddin()`</font> | Inserts code for initializing and reporting a `checkmate` `AssertCollection`      | `Alt+C`               |
 
 ## Using in packages
 
@@ -131,7 +146,14 @@ file.
               - [Selection is a function call with side
                 effects](#selection-is-a-function-call-with-side-effects)
           - [gxs\_function](#gxs_function)
-          - [wrapStringAddin](#wrapstringaddin)
+          - [RStudio Addins](#rstudio-addins)
+              - [How to set up a key command in
+                RStudio](#how-to-set-up-a-key-command-in-rstudio)
+              - [initializeGXSFunctionAddin](#initializegxsfunctionaddin)
+              - [wrapStringAddin](#wrapstringaddin)
+              - [initializeTestthatAddin](#initializetestthataddin)
+              - [assertCollectionAddin](#assertcollectionaddin)
+              - [dputSelectedAddin](#dputselectedaddin)
 
 ## Examples
 
@@ -520,7 +542,7 @@ important tests are missing.
 
 ``` r
 # Define a function with arguments
-fn <- function(x, y, z) {
+fn <- function(x, y, z = 10) {
   if (x > 3) stop("'x' > 3")
   if (y < 0) warning("'y'<0")
   if (z == 10) message("'z' was 10!")
@@ -576,7 +598,7 @@ expect_equal(
   1L)
 
 # Testing fn(x = 4, y = 0, z = 5)
-# Changed from baseline: x
+# Changed from baseline: x = 4
 xpectr::set_test_seed(42)
 # Testing side effects
 expect_error(
@@ -585,7 +607,7 @@ expect_error(
   fixed = TRUE)
 
 # Testing fn(x = NA, y = 0, z = 5)
-# Changed from baseline: x
+# Changed from baseline: x = NA
 xpectr::set_test_seed(42)
 # Testing side effects
 expect_error(
@@ -594,7 +616,7 @@ expect_error(
   fixed = TRUE)
 
 # Testing fn(x = NULL, y = 0, z = 5)
-# Changed from baseline: x
+# Changed from baseline: x = NULL
 xpectr::set_test_seed(42)
 # Testing side effects
 expect_error(
@@ -603,7 +625,7 @@ expect_error(
   fixed = TRUE)
 
 # Testing fn(x = 2, y = -1, z = 5)
-# Changed from baseline: y
+# Changed from baseline: y = -1
 xpectr::set_test_seed(42)
 # Testing side effects
 # Assigning side effects
@@ -647,7 +669,7 @@ expect_equal(
   1L)
 
 # Testing fn(x = 2, y = NULL, z = 5)
-# Changed from baseline: y
+# Changed from baseline: y = NULL
 xpectr::set_test_seed(42)
 # Testing side effects
 expect_error(
@@ -656,7 +678,7 @@ expect_error(
   fixed = TRUE)
 
 # Testing fn(x = 2, y = 0, z = 10)
-# Changed from baseline: z
+# Changed from baseline: z = 10
 xpectr::set_test_seed(42)
 # Testing side effects
 # Assigning side effects
@@ -700,7 +722,7 @@ expect_equal(
   1L)
 
 # Testing fn(x = 2, y = 0, z = NULL)
-# Changed from baseline: z
+# Changed from baseline: z = NULL
 xpectr::set_test_seed(42)
 # Testing side effects
 expect_error(
@@ -711,10 +733,76 @@ expect_error(
 ## Finished testing 'fn'                                                    ####
 ```
 
-### wrapStringAddin
+### RStudio Addins
+
+Below, we present the set of `RStudio` addins. The intention is for you
+to set up key commands for the ones you’d like access to. Once you get
+used to using them, they will speed up your testing process.
+
+#### How to set up a key command in RStudio
+
+Here’s a small guide for setting up key comands in `RStudio`. We use the
+`Insert Expectations` addin as an example:
+
+After installing the package, go to:
+
+`Tools >> Addins >> Browse Addins >> Keyboard Shortcuts`.
+
+Find `"Insert Expectations"` and press its field under `Shortcut`.
+
+Press desired key command, e.g. `Alt+E`.
+
+Press `Apply`.
+
+Press `Execute`.
+
+#### initializeGXSFunctionAddin
+
+The `initializeGXSFunctionAddin` initializes the `gxs_function()` call
+with the argument names and default values of a selected function. We
+can then add the argument values and additional combinations we wish to
+test. Note, that we don’t need to use the default values as our baseline
+values.
+
+The `Tip` comment tells us to comment out the `gxs_function()` call
+after running it, instead of removing it. When you change your code,
+it’s often much quicker to regenerate the tests than to update them
+manually. You can then use a diff tool to check that only the intended
+changes were made.
+
+The `#` in the end helps the code be inserted right after the call to
+`gxs_function()`.
+
+Suggested keycommand: `Alt+F`
+
+``` r
+initializeGXSFunctionAddin("fn")
+
+# Inserts the following:
+
+# Generate expectations for 'fn'
+# Tip: comment out the gxs_function() call
+# so it is easy to regenerate the tests
+xpectr::set_test_seed(42)
+xpectr::gxs_function(
+  fn = fn,
+  args_values = list(
+    "x" = list(),
+    "y" = list(),
+    "z" = list(10)
+  )
+)
+
+#
+```
+
+#### wrapStringAddin
 
 The `wrapStringAddin` splits long strings and wraps them with
 `paste0()`.
+
+Suggested keycommand:
+`Alt+P`
 
 ``` r
 wrapStringAddin("This is a fairly long sentence that we would very very much like to make shorter in our test file!")
@@ -723,4 +811,51 @@ wrapStringAddin("This is a fairly long sentence that we would very very much lik
 
 paste0("This is a fairly long sentence that we would very very much ",
        "like to make shorter in our test file!")
+```
+
+#### initializeTestthatAddin
+
+Suggested keycommand: `Alt+T`
+
+``` r
+initializeTestthatAddin()
+
+# Inserts the following:
+
+test_that("testing ...()", {
+  xpectr::set_test_seed(42)
+
+  # ...
+
+})
+```
+
+#### assertCollectionAddin
+
+Suggested keycommand: `Alt+C`
+
+``` r
+assertCollectionAddin()
+
+# Inserts the following:
+
+# Check arguments ####
+assert_collection <- checkmate::makeAssertCollection()
+# checkmate::assert_ , add = assert_collection)
+checkmate::reportAssertions(assert_collection)
+# End of argument checks ####
+```
+
+#### dputSelectedAddin
+
+Suggested keycommand: `Alt+D`
+
+``` r
+v <- c(1, 2, 3)
+
+dputSelectedAddin("v")  # "v" is the selected code
+
+# Inserts the following:
+
+c(1, 2, 3)
 ```

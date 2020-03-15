@@ -23,14 +23,39 @@
 #' @param args_values The arguments and the values to create tests for.
 #'  Should be supplied as a named list of lists, like the following:
 #'
-#'  \code{args_values = list("x1" = list(1,2,3), "x2" = list("a","b","c"))}
+#'  \code{args_values = list(}
+#'
+#'  \code{"x1" = list(1,2,3),}
+#'
+#'  \code{"x2" = list("a","b","c")}
+#'
+#'  \code{)}
 #'
 #'  The first value for each argument (referred to as the 'baseline' value) should be valid
 #'  (not throw an error/message/warning).
+#'
 #'  \strong{N.B.} This is not checked but should lead to more meaningful tests.
 #'
 #'  \strong{N.B.} Please define the list directly in the function call.
 #'  This is currently necessary.
+#' @param extra_combinations Additional combinations to test. List of lists, where
+#'  each combination is a named sublist.
+#'
+#'  E.g. the following two combinations:
+#'
+#'  \code{extra_combinations = list(}
+#'
+#'  \code{list("x1" = 4, "x2" = "b"),}
+#'
+#'  \code{list("x1" = 7, "x2" = "c")}
+#'
+#'  \code{)}
+#'
+#'  \strong{N.B.} Unspecified arguments gets the baseline value.
+#'
+#'  If you find yourself adding many combinations,
+#'  an additional \code{gxs_function()} call with different baseline values
+#'  might be preferable.
 #' @param check_nulls Whether to try all arguments with \code{NULL}. (Logical)
 #'
 #'  When enabled, you don't need to add \code{NULL} to your \code{args_values},
@@ -56,12 +81,26 @@
 #' # Create expectations
 #' # Note: define the list in the call
 #' gxs_function(fn,
-#'              list("x" = list(2, 4, NA),
-#'                   "y" = list(0, -1),
-#'                   "z" = list(5, 10)))
+#'              args_values = list(
+#'                "x" = list(2, 4, NA),
+#'                "y" = list(0, -1),
+#'                "z" = list(5, 10))
+#'              )
+#'
+#' # Add additional combinations
+#' gxs_function(fn,
+#'              args_values = list(
+#'                "x" = list(2, 4, NA),
+#'                "y" = list(0, -1),
+#'                "z" = list(5, 10)),
+#'              extra_combinations = list(
+#'                list("x" = 4, "z" = 10),
+#'                list("y" = 1, "z" = 10))
+#'              )
 #' }
 gxs_function <- function(fn,
                          args_values,
+                         extra_combinations = NULL,
                          check_nulls = TRUE,
                          indentation = 0,
                          tolerance = "1e-4",
@@ -82,6 +121,9 @@ gxs_function <- function(fn,
   checkmate::assert_function(x = fn, add = assert_collection)
   checkmate::assert_list(x = args_values, types = c("list"),
                          names = "named", add = assert_collection)
+  checkmate::assert_list(x = extra_combinations, types = c("list"),
+                         names = "unnamed", null.ok = TRUE,
+                         add = assert_collection)
   checkmate::assert_flag(x = check_nulls, add = assert_collection)
   checkmate::assert_string(x = tolerance, add = assert_collection)
   checkmate::assert_choice(x = out, choices = c("insert", "return"), add = assert_collection)
@@ -109,15 +151,22 @@ gxs_function <- function(fn,
   #   The substituted list contains each sublist
   #   Each element in those are 1: list/c, 2: first element, 3: second element, etc.
   arg_call <- substitute(args_values)
+  xcomb_call <- substitute(extra_combinations)
 
   if (!grepl("[\\(\\)]", collapse_strings(deparse(arg_call)), fixed = FALSE)){
     assert_collection$push("Please define the 'arg_values' list directly in the function call.")
+    checkmate::reportAssertions(assert_collection)
+  }
+  if (!is.null(extra_combinations) &&
+      !grepl("[\\(\\)]", collapse_strings(deparse(xcomb_call)), fixed = FALSE)){
+    assert_collection$push("Please define the 'extra_combinations' list directly in the function call.")
     checkmate::reportAssertions(assert_collection)
   }
 
   # Generate function call fn(arg = value) strings
   fn_calls <- generate_function_strings(fn_name = fn_name,
                                         args_values_substituted = arg_call,
+                                        extra_combinations_substituted = xcomb_call,
                                         check_nulls = check_nulls)
 
   # Create unique test IDs
@@ -134,8 +183,9 @@ gxs_function <- function(fn,
     changed_arg <- current_call[["changed"]][[1]]
     comment_change <- isTRUE(add_test_comments) && !is.na(changed_arg)
 
-    c(create_test_comment(call_string, create_comment = add_test_comments),
+    c(create_test_comment(call_string, indentation = indentation, create_comment = add_test_comments),
       create_test_comment(paste0("Changed from baseline: ", changed_arg),
+                          indentation = indentation,
                           section = "manual", create_comment = comment_change),
       gxs_selection(
         selection = call_string,
@@ -187,6 +237,7 @@ gxs_function <- function(fn,
 
 generate_function_strings <- function(fn_name,
                                       args_values_substituted,
+                                      extra_combinations_substituted,
                                       check_nulls = TRUE){
 
   # Check arguments ####
@@ -202,11 +253,26 @@ generate_function_strings <- function(fn_name,
              "ld be made with substitute(args_values), where 'args_values' i",
              "s a named list of lists."))
   }
+  if (!is.null(extra_combinations_substituted) &&
+      !is.language(extra_combinations_substituted)){
+    assert_collection$push(
+      paste0("'extra_combinations_substituted' must be a language object."))
+  }
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
   # Get argument names
   arg_names <- non_empty_names(args_values_substituted)
+  if (!is.null(extra_combinations_substituted)){
+    xcomb_names <- lapply(extra_combinations_substituted, non_empty_names) %>%
+      unlist(recursive = FALSE, use.names = TRUE) %>%
+      unique()
+    if (length(setdiff(xcomb_names, arg_names)) > 0){
+      assert_collection$push(
+        "'extra_combinations' had argument name(s) not in 'args_values'.")
+      checkmate::reportAssertions(assert_collection)
+    }
+  }
 
   # Create a tibble of the substituted values
   tibbled_args_values <- plyr::ldply(arg_names, function(an){
@@ -254,18 +320,59 @@ generate_function_strings <- function(fn_name,
     )
   }
 
+  num_combinations <- length(unique(combinations[["combination"]]))
+
+  ## Extra combinations
+  # Create a tibble of the substituted values
+  if (!is.null(extra_combinations_substituted)){
+    tibbled_xcombs <- plyr::ldply(seq_len(length(extra_combinations_substituted)-1),
+                                  function(comb){
+      current_combi <- extra_combinations_substituted[[comb+1]]
+      current_arg_names <- non_empty_names(current_combi)
+      defaults <- default_values %>%
+        dplyr::filter(.data$arg_name %ni% current_arg_names)
+
+      non_defaults <- plyr::llply(current_combi, function(arg_val){
+        paste0(deparse(arg_val), collapse = "\n")
+      }) %>% tibble::enframe(name = "arg_name") %>%
+        dplyr::mutate(index = comb,
+                      is_default = FALSE) %>%
+        dplyr::filter(dplyr::row_number() > 1)
+
+      dplyr::bind_rows(defaults, non_defaults) %>%
+        dplyr::mutate(combination = paste0(comb + num_combinations))
+
+    })
+
+    # Add to combinations
+    combinations <- dplyr::bind_rows(combinations, tibbled_xcombs)
+
+  }
+
   # Sort by argument name order
   # So we call in same order as in args_values
-  combinations <- combinations %>%
-    dplyr::right_join(
-      tibble::enframe(arg_names, name = NULL, value = "arg_name"),
-      by = "arg_name"
-    )
+  combinations <- dplyr::left_join(
+    tibble::enframe(arg_names, name = NULL, value = "arg_name"),
+    combinations,
+    by = "arg_name"
+  )
 
   # Find the non-default arguments per combination
   changed_arg <- combinations %>%
     dplyr::filter(!.data$is_default) %>%
-    dplyr::select(.data$combination, .data$arg_name)
+    dplyr::group_by(.data$combination) %>%
+    dplyr::mutate(changed_string_valued = paste0(.data$arg_name, " = ",
+                                          .data$value,
+                                          collapse = ", "),
+                  changed_string_name_only = paste0(.data$arg_name, collapse = ", "),
+                  num_changed = dplyr::n(),
+                  changed_string = ifelse(.data$num_changed > 1,
+                                          .data$changed_string_name_only,
+                                          .data$changed_string_valued)) %>%
+    dplyr::filter(dplyr::row_number() == 1) %>%
+    dplyr::select(.data$combination, .data$num_changed,
+                  .data$arg_name,
+                  .data$changed_string)
 
   # Create function calls
   function_calls <- combinations %>%
@@ -273,20 +380,29 @@ generate_function_strings <- function(fn_name,
     dplyr::group_by(.data$combination) %>%
     dplyr::summarise(call_strings = paste0(
       fn_name,"(", paste0(.data$name_value, collapse = ", "), ")")) %>%
-    dplyr::left_join(changed_arg, by="combination") %>%
-    dplyr::arrange(.data$arg_name)
+    dplyr::left_join(changed_arg, by = "combination") %>%
+    dplyr::arrange(.data$num_changed)
 
-  # Move default first
-  function_calls <- dplyr::bind_rows(
-    function_calls[nrow(function_calls),],
-    function_calls[1:(nrow(function_calls)-1),])
+  # Create tmp arg_name for default call
+  tmp_value <- ".___TMP_VALUE___"
+  if (sum(is.na(function_calls[["arg_name"]]))>1)
+    stop("Internal error: More than one 'arg_name' was 'NA'. Please report issue on GitHub.")
+  function_calls[is.na(function_calls[["arg_name"]]), "arg_name"] <- tmp_value
+
+  # Order by arg_names, not alphabetically
+  function_calls <- dplyr::left_join(
+    tibble::enframe(c(tmp_value, arg_names), name = NULL, value = "arg_name"),
+    function_calls,
+    by = "arg_name"
+  ) %>%
+    dplyr::filter(!is.na(.data$combination))
 
   # Prepare output tibble
   function_calls %>%
-    dplyr::select(-.data$combination) %>%
-    dplyr::distinct() %>%
+    dplyr::select(.data$call_strings, .data$changed_string) %>%
+    dplyr::distinct(.data$call_strings, .keep_all = TRUE) %>%
     dplyr::rename(call = .data$call_strings,
-                  changed = .data$arg_name)
+                  changed = .data$changed_string)
 
 }
 

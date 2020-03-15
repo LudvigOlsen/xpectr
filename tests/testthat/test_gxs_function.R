@@ -3,8 +3,6 @@ context("gxs_function()")
 
 test_that("gxs_function() works", {
 
-
-
   # Some arbitrary function
   # Have constraints on the arguments
   # and will output slightly different things depending on
@@ -66,37 +64,37 @@ test_that("gxs_function() works", {
     "expect_error(\n  xpectr::strip_msg(fn(a = 1, a_fn = mean, b = \"ah\")),\n  xpectr::strip(paste0(\"2 assertions failed:\\n * Variable 'a': Element 1 is not >= \",\n                       \"4.\\n * Variable 'b': Must have length 2, but has length 1.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 2, a_fn = mean, b = \"ah\")",
-    "# Changed from baseline: a",
+    "# Changed from baseline: a = 2",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 2, a_fn = mean, b = \"ah\")),\n  xpectr::strip(paste0(\"2 assertions failed:\\n * Variable 'a': Element 1 is not >= \",\n                       \"4.\\n * Variable 'b': Must have length 2, but has length 1.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = NULL, a_fn = mean, b = \"ah\")",
-    "# Changed from baseline: a",
+    "# Changed from baseline: a = NULL",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = NULL, a_fn = mean, b = \"ah\")),\n  xpectr::strip(paste0(\"2 assertions failed:\\n * Variable 'a': Must be of type 'num\",\n                       \"ber', not 'NULL'.\\n * Variable 'b': Must have length 2, but \",\n                       \"has length 1.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 1, a_fn = sum, b = \"ah\")",
-    "# Changed from baseline: a_fn",
+    "# Changed from baseline: a_fn = sum",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 1, a_fn = sum, b = \"ah\")),\n  xpectr::strip(paste0(\"2 assertions failed:\\n * Variable 'a': Element 1 is not >= \",\n                       \"4.\\n * Variable 'b': Must have length 2, but has length 1.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 1, a_fn = NULL, b = \"ah\")",
-    "# Changed from baseline: a_fn",
+    "# Changed from baseline: a_fn = NULL",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 1, a_fn = NULL, b = \"ah\")),\n  xpectr::strip(paste0(\"3 assertions failed:\\n * Variable 'a': Element 1 is not >= \",\n                       \"4.\\n * Variable 'a_fn': Must be a function, not 'NULL'.\\n * \",\n                       \"Variable 'b': Must have length 2, but has length 1.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 1, a_fn = mean, b = \"eh\")",
-    "# Changed from baseline: b",
+    "# Changed from baseline: b = \"eh\"",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 1, a_fn = mean, b = \"eh\")),\n  xpectr::strip(paste0(\"2 assertions failed:\\n * Variable 'a': Element 1 is not >= \",\n                       \"4.\\n * Variable 'b': Must have length 2, but has length 1.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 1, a_fn = mean, b = NULL)",
-    "# Changed from baseline: b",
+    "# Changed from baseline: b = NULL",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 1, a_fn = mean, b = NULL)),\n  xpectr::strip(paste0(\"2 assertions failed:\\n * Variable 'a': Element 1 is not >= \",\n                       \"4.\\n * Variable 'b': Must be of type 'character', not 'NULL'\",\n                       \".\")),\n  fixed = TRUE)",
@@ -155,31 +153,31 @@ test_that("gxs_function() works", {
     "expect_equal(\n  sum(xpectr::element_lengths(output_12655)),\n  2L)",
     " ",
     "# Testing fn(a = 3, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), ...",
-    "# Changed from baseline: a",
+    "# Changed from baseline: a = 3",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 3, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = 3, f = \"hii\")),\n  xpectr::strip(\"1 assertions failed:\\n * Variable 'a': Element 1 is not >= 4.\"),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 7, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), ...",
-    "# Changed from baseline: a",
+    "# Changed from baseline: a = 7",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 7, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = 3, f = \"hii\")),\n  xpectr::strip(\"1 assertions failed:\\n * Variable 'a': Element 1 is not <= 6.\"),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = NA, a_fn = mean, b = c(\"ahhh\", \"ohhh\"),...",
-    "# Changed from baseline: a",
+    "# Changed from baseline: a = NA",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = NA, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = 3, f = \"hii\")),\n  xpectr::strip(\"1 assertions failed:\\n * Variable 'a': May not be NA.\"),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = NULL, a_fn = mean, b = c(\"ahhh\", \"ohhh\"...",
-    "# Changed from baseline: a",
+    "# Changed from baseline: a = NULL",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = NULL, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = 3, f = \"hii\")),\n  xpectr::strip(paste0(\"1 assertions failed:\\n * Variable 'a': Must be of type 'num\",\n                       \"ber', not 'NULL'.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 5, a_fn = sum, b = c(\"ahhh\", \"ohhh\"), d...",
-    "# Changed from baseline: a_fn",
+    "# Changed from baseline: a_fn = sum",
     "xpectr::set_test_seed(42)",
     "# Assigning output",
     "output_18983 <- fn(a = 5, a_fn = sum, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = 3, f = \"hii\")",
@@ -197,13 +195,13 @@ test_that("gxs_function() works", {
     "expect_equal(\n  sum(xpectr::element_lengths(output_18983)),\n  2L)",
     " ",
     "# Testing fn(a = 5, a_fn = NULL, b = c(\"ahhh\", \"ohhh\"), ...",
-    "# Changed from baseline: a_fn",
+    "# Changed from baseline: a_fn = NULL",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 5, a_fn = NULL, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = 3, f = \"hii\")),\n  xpectr::strip(paste0(\"1 assertions failed:\\n * Variable 'a_fn': Must be a functio\",\n                       \"n, not 'NULL'.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"ehhh\", \"loool\"),...",
-    "# Changed from baseline: b",
+    "# Changed from baseline: b = c(\"ehhh\", \"loool\")",
     "xpectr::set_test_seed(42)",
     "# Assigning output",
     "output_16607 <- fn(a = 5, a_fn = mean, b = c(\"ehhh\", \"loool\"), d = NULL, e = 3, f = \"hii\")",
@@ -221,37 +219,37 @@ test_that("gxs_function() works", {
     "expect_equal(\n  sum(xpectr::element_lengths(output_16607)),\n  2L)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"jj\", \"ll\"), d = ...",
-    "# Changed from baseline: b",
+    "# Changed from baseline: b = c(\"jj\", \"ll\")",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 5, a_fn = mean, b = c(\"jj\", \"ll\"), d = NULL, e = 3, f = \"hii\")),\n  xpectr::strip(paste0(\"1 assertions failed:\\n * Variable 'b': All elements must ha\",\n                       \"ve at least 3 characters.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"ehhh\", \"loool\", ...",
-    "# Changed from baseline: b",
+    "# Changed from baseline: b = c(\"ehhh\", \"loool\", ...",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 5, a_fn = mean, b = c(\"ehhh\", \"loool\", \"heeej\"), d = NULL, e = 3, f = \"hii\")),\n  xpectr::strip(paste0(\"1 assertions failed:\\n * Variable 'b': Must have length 2, \",\n                       \"but has length 3.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = NULL, d = NULL, e =...",
-    "# Changed from baseline: b",
+    "# Changed from baseline: b = NULL",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 5, a_fn = mean, b = NULL, d = NULL, e = 3, f = \"hii\")),\n  xpectr::strip(paste0(\"1 assertions failed:\\n * Variable 'b': Must be of type 'cha\",\n                       \"racter', not 'NULL'.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), ...",
-    "# Changed from baseline: d",
+    "# Changed from baseline: d = data.frame(col1 = c...",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = data.frame(col1 = c(1)), e = 3, f = \"hii\")),\n  xpectr::strip(paste0(\"1 assertions failed:\\n * Variable 'd': Must have at least 3\",\n                       \" rows, but has 1 rows.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), ...",
-    "# Changed from baseline: e",
+    "# Changed from baseline: e = NA",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = NA, f = \"hii\")),\n  xpectr::strip(\"1 assertions failed:\\n * Variable 'e': May not be NA.\"),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), ...",
-    "# Changed from baseline: e",
+    "# Changed from baseline: e = 6",
     "xpectr::set_test_seed(42)",
     "# Assigning output",
     "output_13841 <- fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = 6, f = \"hii\")",
@@ -269,7 +267,7 @@ test_that("gxs_function() works", {
     "expect_equal(\n  sum(xpectr::element_lengths(output_13841)),\n  2L)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), ...",
-    "# Changed from baseline: e",
+    "# Changed from baseline: e = NULL",
     "xpectr::set_test_seed(42)",
     "# Assigning output",
     "output_17698 <- fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = NULL, f = \"hii\")",
@@ -287,7 +285,7 @@ test_that("gxs_function() works", {
     "expect_equal(\n  sum(xpectr::element_lengths(output_17698)),\n  2L)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), ...",
-    "# Changed from baseline: f",
+    "# Changed from baseline: f = \"lol\"",
     "xpectr::set_test_seed(42)",
     "# Assigning output",
     "output_14976 <- fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = 3, f = \"lol\")",
@@ -305,19 +303,19 @@ test_that("gxs_function() works", {
     "expect_equal(\n  sum(xpectr::element_lengths(output_14976)),\n  2L)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), ...",
-    "# Changed from baseline: f",
+    "# Changed from baseline: f = NA",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = 3, f = NA)),\n  xpectr::strip(\"1 assertions failed:\\n * Variable 'f': May not be NA.\"),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), ...",
-    "# Changed from baseline: f",
+    "# Changed from baseline: f = 3",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = 3, f = 3)),\n  xpectr::strip(paste0(\"1 assertions failed:\\n * Variable 'f': Must be of type 'str\",\n                       \"ing', not 'double'.\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), ...",
-    "# Changed from baseline: f",
+    "# Changed from baseline: f = NULL",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn(a = 5, a_fn = mean, b = c(\"ahhh\", \"ohhh\"), d = NULL, e = 3, f = NULL)),\n  xpectr::strip(paste0(\"1 assertions failed:\\n * Variable 'f': Must be of type 'str\",\n                       \"ing', not 'NULL'.\")),\n  fixed = TRUE)",
@@ -358,7 +356,7 @@ test_that("gxs_function() works", {
     "## Testing 'fn2'                                                            ####",
     "## Initially generated by xpectr",
     "# Testing different combinations of argument values",
-    "",
+    " ",
     "# Testing fn2(x = 2, y = 0, z = 5)",
     "xpectr::set_test_seed(42)",
     "# Assigning output",
@@ -375,27 +373,27 @@ test_that("gxs_function() works", {
     "expect_equal(\n  length(output_12655),\n  1L)",
     "# Testing sum of element lengths",
     "expect_equal(\n  sum(xpectr::element_lengths(output_12655)),\n  1L)",
-    "",
+    " ",
     "# Testing fn2(x = 4, y = 0, z = 5)",
-    "# Changed from baseline: x",
+    "# Changed from baseline: x = 4",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn2(x = 4, y = 0, z = 5)),\n  xpectr::strip(\"'x' > 3\"),\n  fixed = TRUE)",
-    "",
+    " ",
     "# Testing fn2(x = NA, y = 0, z = 5)",
-    "# Changed from baseline: x",
+    "# Changed from baseline: x = NA",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn2(x = NA, y = 0, z = 5)),\n  xpectr::strip(\"missing value where TRUE/FALSE needed\"),\n  fixed = TRUE)",
-    "",
+    " ",
     "# Testing fn2(x = NULL, y = 0, z = 5)",
-    "# Changed from baseline: x",
+    "# Changed from baseline: x = NULL",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn2(x = NULL, y = 0, z = 5)),\n  xpectr::strip(\"argument is of length zero\"),\n  fixed = TRUE)",
-    "",
+    " ",
     "# Testing fn2(x = 2, y = -1, z = 5)",
-    "# Changed from baseline: y",
+    "# Changed from baseline: y = -1",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "# Assigning side effects",
@@ -416,15 +414,15 @@ test_that("gxs_function() works", {
     "expect_equal(\n  length(output_12016),\n  1L)",
     "# Testing sum of element lengths",
     "expect_equal(\n  sum(xpectr::element_lengths(output_12016)),\n  1L)",
-    "",
+    " ",
     "# Testing fn2(x = 2, y = NULL, z = 5)",
-    "# Changed from baseline: y",
+    "# Changed from baseline: y = NULL",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn2(x = 2, y = NULL, z = 5)),\n  xpectr::strip(\"argument is of length zero\"),\n  fixed = TRUE)",
-    "",
+    " ",
     "# Testing fn2(x = 2, y = 0, z = 10)",
-    "# Changed from baseline: z",
+    "# Changed from baseline: z = 10",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "# Assigning side effects",
@@ -445,9 +443,9 @@ test_that("gxs_function() works", {
     "expect_equal(\n  length(output_19446),\n  1L)",
     "# Testing sum of element lengths",
     "expect_equal(\n  sum(xpectr::element_lengths(output_19446)),\n  1L)",
-    "",
+    " ",
     "# Testing fn2(x = 2, y = 0, z = 15)",
-    "# Changed from baseline: z",
+    "# Changed from baseline: z = 15",
     "xpectr::set_test_seed(42)",
     "# Assigning output",
     "output_16607 <- fn2(x = 2, y = 0, z = 15)",
@@ -463,13 +461,13 @@ test_that("gxs_function() works", {
     "expect_equal(\n  length(output_16607),\n  1L)",
     "# Testing sum of element lengths",
     "expect_equal(\n  sum(xpectr::element_lengths(output_16607)),\n  1L)",
-    "",
+    " ",
     "# Testing fn2(x = 2, y = 0, z = NULL)",
-    "# Changed from baseline: z",
+    "# Changed from baseline: z = NULL",
     "xpectr::set_test_seed(42)",
     "# Testing side effects",
     "expect_error(\n  xpectr::strip_msg(fn2(x = 2, y = 0, z = NULL)),\n  xpectr::strip(\"argument is of length zero\"),\n  fixed = TRUE)",
-    "",
+    " ",
     "## Finished testing 'fn2'                                                   ####",
     " "
   )
@@ -506,121 +504,330 @@ test_that("gxs_function() works with multiline function definitions as arg value
   # ), indentation = 2)
 
 
-
   ## Testing 'fn1'                                                            ####
   ## Initially generated by xpectr
   # Testing different combinations of argument values
 
-  # Testing fn1(x = function(a) { b <- a * a b}, y = 1, z ...
+  # Testing fn1(x = function(a) { b <- a * a b}, y = 1, ...
+  xpectr::set_test_seed(42)
   # Assigning output
-  output_11255 <- fn1(x = function(a) {
-    b <- a * a
-    b
+  output_19148 <- fn1(x = function(a) {
+      b <- a * a
+      b
   }, y = 1, z = 3)
   # Testing class
   expect_equal(
-    class(output_11255),
+    class(output_19148),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_11255,
+    output_19148,
     type = "double")
   # Testing values
   expect_equal(
-    output_11255,
+    output_19148,
     5,
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_11255),
+    names(output_19148),
     NULL,
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_11255),
+    length(output_19148),
     1L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_11255)),
+    sum(xpectr::element_lengths(output_19148)),
     1L)
 
   # Testing fn1(x = NULL, y = 1, z = 3)
+  # Changed from baseline: x = NULL
+  xpectr::set_test_seed(42)
   # Testing side effects
   expect_error(
     xpectr::strip_msg(fn1(x = NULL, y = 1, z = 3)),
-    xpectr::strip("could not find function 'x'"),
+    xpectr::strip("could not find function \"x\""),
     fixed = TRUE)
 
-  # Testing fn1(x = function(a) { b <- a * a b}, y = NULL,...
+  # Testing fn1(x = function(a) { b <- a * a b}, y = NUL...
+  # Changed from baseline: y = NULL
+  xpectr::set_test_seed(42)
   # Assigning output
-  output_12671 <- fn1(x = function(a) {
-    b <- a * a
-    b
+  output_12861 <- fn1(x = function(a) {
+      b <- a * a
+      b
   }, y = NULL, z = 3)
   # Testing class
   expect_equal(
-    class(output_12671),
+    class(output_12861),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_12671,
+    output_12861,
     type = "double")
   # Testing values
   expect_equal(
-    output_12671,
+    output_12861,
     numeric(0),
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_12671),
+    names(output_12861),
     NULL,
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_12671),
+    length(output_12861),
     0L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_12671)),
+    sum(xpectr::element_lengths(output_12861)),
     0L)
 
-  # Testing fn1(x = function(a) { b <- a * a b}, y = 1, z ...
+  # Testing fn1(x = function(a) { b <- a * a b}, y = 1, ...
+  # Changed from baseline: z = NULL
+  xpectr::set_test_seed(42)
   # Assigning output
-  output_13860 <- fn1(x = function(a) {
-    b <- a * a
-    b
+  output_18304 <- fn1(x = function(a) {
+      b <- a * a
+      b
   }, y = 1, z = NULL)
   # Testing class
   expect_equal(
-    class(output_13860),
+    class(output_18304),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_13860,
+    output_18304,
     type = "double")
   # Testing values
   expect_equal(
-    output_13860,
+    output_18304,
     numeric(0),
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_13860),
+    names(output_18304),
     NULL,
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_13860),
+    length(output_18304),
     0L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_13860)),
+    sum(xpectr::element_lengths(output_18304)),
     0L)
 
   ## Finished testing 'fn1'                                                   ####
+  #
 
 })
 
+
+test_that("gxs_function() works with extra combinations", {
+
+  # Also checks order when args aren't alphabetically ordered
+  fn10 <- function(z, a, x){
+    x + a * z + 10
+  }
+
+  set_test_seed(1)
+  fn10_expected_tests <- c(
+    " ",
+    "## Testing 'fn10'                                                           ####",
+    "## Initially generated by xpectr",
+    "# Testing different combinations of argument values",
+    " ",
+    "# Testing fn10(z = 10, a = 1, x = 3)",
+    "xpectr::set_test_seed(42)",
+    "# Assigning output",
+    "output_12655 <- fn10(z = 10, a = 1, x = 3)",
+    "# Testing class",
+    "expect_equal(\n  class(output_12655),\n  \"numeric\",\n  fixed = TRUE)",
+    "# Testing type",
+    "expect_type(\n  output_12655,\n  type = \"double\")",
+    "# Testing values",
+    "expect_equal(\n  output_12655,\n  23,\n  tolerance = 1e-4)",
+    "# Testing names",
+    "expect_equal(\n  names(output_12655),\n  NULL,\n  fixed = TRUE)",
+    "# Testing length",
+    "expect_equal(\n  length(output_12655),\n  1L)",
+    "# Testing sum of element lengths",
+    "expect_equal(\n  sum(xpectr::element_lengths(output_12655)),\n  1L)",
+    " ",
+    "# Testing fn10(z = 20, a = 1, x = 3)",
+    "# Changed from baseline: z = 20",
+    "xpectr::set_test_seed(42)",
+    "# Assigning output",
+    "output_13721 <- fn10(z = 20, a = 1, x = 3)",
+    "# Testing class",
+    "expect_equal(\n  class(output_13721),\n  \"numeric\",\n  fixed = TRUE)",
+    "# Testing type",
+    "expect_type(\n  output_13721,\n  type = \"double\")",
+    "# Testing values",
+    "expect_equal(\n  output_13721,\n  33,\n  tolerance = 1e-4)",
+    "# Testing names",
+    "expect_equal(\n  names(output_13721),\n  NULL,\n  fixed = TRUE)",
+    "# Testing length",
+    "expect_equal(\n  length(output_13721),\n  1L)",
+    "# Testing sum of element lengths",
+    "expect_equal(\n  sum(xpectr::element_lengths(output_13721)),\n  1L)",
+    " ",
+    "# Testing fn10(z = NULL, a = 1, x = 3)",
+    "# Changed from baseline: z = NULL",
+    "xpectr::set_test_seed(42)",
+    "# Assigning output",
+    "output_15728 <- fn10(z = NULL, a = 1, x = 3)",
+    "# Testing class",
+    "expect_equal(\n  class(output_15728),\n  \"numeric\",\n  fixed = TRUE)",
+    "# Testing type",
+    "expect_type(\n  output_15728,\n  type = \"double\")",
+    "# Testing values",
+    "expect_equal(\n  output_15728,\n  numeric(0),\n  tolerance = 1e-4)",
+    "# Testing names",
+    "expect_equal(\n  names(output_15728),\n  NULL,\n  fixed = TRUE)",
+    "# Testing length",
+    "expect_equal(\n  length(output_15728),\n  0L)",
+    "# Testing sum of element lengths",
+    "expect_equal(\n  sum(xpectr::element_lengths(output_15728)),\n  0L)",
+    " ",
+    "# Testing fn10(z = 20, a = 1, x = -3)",
+    "# Changed from baseline: z, x",
+    "xpectr::set_test_seed(42)",
+    "# Assigning output",
+    "output_19082 <- fn10(z = 20, a = 1, x = -3)",
+    "# Testing class",
+    "expect_equal(\n  class(output_19082),\n  \"numeric\",\n  fixed = TRUE)",
+    "# Testing type",
+    "expect_type(\n  output_19082,\n  type = \"double\")",
+    "# Testing values",
+    "expect_equal(\n  output_19082,\n  27,\n  tolerance = 1e-4)",
+    "# Testing names",
+    "expect_equal(\n  names(output_19082),\n  NULL,\n  fixed = TRUE)",
+    "# Testing length",
+    "expect_equal(\n  length(output_19082),\n  1L)",
+    "# Testing sum of element lengths",
+    "expect_equal(\n  sum(xpectr::element_lengths(output_19082)),\n  1L)",
+    " ",
+    "# Testing fn10(z = 20, a = 2, x = 3)",
+    "# Changed from baseline: z, a",
+    "xpectr::set_test_seed(42)",
+    "# Assigning output",
+    "output_12016 <- fn10(z = 20, a = 2, x = 3)",
+    "# Testing class",
+    "expect_equal(\n  class(output_12016),\n  \"numeric\",\n  fixed = TRUE)",
+    "# Testing type",
+    "expect_type(\n  output_12016,\n  type = \"double\")",
+    "# Testing values",
+    "expect_equal(\n  output_12016,\n  53,\n  tolerance = 1e-4)",
+    "# Testing names",
+    "expect_equal(\n  names(output_12016),\n  NULL,\n  fixed = TRUE)",
+    "# Testing length",
+    "expect_equal(\n  length(output_12016),\n  1L)",
+    "# Testing sum of element lengths",
+    "expect_equal(\n  sum(xpectr::element_lengths(output_12016)),\n  1L)",
+    " ",
+    "# Testing fn10(z = 10, a = 2, x = 3)",
+    "# Changed from baseline: a = 2",
+    "xpectr::set_test_seed(42)",
+    "# Assigning output",
+    "output_18983 <- fn10(z = 10, a = 2, x = 3)",
+    "# Testing class",
+    "expect_equal(\n  class(output_18983),\n  \"numeric\",\n  fixed = TRUE)",
+    "# Testing type",
+    "expect_type(\n  output_18983,\n  type = \"double\")",
+    "# Testing values",
+    "expect_equal(\n  output_18983,\n  33,\n  tolerance = 1e-4)",
+    "# Testing names",
+    "expect_equal(\n  names(output_18983),\n  NULL,\n  fixed = TRUE)",
+    "# Testing length",
+    "expect_equal(\n  length(output_18983),\n  1L)",
+    "# Testing sum of element lengths",
+    "expect_equal(\n  sum(xpectr::element_lengths(output_18983)),\n  1L)",
+    " ",
+    "# Testing fn10(z = 10, a = NULL, x = 3)",
+    "# Changed from baseline: a = NULL",
+    "xpectr::set_test_seed(42)",
+    "# Assigning output",
+    "output_19446 <- fn10(z = 10, a = NULL, x = 3)",
+    "# Testing class",
+    "expect_equal(\n  class(output_19446),\n  \"numeric\",\n  fixed = TRUE)",
+    "# Testing type",
+    "expect_type(\n  output_19446,\n  type = \"double\")",
+    "# Testing values",
+    "expect_equal(\n  output_19446,\n  numeric(0),\n  tolerance = 1e-4)",
+    "# Testing names",
+    "expect_equal(\n  names(output_19446),\n  NULL,\n  fixed = TRUE)",
+    "# Testing length",
+    "expect_equal(\n  length(output_19446),\n  0L)",
+    "# Testing sum of element lengths",
+    "expect_equal(\n  sum(xpectr::element_lengths(output_19446)),\n  0L)",
+    " ",
+    "# Testing fn10(z = 10, a = 1, x = -3)",
+    "# Changed from baseline: x = -3",
+    "xpectr::set_test_seed(42)",
+    "# Assigning output",
+    "output_16607 <- fn10(z = 10, a = 1, x = -3)",
+    "# Testing class",
+    "expect_equal(\n  class(output_16607),\n  \"numeric\",\n  fixed = TRUE)",
+    "# Testing type",
+    "expect_type(\n  output_16607,\n  type = \"double\")",
+    "# Testing values",
+    "expect_equal(\n  output_16607,\n  17,\n  tolerance = 1e-4)",
+    "# Testing names",
+    "expect_equal(\n  names(output_16607),\n  NULL,\n  fixed = TRUE)",
+    "# Testing length",
+    "expect_equal(\n  length(output_16607),\n  1L)",
+    "# Testing sum of element lengths",
+    "expect_equal(\n  sum(xpectr::element_lengths(output_16607)),\n  1L)",
+    " ",
+    "# Testing fn10(z = 10, a = 1, x = NULL)",
+    "# Changed from baseline: x = NULL",
+    "xpectr::set_test_seed(42)",
+    "# Assigning output",
+    "output_16291 <- fn10(z = 10, a = 1, x = NULL)",
+    "# Testing class",
+    "expect_equal(\n  class(output_16291),\n  \"numeric\",\n  fixed = TRUE)",
+    "# Testing type",
+    "expect_type(\n  output_16291,\n  type = \"double\")",
+    "# Testing values",
+    "expect_equal(\n  output_16291,\n  numeric(0),\n  tolerance = 1e-4)",
+    "# Testing names",
+    "expect_equal(\n  names(output_16291),\n  NULL,\n  fixed = TRUE)",
+    "# Testing length",
+    "expect_equal(\n  length(output_16291),\n  0L)",
+    "# Testing sum of element lengths",
+    "expect_equal(\n  sum(xpectr::element_lengths(output_16291)),\n  0L)",
+    " ",
+    "## Finished testing 'fn10'                                                  ####",
+    " "
+  )
+
+  set_test_seed(1)
+  expect_equal(strip(
+    gxs_function(
+      fn10,
+      args_values = list(
+        "z" = list(10, 20),
+        "a" = list(1, 2),
+        "x" = list(3,-3)
+      ),
+      extra_combinations = list(list("z" = 20, "x" = -3),
+                                list("a" = 2, "z" = 20),
+                                list("z" = 10, "a" = 1)),
+      # last should be filtered out (not unique)),
+      indentation = 2,
+      out = "return"
+    )
+  ),
+  strip(fn10_expected_tests),
+  fixed = TRUE)
+
+
+})
