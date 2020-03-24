@@ -25,6 +25,7 @@ Imports:
     tibble,
     rlang,
     utils,
+    withr (>= 2.0.0),
     stats,
     checkmate (>= 2.0.0),
     lifecycle

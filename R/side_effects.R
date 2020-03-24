@@ -84,7 +84,7 @@ capture_side_effects <- function(expr, envir = NULL, reset_seed = FALSE) {
     warnings <- testthat::capture_warnings(suppressMessages(
       eval(sexpr, envir = envir)))
   } else {
-    error <- error$message
+    error <- cnd_message(error)
     messages <- NULL
     warnings <- NULL
   }
