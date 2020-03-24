@@ -71,14 +71,15 @@ element_types <- function(x, keep_names = FALSE){
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Applies \code{\link[base:class]{class()}} to each element of \code{x} (without recursion).
+#'  Applies \code{\link[base:class]{class()}} to each element of \code{x} (without recursion). When
+#'  \code{class()} returns multiple strings, the first class string is returned.
 #' @inheritParams element_lengths
 #' @family element descriptors
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
-#' @return The class of each element.
+#' @return The main class of each element.
 #' @details
-#'  Simple wrapper for \code{unlist(lapply(x, class))}.
+#'  Gets first string in \code{class()} for all elements.
 #' @examples
 #' # Attach packages
 #' library(xpectr)
@@ -88,7 +89,8 @@ element_types <- function(x, keep_names = FALSE){
 #' element_classes(l)
 #' element_classes(l, keep_names = TRUE)
 element_classes <- function(x, keep_names = FALSE){
-  unlist(lapply(x, class), use.names = keep_names)
+  first_class <- function(x){class(x)[[1]]}
+  unlist(lapply(x, first_class), use.names = keep_names)
 }
 
 

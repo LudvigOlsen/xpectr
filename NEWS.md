@@ -1,5 +1,7 @@
 # xpectr 0.2.0.9000
 
+* Breaking: `element_classes()` only returns the first class string per element.
+
 # xpectr 0.2.0
 
 * Adds `initializeGXSFunctionAddin()` addin for initializing a `gxs_function()` call for a selected function.

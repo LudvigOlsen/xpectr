@@ -12,15 +12,16 @@ element_classes(x, keep_names = FALSE)
 \item{keep_names}{Whether to keep names. (Logical)}
 }
 \value{
-The class of each element.
+The main class of each element.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Applies \code{\link[base:class]{class()}} to each element of \code{x} (without recursion).
+Applies \code{\link[base:class]{class()}} to each element of \code{x} (without recursion). When
+\code{class()} returns multiple strings, the first class string is returned.
 }
 \details{
-Simple wrapper for \code{unlist(lapply(x, class))}.
+Gets first string in \code{class()} for all elements.
 }
 \examples{
 # Attach packages
