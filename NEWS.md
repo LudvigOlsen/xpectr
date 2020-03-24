@@ -2,6 +2,10 @@
 
 * Breaking: `element_classes()` only returns the first class string per element.
 
+* Adds test of `class` attribute for errors.
+
+* Extracts error message with `conditionMessage()` instead of `$message`.
+
 # xpectr 0.2.0
 
 * Adds `initializeGXSFunctionAddin()` addin for initializing a `gxs_function()` call for a selected function.
