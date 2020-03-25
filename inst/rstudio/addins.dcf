@@ -24,7 +24,7 @@ Binding: wrapStringAddin
 Interactive: false
 
 Name: Navigate To Test File
-Description: Navigates to extracted file name and line number. E.g. "test_x.R:5" as selection or in clipboard.
+Description: Navigates to extracted file name and line number. E.g. select/copy `test_x.R:5` and it opens `/tests/testthat/test_x.R` at line 5.
 Binding: navigateTestFileAddin
 Interactive: false
 

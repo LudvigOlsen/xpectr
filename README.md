@@ -111,14 +111,15 @@ These functions are used to *generate expectations*
 
 ## Addins
 
-| Addin                                                                                            | Description                                                                       | Suggested Key Command |
-| :----------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------- | :-------------------- |
-| *Insert Expectations* </br><font size="2">`insertExpectationsAddin()`</font>                     | Generates `testthat` `expect_*` tests from selected code (with `gxs_selection()`) | `Alt+E`               |
-| *Initialize `test_that()`* </br><font size="2">`initializeTestthatAddin()`</font>                | Inserts `testthat::test_that()` code                                              | `Alt+T`               |
-| *Initialize `gxs_function()`* </br><font size="2">`initializeGXSFunctionAddin()`</font>          | Initializes a `gxs_function()` call with default values of a function             | `Alt+F`               |
-| *`dput()` selected* </br><font size="2">`dputSelectedAddin()`</font>                             | Applies `dput()` to selected code                                                 | `Alt+D`               |
-| *Wrap string with `paste0()`* </br><font size="2">`wrapStringAddin()`</font>                     | Splits selected string every n characters and wraps in `paste0()` call            | `Alt+P`               |
-| *Insert `checkmate` `AssertCollection`code* </br><font size="2">`assertCollectionAddin()`</font> | Inserts code for initializing and reporting a `checkmate` `AssertCollection`      | `Alt+C`               |
+| Addin                                                                                            | Description                                                                                                                             | Suggested Key Command |
+| :----------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- | :-------------------- |
+| *Insert Expectations* </br><font size="2">`insertExpectationsAddin()`</font>                     | Generates `testthat` `expect_*` tests from selected code (with `gxs_selection()`)                                                       | `Alt+E`               |
+| *Initialize `test_that()`* </br><font size="2">`initializeTestthatAddin()`</font>                | Inserts `testthat::test_that()` code                                                                                                    | `Alt+T`               |
+| *Initialize `gxs_function()`* </br><font size="2">`initializeGXSFunctionAddin()`</font>          | Initializes a `gxs_function()` call with default values of a function                                                                   | `Alt+F`               |
+| *`dput()` selected* </br><font size="2">`dputSelectedAddin()`</font>                             | Applies `dput()` to selected code                                                                                                       | `Alt+D`               |
+| *Wrap string with `paste0()`* </br><font size="2">`wrapStringAddin()`</font>                     | Splits selected string every n characters and wraps in `paste0()` call                                                                  | `Alt+P`               |
+| *Insert `checkmate` `AssertCollection`code* </br><font size="2">`assertCollectionAddin()`</font> | Inserts code for initializing and reporting a `checkmate` `AssertCollection`                                                            | `Alt+C`               |
+| *Navigate To Test File* </br><font size="2">`navigateTestFileAddin()`</font>                     | Navigates to extracted file name and line number. E.g. select or copy `test_x.R:5` and it opens `/tests/testthat/test_x.R` at line `5`. | `Alt+N`               |
 
 ## Using in packages
 
@@ -154,6 +155,7 @@ file.
               - [initializeTestthatAddin](#initializetestthataddin)
               - [assertCollectionAddin](#assertcollectionaddin)
               - [dputSelectedAddin](#dputselectedaddin)
+              - [navigateTestFileAddin](#navigatetestfileaddin)
 
 ## Examples
 
@@ -859,3 +861,18 @@ dputSelectedAddin("v")  # "v" is the selected code
 
 c(1, 2, 3)
 ```
+
+#### navigateTestFileAddin
+
+Suggested keycommand: `Alt+N`
+
+A common work process in package development is to run
+`Ctrl/Cmd+Shift+L`, which runs all `testthat` tests in
+`/tests/testthat/` in the `Build` pane.
+
+When a test fails, a message like the following is printed:
+`test_x.R:15: failure: x works`.
+
+If we then copy the `test_x.R:15:` part to our clipboard and run
+`navigateTestFileAddin()`, it will open the `test_x.R` file and place
+the cursor at line `15`.

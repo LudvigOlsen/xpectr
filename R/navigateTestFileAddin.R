@@ -43,7 +43,7 @@
 #'
 #'  Find \code{"Go To Test File"} and press its field under \code{Shortcut}.
 #'
-#'  Press desired key command, e.g. \code{Alt+G}.
+#'  Press desired key command, e.g. \code{Alt+N}.
 #'
 #'  Press \code{Apply}.
 #'
