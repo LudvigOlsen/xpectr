@@ -72,6 +72,7 @@ Other addins:
 \code{\link{initializeGXSFunctionAddin}()},
 \code{\link{initializeTestthatAddin}()},
 \code{\link{insertExpectationsAddin}()},
+\code{\link{navigateTestFileAddin}()},
 \code{\link{wrapStringAddin}()}
 }
 \author{

@@ -70,6 +70,7 @@ Other addins:
 \code{\link{dputSelectedAddin}()},
 \code{\link{initializeTestthatAddin}()},
 \code{\link{insertExpectationsAddin}()},
+\code{\link{navigateTestFileAddin}()},
 \code{\link{wrapStringAddin}()}
 }
 \author{

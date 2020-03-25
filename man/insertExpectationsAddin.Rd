@@ -82,6 +82,7 @@ Other addins:
 \code{\link{dputSelectedAddin}()},
 \code{\link{initializeGXSFunctionAddin}()},
 \code{\link{initializeTestthatAddin}()},
+\code{\link{navigateTestFileAddin}()},
 \code{\link{wrapStringAddin}()}
 }
 \author{

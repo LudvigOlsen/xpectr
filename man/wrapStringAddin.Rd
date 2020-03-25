@@ -80,7 +80,8 @@ Other addins:
 \code{\link{dputSelectedAddin}()},
 \code{\link{initializeGXSFunctionAddin}()},
 \code{\link{initializeTestthatAddin}()},
-\code{\link{insertExpectationsAddin}()}
+\code{\link{insertExpectationsAddin}()},
+\code{\link{navigateTestFileAddin}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

@@ -23,6 +23,11 @@ Description: Inserts the wrapped selection
 Binding: wrapStringAddin
 Interactive: false
 
+Name: Navigate To Test File
+Description: Navigates to extracted file name and line number. E.g. "test_x.R:5" as selection or in clipboard.
+Binding: navigateTestFileAddin
+Interactive: false
+
 Name: Insert checkmate AssertCollection code
 Description: Inserts checkmate AssertCollection initialization and reporting code
 Binding: assertCollectionAddin

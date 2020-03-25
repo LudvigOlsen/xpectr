@@ -107,3 +107,13 @@ eval_expectations <- function(l, envir) {
     eval(parse(text = x), envir = envir)
   })
 }
+
+# Inspired by the reprex package
+read_clipboard <- function() {
+  if (clipr::clipr_available()) {
+    return(suppressWarnings(enc2utf8(clipr::read_clip())))
+  }
+  warning("Cannot read clipboard.")
+  NULL
+}
+
