@@ -110,6 +110,9 @@ initializeGXSFunctionAddin <- function(selection = NULL, insert = TRUE, indentat
       stop("'selection' was not the name of an available function.")
     }
 
+    # Trim trailing spaces
+    selection <- trimws(selection, which = "both")
+
     # Extract the formals (arg names and default values)
     fn_formals <- formals(obj)
     arg_names <- names(fn_formals)
