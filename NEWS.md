@@ -4,7 +4,7 @@
 
 * Adds `navigateTestFileAddin()` addin for opening test file from string name. E.g. when running `testthat` in the build window, copy the filename and line number of the failed test, e.g. `test_x.R:5:`, and run the addin. It will then open `/tests/testthat/test_x.R` at line `5`.
 
-* Adds test of `class` attribute for errors.
+* Adds test of `class` attribute for errors. 
 
 * Extracts error message with `conditionMessage()` instead of `$message`.
 
