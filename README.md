@@ -792,7 +792,8 @@ xpectr::gxs_function(
     "x" = list(),
     "y" = list(),
     "z" = list(10)
-  )
+  ),
+  identation = 2
 )
 
 #
@@ -876,3 +877,8 @@ When a test fails, a message like the following is printed:
 If we then copy the `test_x.R:15:` part to our clipboard and run
 `navigateTestFileAddin()`, it will open the `test_x.R` file and place
 the cursor at line `15`.
+
+A service like `Travis CI` indicate the failed test with
+`(@test_x.R#15)`. The addin therefore also works with `test_x.R#15`. If
+you have additional formats you would like to request, simply open an
+issue.
