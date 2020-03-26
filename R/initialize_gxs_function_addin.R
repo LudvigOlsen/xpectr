@@ -140,7 +140,8 @@ initializeGXSFunctionAddin <- function(selection = NULL, insert = TRUE, indentat
       paste0("  fn = ", selection, ","),
       "  args_values = list(\n",
       args_values_strings,
-      "  )",
+      "  ),",
+      "  indentation = 2",
       ")",
       " ",
       "#"
