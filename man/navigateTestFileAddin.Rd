@@ -4,7 +4,7 @@
 \alias{navigateTestFileAddin}
 \title{Navigates to test file}
 \usage{
-navigateTestFileAddin(selection = NULL, navigate = TRUE)
+navigateTestFileAddin(selection = NULL, navigate = TRUE, abs_path = TRUE)
 }
 \arguments{
 \item{selection}{String with file name and line number. (Character)
@@ -16,6 +16,10 @@ E.g. \code{"test_x.R:3:"}, which navigates to the third line of \code{"/tests/te
 \item{navigate}{Whether to navigate to the file or return the extracted file name and line number. (Logical)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
+
+\item{abs_path}{Whether to return the full path or only the file name when \code{navigate} is \code{FALSE}.
+
+\strong{N.B.} Mainly intended for testing the addin programmatically.}
 }
 \value{
 Navigates to file and line number.
@@ -25,14 +29,15 @@ Does not return anything.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-RStudio Addin:
+\code{RStudio} Addin:
 Extracts file name and (possibly) line number of a test file
 from a selection or from clipboard content.
+Navigates to the file and places the cursor at the line number.
 
-Supported types of strings: \code{"test_x.R:3"}, \code{"test_x.R"}.
+Supported types of strings: \code{"test_x.R:3"}, \code{"test_x.R#3"}, \code{"test_x.R"}.
 
 The string must start with \code{"test_"} and contain \code{".R"}.
-It is split at \code{":"} and the second element (here \code{"3"}) is
+It is split at either \code{":"} or \code{"#"}, with the second element (here \code{"3"}) being
 interpreted as the line number.
 
 See \code{Details} for how to set a key command.

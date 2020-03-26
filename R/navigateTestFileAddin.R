@@ -8,14 +8,15 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  RStudio Addin:
+#'  \code{RStudio} Addin:
 #'  Extracts file name and (possibly) line number of a test file
 #'  from a selection or from clipboard content.
+#'  Navigates to the file and places the cursor at the line number.
 #'
-#'  Supported types of strings: \code{"test_x.R:3"}, \code{"test_x.R"}.
+#'  Supported types of strings: \code{"test_x.R:3"}, \code{"test_x.R#3"}, \code{"test_x.R"}.
 #'
 #'  The string must start with \code{"test_"} and contain \code{".R"}.
-#'  It is split at \code{":"} and the second element (here \code{"3"}) is
+#'  It is split at either \code{":"} or \code{"#"}, with the second element (here \code{"3"}) being
 #'  interpreted as the line number.
 #'
 #'  See \code{Details} for how to set a key command.
@@ -26,6 +27,9 @@
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
 #' @param navigate Whether to navigate to the file or return the extracted file name and line number. (Logical)
+#'
+#'  \strong{N.B.} Mainly intended for testing the addin programmatically.
+#' @param abs_path Whether to return the full path or only the file name when \code{navigate} is \code{FALSE}.
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
 #' @export
@@ -49,13 +53,14 @@
 #'
 #'  Press \code{Execute}.
 #'  }
-navigateTestFileAddin <- function(selection = NULL, navigate = TRUE) {
+navigateTestFileAddin <- function(selection = NULL, navigate = TRUE, abs_path = TRUE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(x = selection, null.ok = TRUE,
                            add = assert_collection)
   checkmate::assert_flag(x = navigate, add = assert_collection)
+  checkmate::assert_flag(x = abs_path, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
@@ -79,12 +84,22 @@ navigateTestFileAddin <- function(selection = NULL, navigate = TRUE) {
     stop("selection/clipboard content did not include '.R'.")
   }
 
+  if (grepl(pattern = ".R#", x = selection, fixed = TRUE)){
+    sep <- "#"
+  } else {
+    sep <- ":"
+  }
+
   # Extract file name and (possibly) line number
   selection <- trimws(selection, which = "both")
-  split_sel <- unlist(strsplit(selection, ":"))
+  split_sel <- unlist(strsplit(selection, sep))
   if (length(split_sel) > 1){
     file_name <- split_sel[[1]]
     line_num <- split_sel[[2]]
+    if (!grepl("^[0-9]", line_num)){
+      stop("line number was not a number.")
+    }
+    line_num <- gsub("^([0-9]+).*$", "\\1", line_num)
   } else {
     file_name <- split_sel
     line_num <- -1
@@ -109,17 +124,20 @@ navigateTestFileAddin <- function(selection = NULL, navigate = TRUE) {
   }
 
   # Create absolute path
-  file_name <- paste0(getwd(), "/tests/testthat/", file_name)
+  full_file_path <- paste0(getwd(), "/tests/testthat/", file_name)
 
   # Navigate or return extractions
 
   if (isTRUE(navigate)){
     # Open file and set cursor at line number
-    rstudioapi::navigateToFile(file = file_name,
+    rstudioapi::navigateToFile(file = full_file_path,
                                line = line_num)
   } else {
-    list("file_name" = file_name,
-         "line_number" = line_num)
+    output <- list()
+    if (isTRUE(abs_path)) output[["file"]] <- full_file_path
+    else output[["file"]] <- file_name
+    output[["line_number"]] <- line_num
+    output
   }
 
 }
