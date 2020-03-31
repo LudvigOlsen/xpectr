@@ -10,6 +10,8 @@
 
 * Adds `indentation = 2` to generated code from `initializeGXSFunctionAddin()`.
 
+* Bug fix: Does not check symmetry for `table` objects.
+
 # xpectr 0.2.0
 
 * Adds `initializeGXSFunctionAddin()` addin for initializing a `gxs_function()` call for a selected function.

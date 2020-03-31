@@ -340,8 +340,11 @@ create_expectations_matrix <- function(data, name = NULL, indentation = 0,
                                                       indentation = indentation)
   dim_expectation <- create_dim_expectation(data = data, name = name,
                                             indentation = indentation)
-  symmetry_expectation <- create_is_symmetric_expectation(data = data, name = name,
-                                                          indentation = indentation)
+  symmetry_expectation <- tryCatch(
+    # Doesn't work for table objects
+    create_is_symmetric_expectation(data = data, name = name,
+                                    indentation = indentation),
+    error = function(e){return(NULL)})
 
   # Find digits for rounding
   if (isTRUE(round_to_tolerance) && is.numeric(data)){
@@ -440,7 +443,7 @@ create_expectations_matrix <- function(data, name = NULL, indentation = 0,
                           create_comment = add_comments),
       dim_expectation,
       create_test_comment("symmetry", indentation = indentation,
-                          create_comment = add_comments),
+                          create_comment = add_comments && !is.null(symmetry_expectation)),
       symmetry_expectation
     )
 

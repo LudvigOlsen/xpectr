@@ -693,9 +693,5 @@ wrap_elements_in_string <- function(string, max_n = 60, indentation = 0){
   # Reformat and wrap the string
   spaces <- create_space_string(0)
   lines <- deparse(parse(text = string)[[1]], width.cutoff = max_n)
-  if (!any(grepl("\"", lines))){ # Otherwise we risk removing spaces from strings
-    lines <- gsub("[[:blank:]]+", " ", lines)
-    lines <- trimws(lines, which = "both")
-  }
   paste0(lines, collapse = paste0("\n", spaces))
 }
