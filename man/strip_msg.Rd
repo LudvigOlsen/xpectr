@@ -4,7 +4,13 @@
 \alias{strip_msg}
 \title{Strip side-effect messages of non-alphanumeric characters and rethrow them}
 \usage{
-strip_msg(x, remove_spaces = FALSE, remove_numbers = FALSE)
+strip_msg(
+  x,
+  remove_spaces = FALSE,
+  remove_numbers = FALSE,
+  remove_ansi = TRUE,
+  lowercase = FALSE
+)
 }
 \arguments{
 \item{x}{Code that potentially throws warnings, messages, or an error.}
@@ -12,6 +18,10 @@ strip_msg(x, remove_spaces = FALSE, remove_numbers = FALSE)
 \item{remove_spaces}{Whether to remove all whitespaces. (Logical)}
 
 \item{remove_numbers}{Whether to remove all numbers. (Logical)}
+
+\item{remove_ansi}{Whether to remove ANSI control sequences. (Logical)}
+
+\item{lowercase}{Whether to make the strings lowercase. (Logical)}
 }
 \value{
 Returns \code{NULL} invisibly.

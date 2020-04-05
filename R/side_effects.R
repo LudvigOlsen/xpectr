@@ -67,6 +67,9 @@ capture_side_effects <- function(expr, envir = NULL, reset_seed = FALSE) {
   # Get current random state
   initial_random_state <- .Random.seed
 
+  # Disable crayon (ANSI codes)
+  withr::local_options(c(crayon.enabled = FALSE))
+
   # Capture error
   error <- testthat::capture_error(suppress_mw(
     eval(sexpr, envir = envir)))

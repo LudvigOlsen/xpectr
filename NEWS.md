@@ -1,5 +1,11 @@
 # xpectr 0.3.0.9000
 
+* `strip()` and `strip_msg()` now strips ANSI control sequences by default.
+
+* `strip()` and `strip_msg()` can now make the strings lowercase (disabled by default).
+
+* `capture_side_effects()` disables `crayon` locally before evaluating the expression. Avoids ANSI control sequences in messages.
+
 # xpectr 0.3.0
 
 * Breaking: `element_classes()` only returns the first class string per element.

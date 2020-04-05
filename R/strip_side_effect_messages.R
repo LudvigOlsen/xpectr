@@ -41,7 +41,8 @@
 #' expect_error(strip_msg(error_fn(), remove_numbers = TRUE),
 #'              strip("this 'dot' .\n is removed! 123", remove_numbers = TRUE))
 #' }
-strip_msg <- function(x, remove_spaces = FALSE, remove_numbers = FALSE){
+strip_msg <- function(x, remove_spaces = FALSE, remove_numbers = FALSE,
+                      remove_ansi = TRUE, lowercase = FALSE){
 
   # Catch x lexically
   # Needed with direct message() calls
@@ -50,7 +51,9 @@ strip_msg <- function(x, remove_spaces = FALSE, remove_numbers = FALSE){
   side_effects <- capture_side_effects(eval(x, envir = parent.frame(4)))
   stripper <- function(msg) {
     strip(msg, remove_spaces = remove_spaces,
-          remove_numbers = remove_numbers)
+          remove_numbers = remove_numbers,
+          remove_ansi = remove_ansi,
+          lowercase = lowercase)
   }
 
   # Regenerate error

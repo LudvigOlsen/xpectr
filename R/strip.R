@@ -21,17 +21,22 @@
 #' @param replacement What to replace blocks of punctuation with. (Character)
 #' @param remove_spaces Whether to remove all whitespaces. (Logical)
 #' @param remove_numbers Whether to remove all numbers. (Logical)
+#' @param remove_ansi Whether to remove ANSI control sequences. (Logical)
+#' @param lowercase Whether to make the strings lowercase. (Logical)
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family strippers
 #' @return The stripped strings.
 #' @export
 #' @details
-#' 1) \code{gsub("[^[:alnum:][:blank:]]", replacement, strings))}
+#' 1) ANSI control sequences are removed with \code{\link[fansi:strip_ctl]{fansi::strip_ctl()}}.
 #'
-#' 2) \code{gsub('[0-9]+', '', strings)} (Note: only if specified!)
+#' 2) \code{gsub("[^[:alnum:][:blank:]]", replacement, strings))}
 #'
-#' 3) \code{trimws( gsub("[[:blank:]]+", " ", strings) )}
+#' 3) \code{gsub('[0-9]+', '', strings)} (Note: only if specified!)
+#'
+#' 4) \code{trimws( gsub("[[:blank:]]+", " ", strings) )}
 #' (Or \code{""} if \code{remove_spaces} is \code{TRUE})
+#'
 #' @examples
 #' # Attach packages
 #' library(xpectr)
@@ -48,6 +53,8 @@ strip <- function(strings,
                   replacement = "",
                   remove_spaces = FALSE,
                   remove_numbers = FALSE,
+                  remove_ansi = TRUE,
+                  lowercase = FALSE,
                   allow_na = TRUE) {
 
 
@@ -63,12 +70,20 @@ strip <- function(strings,
   checkmate::assert_string(replacement, add = assert_collection)
   checkmate::assert_flag(remove_spaces, add = assert_collection)
   checkmate::assert_flag(remove_numbers, add = assert_collection)
+  checkmate::assert_flag(remove_ansi, add = assert_collection)
+  checkmate::assert_flag(lowercase, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
 
 
 ##  .................. #< 43d21464a1012b2a6ace37d658f5a3b6 ># ..................
 ##  Code                                                                    ####
 
+
+  # Remove ansi escape sequence
+  # Borrowed from crayon::strip_style
+  if (isTRUE(remove_ansi)){
+    strings <- fansi::strip_ctl(strings, ctl = "all")
+  }
 
   # Replace all non-alphanumeric and non-space
   strings <- gsub("[^[:alnum:][:blank:]]", replacement, strings)
@@ -85,5 +100,11 @@ strip <- function(strings,
   # Trim both ends for whitespaces
   strings <- trimws(strings)
 
+  # Make lowercase
+  if (isTRUE(lowercase)){
+    strings <- tolower(strings)
+  }
+
   strings
 }
+

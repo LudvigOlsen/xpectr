@@ -71,7 +71,8 @@ assign_random_state <- function(state, envir = globalenv(), check_existence = TR
 # Get message from testthat::capture_error
 # copied from testthat:::cnd_message
 cnd_message <- function(x){
-  withr::local_options(c(rlang_backtrace_on_error = "none", crayon.enabled = FALSE))
+  withr::local_options(c(rlang_backtrace_on_error = "none",
+                         crayon.enabled = FALSE))
   conditionMessage(x)
 }
 
