@@ -29,7 +29,7 @@ test_that("capture_side_effects() works with tibbles", {
   # Testing values
   expect_equal(
     strip(output_10856[["error"]]),
-    strip("Must extract column with a single valid subscript.\nx The subscript `NA` can't be `NA`."),
+    strip("Must extract column with a single valid subscript.\nx Subscript `NA` can't be `NA`."),
     fixed = TRUE)
   expect_equal(
     output_10856[["error_class"]],

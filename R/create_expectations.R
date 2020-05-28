@@ -200,6 +200,7 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
   column_expectations <- plyr::llply(colnames(data), function(col_name) {
     # Get current column
     current_col <- data[[col_name]]
+
     if (is.list(current_col)) {
       return(NULL)
     }
@@ -225,14 +226,16 @@ create_expectations_data_frame <- function(data, name = NULL, indentation = 0,
     }
 
     # Create expect_equal text
-    create_expect_equal(x, y,
-                        add_tolerance = is.numeric(current_col),
-                        add_fixed = is.character(current_col),
-                        spaces = 2,
-                        tolerance = tolerance)
+    create_expect_equal(
+      x, y,
+      add_tolerance = is.numeric(current_col),
+      add_fixed = is.character(current_col),
+      spaces = 2,
+      tolerance = tolerance)
   })
 
   null_indices <- get_null_indices(column_expectations)
+
   if (length(null_indices) > 0) {
 
     # Warn about skipped elements
