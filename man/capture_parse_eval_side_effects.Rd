@@ -13,14 +13,14 @@ capture_parse_eval_side_effects(string, envir = NULL)
 \code{\link[base:parent.frame]{parent.frame()}}.}
 }
 \value{
-Named list with the side effects.
+\code{named list} with the side effects.
 }
 \description{
 Wraps string in \code{\link[xpectr:capture_side_effects]{capture_side_effects()}}
 before parsing and evaluating it.
-The side effects (error, warnings, messages) are returned in a list.
+The side effects (\code{error}, \code{warning}s, \code{message}s) are returned in a \code{list}.
 
-When capturing an error, no other side effects are captured.
+When capturing an \code{error}, no other side effects are captured.
 }
 \examples{
 # Attach package

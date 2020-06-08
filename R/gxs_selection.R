@@ -8,10 +8,10 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Based on the selection (string of code), a set of testthat \code{expect_*}
+#'  Based on the selection (string of code), a set of \code{testthat} \code{expect_*}
 #'  statements are generated.
 #'
-#'  Example: If the selected code is the name of a data frame object,
+#'  Example: If the selected code is the name of a \code{data.frame} object,
 #'  it will create an \code{\link[testthat:expect_equal]{expect_equal}}
 #'  test for each column, along with a test of the column names,
 #'  types and classes, dimensions, grouping keys, etc.
@@ -32,13 +32,13 @@
 #' @param sample_n The number of elements/rows to sample. Set to \code{NULL} to avoid sampling.
 #'
 #'  Inserts \code{\link[xpectr:strip]{smpl()}} in the generated tests when sampling was used. A seed is
-#'  set internally, setting \code{sample.kind} as \code{"Rounding"} to ensure compatibility with R versions
+#'  set internally, setting \code{sample.kind} as \code{"Rounding"} to ensure compatibility with \code{R} versions
 #'  \code{< 3.6.0}.
 #'
 #'  The order of the elements/rows is kept intact. No replacement is used, why no oversampling will
 #'  take place.
 #'
-#'  When testing a big data frame, sampling the rows can help keep the test files somewhat readable.
+#'  When testing a big \code{data.frame}, sampling the rows can help keep the test files somewhat readable.
 #' @param strip Whether to insert
 #'  \code{\link[xpectr:strip]{strip_msg()}} and
 #'  \code{\link[xpectr:strip]{strip()}}
@@ -52,15 +52,15 @@
 #' @param assign_output Whether to assign the output of a function call or long selection
 #'  to a variable. This will avoid recalling the function and decrease cluttering. (Logical)
 #'
-#'  Heuristic: when the \code{selection} isn't of a string and contains a parenthesis, it is considered a function call.
+#'  Heuristic: when the \code{`selection`} isn't of a string and contains a parenthesis, it is considered a function call.
 #'  A selection with more than 30 characters will be assigned as well.
 #'
 #'  The tests themselves can be more difficult to interpret, as you will
 #'  have to look at the assignment to see the object that is being tested.
-#' @param seed Seed to set. (Whole number)
+#' @param seed \code{seed} to set. (Whole number)
 #' @param test_id Number to append to assignment names. (Whole number)
 #'
-#'  For instance used to create the "output_" name: \code{output_<test_id>}.
+#'  For instance used to create the \code{"output_"} name: \code{output_<test_id>}.
 #' @param envir Environment to evaluate in.
 #' @param out Either \code{"insert"} or \code{"return"}.
 #'
@@ -69,13 +69,13 @@
 #'  \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}.
 #'  }
 #'  \subsection{"return"}{
-#'  Returns the expectations in a list.
+#'  Returns the expectations in a \code{list}.
 #'
 #'  These can be prepared for insertion with
 #'  \code{\link[xpectr:prepare_insertion]{prepare_insertion()}}.
 #'  }
 #' @param start_with_newline,end_with_newline Whether to have a newline in the beginning/end. (Logical)
-#' @return Either \code{NULL} or the unprepared expectations as a character vector.
+#' @return Either \code{NULL} or the unprepared expectations as a \code{character vector}.
 #' @details
 #'  The following "types" are currently supported or intended to be supported in the future.
 #'  Please suggest more types and tests in a GitHub issue!

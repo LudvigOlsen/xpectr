@@ -28,7 +28,7 @@ A string for insertion with \code{\link[rstudioapi:insertText]{rstudioapi::inser
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Collapses a list/vector of expectation strings and adds the specified indentation.
+Collapses a \code{list}/\code{vector} of expectation strings and adds the specified indentation.
 }
 \examples{
 # Attach packages

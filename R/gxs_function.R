@@ -11,7 +11,7 @@
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
 #'  Based on a set of supplied values for each function argument,
-#'  a set of testthat \code{expect_*} statements are generated.
+#'  a set of \code{testthat} \code{expect_*} statements are generated.
 #'
 #'  \strong{Included tests}: The first value supplied for an argument
 #'  is considered the \emph{valid baseline} value. For each argument, we
@@ -32,7 +32,7 @@
 #'  \code{)}
 #'
 #'  The first value for each argument (referred to as the 'baseline' value) should be valid
-#'  (not throw an error/message/warning).
+#'  (not throw an \code{error/}\code{message}/\code{warning}).
 #'
 #'  \strong{N.B.} This is not checked but should lead to more meaningful tests.
 #'
@@ -58,12 +58,12 @@
 #'  might be preferable.
 #' @param check_nulls Whether to try all arguments with \code{NULL}. (Logical)
 #'
-#'  When enabled, you don't need to add \code{NULL} to your \code{args_values},
+#'  When enabled, you don't need to add \code{NULL} to your \code{`args_values`},
 #'  unless it should be the baseline value.
 #' @inheritParams gxs_selection
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family expectation generators
-#' @return Either \code{NULL} or the unprepared expectations as a character vector.
+#' @return Either \code{NULL} or the unprepared expectations as a \code{character vector}.
 #' @export
 #' @inherit gxs_selection details
 #' @examples

@@ -36,7 +36,7 @@ RStudio Addin:
 Runs \code{\link[base:dput]{dput()}} on the selected code and inserts
 it instead of the selection.
 
-See \code{Details} for how to set a key command.
+See \code{`Details`} for how to set a key command.
 }
 \details{
 \subsection{How}{

@@ -10,7 +10,7 @@
 #'
 #'  Inserts code for calling \code{\link[testthat:test_that]{testthat::test_that()}}.
 #'
-#'  See \code{Details} for how to set a key command.
+#'  See \code{`Details`} for how to set a key command.
 #' @param indentation Indentation of the code. (Numeric)
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.

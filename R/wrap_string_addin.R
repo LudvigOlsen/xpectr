@@ -11,7 +11,7 @@
 #'  Splits the selection every n characters
 #'  and inserts it in a \code{\link[base:paste0]{paste0()}} call.
 #'
-#'  See \code{Details} for how to set a key command.
+#'  See \code{`Details`} for how to set a key command.
 #' @param selection String of code. (Character)
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
@@ -20,7 +20,7 @@
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
 #' @param every_n Number of characters per split.
 #'
-#'  If NULL, the following is used to calculate the string width:
+#'  If \code{NULL}, the following is used to calculate the string width:
 #'
 #'  \code{max(min(80 - indentation, 70), 50)}
 #'

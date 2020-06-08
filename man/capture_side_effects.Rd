@@ -14,12 +14,12 @@ capture_side_effects(expr, envir = NULL, reset_seed = FALSE)
 \item{reset_seed}{Whether to reset the random state on exit. (Logical)}
 }
 \value{
-Named list with the side effects.
+\code{named list} with the side effects.
 }
 \description{
-Captures errors, warnings, and messages from an expression.
+Captures \code{error}s, \code{warning}s, and \code{message}s from an expression.
 
-In case of an error, no other side effects are captured.
+In case of an \code{error}, no other side effects are captured.
 
 Simple wrapper for \code{testthat}'s
 \code{\link[testthat:capture_error]{capture_error()}},

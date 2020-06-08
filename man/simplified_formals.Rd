@@ -7,16 +7,16 @@
 simplified_formals(fn)
 }
 \arguments{
-\item{fn}{Function.}
+\item{fn}{\code{Function}.}
 }
 \value{
-A character vector with the simplified formals.
+A \code{character vector} with the simplified formals.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
 Extracts \code{\link[base:formals]{formals}} and
-formats them as an easily testable character vector.
+formats them as an easily testable \code{character vector}.
 }
 \examples{
 # Attach packages

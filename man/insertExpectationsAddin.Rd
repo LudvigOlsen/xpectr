@@ -35,17 +35,17 @@ Returns \code{NULL} invisibly.
 Inserts relevant \code{expect_*} tests based
 on the evaluation of the selected code.
 
-Example: If the selected code is the name of a data frame object,
+Example: If the selected code is the name of a \code{data.frame} object,
 it will create an \code{\link[testthat:expect_equal]{expect_equal}}
 test for each column,
 along with a test of the column names.
 
-Currently supports side effects (error, warnings, messages),
-data frames, and vectors.
+Currently supports side effects (\code{error}, \code{warning}s, \code{message}s),
+\code{data.frame}s, and \code{vector}s.
 
-List columns in data frames (like nested tibbles) are currently skipped.
+List columns in \code{data.frame}s (like nested \code{tibble}s) are currently skipped.
 
-See \code{Details} for how to set a key command.
+See \code{`Details`} for how to set a key command.
 }
 \details{
 \subsection{How}{

@@ -15,7 +15,7 @@ strip(
 )
 }
 \arguments{
-\item{strings}{Vector of strings. (Character)}
+\item{strings}{\code{vector} of strings. (Character)}
 
 \item{replacement}{What to replace blocks of punctuation with. (Character)}
 

@@ -5,9 +5,9 @@
 
 #' @title Capture side effects
 #' @description
-#'  Captures errors, warnings, and messages from an expression.
+#'  Captures \code{error}s, \code{warning}s, and \code{message}s from an expression.
 #'
-#'  In case of an error, no other side effects are captured.
+#'  In case of an \code{error}, no other side effects are captured.
 #'
 #'  Simple wrapper for \code{testthat}'s
 #'  \code{\link[testthat:capture_error]{capture_error()}},
@@ -19,7 +19,7 @@
 #' @param envir Environment to evaluate expression in.
 #' @param reset_seed Whether to reset the random state on exit. (Logical)
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @return Named list with the side effects.
+#' @return \code{named list} with the side effects.
 #' @export
 #' @examples
 #' # Attach packages
@@ -118,14 +118,14 @@ capture_side_effects <- function(expr, envir = NULL, reset_seed = FALSE) {
 #' @description
 #'  Wraps string in \code{\link[xpectr:capture_side_effects]{capture_side_effects()}}
 #'  before parsing and evaluating it.
-#'  The side effects (error, warnings, messages) are returned in a list.
+#'  The side effects (\code{error}, \code{warning}s, \code{message}s) are returned in a \code{list}.
 #'
-#'  When capturing an error, no other side effects are captured.
+#'  When capturing an \code{error}, no other side effects are captured.
 #' @param string String of code that can be parsed and evaluated in \code{envir}.
 #' @param envir Environment to evaluate in. Defaults to
 #'  \code{\link[base:parent.frame]{parent.frame()}}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @return Named list with the side effects.
+#' @return \code{named list} with the side effects.
 #' @export
 #' @examples
 #' # Attach package

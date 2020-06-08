@@ -12,9 +12,9 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Applies \code{\link[base:length]{length()}} to each element of \code{x} (without recursion).
+#'  Applies \code{\link[base:length]{length()}} to each element of \code{`x`} (without recursion).
 #' @param x List with elements.
-#' @param keep_names Whether to keep names. (Logical)
+#' @param keep_names Whether to keep existing names. (Logical)
 #' @family element descriptors
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @return The length of each element.
@@ -42,7 +42,7 @@ element_lengths <- function(x, keep_names = FALSE){
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Applies \code{\link[base:typeof]{typeof()}} to each element of \code{x} (without recursion).
+#'  Applies \code{\link[base:typeof]{typeof()}} to each element of \code{`x`} (without recursion).
 #' @inheritParams element_lengths
 #' @family element descriptors
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
@@ -71,7 +71,7 @@ element_types <- function(x, keep_names = FALSE){
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Applies \code{\link[base:class]{class()}} to each element of \code{x} (without recursion). When
+#'  Applies \code{\link[base:class]{class()}} to each element of \code{`x`} (without recursion). When
 #'  \code{class()} returns multiple strings, the first class string is returned.
 #' @inheritParams element_lengths
 #' @family element descriptors
@@ -101,13 +101,13 @@ element_classes <- function(x, keep_names = FALSE){
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Unlists \code{x} recursively and finds the total number of elements.
+#'  Unlists \code{`x`} recursively and finds the total number of elements.
 #' @param x List with elements.
 #' @param deduplicated Whether to only count the unique elements. (Logical)
 #' @family element descriptors
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
-#' @return The total number of elements in \code{x}.
+#' @return The total number of elements in \code{`x`}.
 #' @details
 #'  Simple wrapper for
 #'  \code{length(unlist(x, recursive = TRUE, use.names = FALSE))}.

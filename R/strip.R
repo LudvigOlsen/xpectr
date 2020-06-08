@@ -15,7 +15,7 @@
 #'  3) Reduces multiple consecutive whitespaces to a single whitespace and trims ends.
 #'
 #'  Can for instance be used to simplify error messages before checking them.
-#' @param strings Vector of strings. (Character)
+#' @param strings \code{vector} of strings. (Character)
 #' @param allow_na Whether to allow \code{strings}
 #'  to contain \code{NA}s. (Logical)
 #' @param replacement What to replace blocks of punctuation with. (Character)

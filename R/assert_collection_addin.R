@@ -7,7 +7,7 @@
 #'  Inserts code for initializing and reporting a
 #'  \code{\link[checkmate:AssertCollection]{checkmate assert collection}}.
 #'
-#'  See \code{Details} for how to set a key command.
+#'  See \code{`Details`} for how to set a key command.
 #' @param add_comments Whether to add comments around. (Logical)
 #'
 #'  This makes it easy for a user to create their own addin without the comments.

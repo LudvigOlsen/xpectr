@@ -47,7 +47,7 @@ RStudio Addin:
 Inserts code for initializing and reporting a
 \code{\link[checkmate:AssertCollection]{checkmate assert collection}}.
 
-See \code{Details} for how to set a key command.
+See \code{`Details`} for how to set a key command.
 }
 \details{
 \subsection{How to set up a key command in RStudio}{

@@ -28,7 +28,7 @@ Returns \code{NULL} invisibly.
 
 Inserts code for calling \code{\link[testthat:test_that]{testthat::test_that()}}.
 
-See \code{Details} for how to set a key command.
+See \code{`Details`} for how to set a key command.
 }
 \details{
 \subsection{How to set up a key command in RStudio}{

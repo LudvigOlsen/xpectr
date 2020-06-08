@@ -9,10 +9,10 @@
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
 #'  Extracts \code{\link[base:formals]{formals}} and
-#'  formats them as an easily testable character vector.
-#' @param fn Function.
+#'  formats them as an easily testable \code{character vector}.
+#' @param fn \code{Function}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @return A character vector with the simplified formals.
+#' @return A \code{character vector} with the simplified formals.
 #' @export
 #' @examples
 #' # Attach packages

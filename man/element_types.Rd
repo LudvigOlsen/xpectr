@@ -9,7 +9,7 @@ element_types(x, keep_names = FALSE)
 \arguments{
 \item{x}{List with elements.}
 
-\item{keep_names}{Whether to keep names. (Logical)}
+\item{keep_names}{Whether to keep existing names. (Logical)}
 }
 \value{
 The type of each element.
@@ -17,7 +17,7 @@ The type of each element.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Applies \code{\link[base:typeof]{typeof()}} to each element of \code{x} (without recursion).
+Applies \code{\link[base:typeof]{typeof()}} to each element of \code{`x`} (without recursion).
 }
 \details{
 Simple wrapper for \code{unlist(lapply(x, typeof))}.
