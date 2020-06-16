@@ -6,6 +6,8 @@
 
 * `capture_side_effects()` disables `crayon` locally before evaluating the expression. Avoids ANSI control sequences in messages.
 
+* Bug fix: `"Assigned data "NULL" must be compatible with existing data."`
+
 # xpectr 0.3.0
 
 * Breaking: `element_classes()` only returns the first class string per element.

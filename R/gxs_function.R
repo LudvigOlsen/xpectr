@@ -278,7 +278,8 @@ generate_function_strings <- function(fn_name,
   tibbled_args_values <- plyr::ldply(arg_names, function(an){
     plyr::llply(args_values_substituted[[an]], function(av){
       paste0(deparse(av), collapse = "\n")
-    }) %>% tibble::enframe(name = "index") %>%
+    }) %>% unlist(recursive = FALSE) %>%
+      tibble::enframe(name = "index") %>%
       dplyr::mutate(arg_name = an,
                     index = .data$index - 1)
   }) %>% dplyr::filter(.data$index != 0)
@@ -334,7 +335,8 @@ generate_function_strings <- function(fn_name,
 
       non_defaults <- plyr::llply(current_combi, function(arg_val){
         paste0(deparse(arg_val), collapse = "\n")
-      }) %>% tibble::enframe(name = "arg_name") %>%
+      }) %>% unlist(recursive = FALSE) %>%
+        tibble::enframe(name = "arg_name") %>%
         dplyr::mutate(index = comb,
                       is_default = FALSE) %>%
         dplyr::filter(dplyr::row_number() > 1)
