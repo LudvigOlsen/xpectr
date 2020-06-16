@@ -27,10 +27,12 @@ test_that("capture_side_effects() works with tibbles", {
     output_10856,
     type = "list")
   # Testing values
-  expect_equal(
-    strip(output_10856[["error"]]),
-    strip("Must extract column with a single valid subscript.\nx Subscript `NA` can't be `NA`."), # TODO The x is gone on travis?
-    fixed = TRUE)
+  expect_true(
+    strip(output_10856[["error"]]) %in%
+    strip(c(
+      "Must extract column with a single valid subscript.\nx Subscript `NA` can't be `NA`.",
+      "Must extract column with a single valid subscript.\n Subscript `NA` can't be `NA`."
+    )))
   expect_equal(
     output_10856[["error_class"]],
     c("vctrs_error_subscript_type", "vctrs_error_subscript", "rlang_error",
