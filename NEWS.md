@@ -1,10 +1,10 @@
-# xpectr 0.3.0.9000
+# xpectr 0.4.0
 
 * `wrapStringAddin()` now wraps short strings in `paste0()` as well. Previously, strings that were too short to be split were not wrapped.
 
 * Adds `insertExpectationsCopyEnvAddin()` addin. Same as `insertExpectationsAddin()` but where code is evaluated in a deep copy of the parent environment. This is especially useful when testing a function that alters non-local variables and has side effects (error/warnings/messages).
 
-* Multiple functions now allow working on a deep copy of the environment. This is useful when testing a function that alters non-local variables. It is disabled by default to save memory.
+* Multiple functions now allow working on a deep copy of the environment (see new `copy_env` argument). This is useful when testing a function that alters non-local variables. It is disabled by default to save memory.
 
 * `gxs_function()` now allows parallelization of the expectation generation process. Requires a backend, as setup with `doParallel::registerDoParallel(4)`. Remember to set `parallel = TRUE` when calling `gxs_function()`.
 

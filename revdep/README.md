@@ -10,13 +10,14 @@
 |collate  |en_US.UTF-8                  |
 |ctype    |en_US.UTF-8                  |
 |tz       |Europe/Copenhagen            |
-|date     |2020-03-31                   |
+|date     |2020-06-18                   |
 
 # Dependencies
 
-|package |old   |new   |Δ  |
-|:-------|:-----|:-----|:--|
-|xpectr  |0.2.0 |0.3.0 |*  |
+|package |old   |new        |Δ  |
+|:-------|:-----|:----------|:--|
+|xpectr  |0.3.0 |0.4.0      |*  |
+|tibble  |NA    |3.0.1.9000 |*  |
 
 # Revdeps
 
