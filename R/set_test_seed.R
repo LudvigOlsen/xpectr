@@ -4,10 +4,10 @@
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
 #'  In order for tests to be compatible with \code{R} versions \code{< 3.6.0},
-#'  we set the \code{sample.kind} argument in \code{\link[base:set.seed]{set.seed()}}
+#'  we set the \code{sample.kind} argument in \code{\link[base:Random]{set.seed()}}
 #'  to \code{"Rounding"} when using \code{R} versions \code{>= 3.6.0}.
 #' @param seed Random \code{seed}.
-#' @param ... Named arguments to \code{\link[base:set.seed]{set.seed()}}.
+#' @param ... Named arguments to \code{\link[base:Random]{set.seed()}}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @author R. Mark Sharp
 #' @return \code{NULL}.

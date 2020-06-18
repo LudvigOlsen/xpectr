@@ -10,14 +10,14 @@
 #'  In case of an \code{error}, no other side effects are captured.
 #'
 #'  Simple wrapper for \code{testthat}'s
-#'  \code{\link[testthat:capture_error]{capture_error()}},
-#'  \code{\link[testthat:capture_warnings]{capture_warnings()}} and
-#'  \code{\link[testthat:capture_messages]{capture_messages()}}.
+#'  \code{\link[testthat:capture_condition]{capture_error()}},
+#'  \code{\link[testthat:capture_condition]{capture_warnings()}} and
+#'  \code{\link[testthat:capture_condition]{capture_messages()}}.
 #'
 #'  Note: Evaluates \code{expr} up to three times.
 #' @param expr Expression.
 #' @param envir Environment to evaluate in. Defaults to
-#'  \code{\link[base:parent.frame]{parent.frame()}}.
+#'  \code{\link[base:`sys.parent`]{parent.frame()}}.
 #' @param copy_env Whether to use deep copies of the environment when capturing side effects. (Logical)
 #'
 #'  Disabled by default to save memory but is often preferable to enable, e.g. when the function

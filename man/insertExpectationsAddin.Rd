@@ -27,7 +27,7 @@ E.g. \code{"stop('This gives an expect_error test')"}.
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
 
 \item{insert}{Whether to insert the expectations via
-\code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
+\code{\link[rstudioapi:`rstudio-documents`]{rstudioapi::insertText()}}
 or return them. (Logical)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
@@ -45,7 +45,7 @@ Disabled by default to save memory but is often preferable to enable,
 e.g. when the function changes non-local variables.}
 }
 \value{
-Inserts \code{\link[testthat:expect_equal]{testthat::expect_*}}
+Inserts \code{\link[testthat:`equality-expectations`]{testthat::expect_*}}
 unit tests for the selected code.
 
 Returns \code{NULL} invisibly.
@@ -57,7 +57,7 @@ Inserts relevant \code{expect_*} tests based
 on the evaluation of the selected code.
 
 Example: If the selected code is the name of a \code{data.frame} object,
-it will create an \code{\link[testthat:expect_equal]{expect_equal}}
+it will create an \code{\link[testthat:`equality-expectations`]{expect_equal}}
 test for each column,
 along with a test of the column names.
 

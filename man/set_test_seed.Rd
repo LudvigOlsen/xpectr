@@ -9,7 +9,7 @@ set_test_seed(seed = 42, ...)
 \arguments{
 \item{seed}{Random \code{seed}.}
 
-\item{...}{Named arguments to \code{\link[base:set.seed]{set.seed()}}.}
+\item{...}{Named arguments to \code{\link[base:Random]{set.seed()}}.}
 }
 \value{
 \code{NULL}.
@@ -18,7 +18,7 @@ set_test_seed(seed = 42, ...)
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
 In order for tests to be compatible with \code{R} versions \code{< 3.6.0},
-we set the \code{sample.kind} argument in \code{\link[base:set.seed]{set.seed()}}
+we set the \code{sample.kind} argument in \code{\link[base:Random]{set.seed()}}
 to \code{"Rounding"} when using \code{R} versions \code{>= 3.6.0}.
 }
 \details{

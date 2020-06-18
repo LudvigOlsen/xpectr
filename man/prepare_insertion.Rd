@@ -23,7 +23,7 @@ As returned with \code{gxs_*} functions with \code{out = "return"}.}
 \item{trim_right}{Whether to trim whitespaces from the end of the collapsed string. (Logical)}
 }
 \value{
-A string for insertion with \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}.
+A string for insertion with \code{\link[rstudioapi:`rstudio-documents`]{rstudioapi::insertText()}}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

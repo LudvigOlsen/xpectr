@@ -7,8 +7,8 @@
 suppress_mw(expr)
 }
 \arguments{
-\item{expr}{Any expression to run within \code{\link[base:suppressMessages]{suppressMessages()}} and
-\code{\link[base:suppressWarnings]{suppressWarnings()}}.}
+\item{expr}{Any expression to run within \code{\link[base:message]{suppressMessages()}} and
+\code{\link[base:warning]{suppressWarnings()}}.}
 }
 \value{
 The output of \code{expr}.
@@ -17,8 +17,8 @@ The output of \code{expr}.
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
 Run expression wrapped in both
-\code{\link[base:suppressMessages]{suppressMessages()}} and
-\code{\link[base:suppressWarnings]{suppressWarnings()}}.
+\code{\link[base:message]{suppressMessages()}} and
+\code{\link[base:warning]{suppressWarnings()}}.
 }
 \details{
 \code{suppressWarnings(suppressMessages(expr))}

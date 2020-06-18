@@ -16,7 +16,7 @@ capture_parse_eval_side_effects(
 \item{string}{String of code that can be parsed and evaluated in \code{envir}.}
 
 \item{envir}{Environment to evaluate in. Defaults to
-\code{\link[base:parent.frame]{parent.frame()}}.}
+\code{\link[base:`sys.parent`]{parent.frame()}}.}
 
 \item{copy_env}{Whether to use deep copies of the environment when capturing side effects. (Logical)
 
