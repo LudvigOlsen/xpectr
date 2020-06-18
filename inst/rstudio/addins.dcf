@@ -8,6 +8,11 @@ Description: Creates expect_* testthat tests from the selected code
 Binding: insertExpectationsAddin
 Interactive: false
 
+Name: Insert Expectations With Deep Copied Environment
+Description: Creates expect_* testthat tests from the selected code evaluated in a deep copy of the parent environment
+Binding: insertExpectationsCopyEnvAddin
+Interactive: false
+
 Name: Initialize test_that()
 Description: Inserts test_that() call
 Binding: initializeTestthatAddin
@@ -28,7 +33,7 @@ Description: Navigates to extracted file name and line number. E.g. select/copy 
 Binding: navigateTestFileAddin
 Interactive: false
 
-Name: Insert checkmate AssertCollection code
+Name: Insert checkmate AssertCollection Code
 Description: Inserts checkmate AssertCollection initialization and reporting code
 Binding: assertCollectionAddin
 Interactive: false

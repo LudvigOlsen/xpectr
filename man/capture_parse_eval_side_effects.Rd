@@ -4,23 +4,39 @@
 \alias{capture_parse_eval_side_effects}
 \title{Capture side effects from parse eval}
 \usage{
-capture_parse_eval_side_effects(string, envir = NULL)
+capture_parse_eval_side_effects(
+  string,
+  envir = NULL,
+  copy_env = FALSE,
+  reset_seed = FALSE,
+  disable_crayon = TRUE
+)
 }
 \arguments{
 \item{string}{String of code that can be parsed and evaluated in \code{envir}.}
 
 \item{envir}{Environment to evaluate in. Defaults to
-\code{\link[base:parent.frame]{parent.frame()}}.}
+\code{\link[base:sys.parent]{parent.frame()}}.}
+
+\item{copy_env}{Whether to use deep copies of the environment when capturing side effects. (Logical)
+
+Disabled by default to save memory but is often preferable to enable, e.g. when the function
+alters non-local variables before throwing its \code{error}/\code{warning}/\code{message}.}
+
+\item{reset_seed}{Whether to reset the random state on exit. (Logical)}
+
+\item{disable_crayon}{Whether to disable \code{crayon} formatting.
+This can remove ANSI characters from the messages. (Logical)}
 }
 \value{
-Named list with the side effects.
+\code{named list} with the side effects.
 }
 \description{
 Wraps string in \code{\link[xpectr:capture_side_effects]{capture_side_effects()}}
 before parsing and evaluating it.
-The side effects (error, warnings, messages) are returned in a list.
+The side effects (\code{error}, \code{warning}s, \code{message}s) are returned in a \code{list}.
 
-When capturing an error, no other side effects are captured.
+When capturing an \code{error}, no other side effects are captured.
 }
 \examples{
 # Attach package
@@ -32,6 +48,11 @@ capture_parse_eval_side_effects("warning('hi!')")
 capture_parse_eval_side_effects("message('hi!')")
 }
 }
+\seealso{
+Other capturers: 
+\code{\link{capture_side_effects}()}
+}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{capturers}

@@ -11,12 +11,14 @@
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
 #'  Based on a set of supplied values for each function argument,
-#'  a set of testthat \code{expect_*} statements are generated.
+#'  a set of \code{testthat} \code{expect_*} statements are generated.
 #'
 #'  \strong{Included tests}: The first value supplied for an argument
 #'  is considered the \emph{valid baseline} value. For each argument, we
 #'  create tests for each of the supplied values, where the other arguments
 #'  have their baseline value.
+#'
+#'  When testing a function that alters non-local variables, consider enabling \code{`copy_env`}.
 #'
 #'  See supported objects in \code{details}.
 #' @param fn Function to create tests for.
@@ -25,14 +27,14 @@
 #'
 #'  \code{args_values = list(}
 #'
-#'  \code{"x1" = list(1,2,3),}
+#'  \code{"x1" = list(1, 2, 3), }
 #'
-#'  \code{"x2" = list("a","b","c")}
+#'  \code{"x2" = list("a", "b", "c")}
 #'
 #'  \code{)}
 #'
 #'  The first value for each argument (referred to as the 'baseline' value) should be valid
-#'  (not throw an error/message/warning).
+#'  (not throw an \code{error/}\code{message}/\code{warning}).
 #'
 #'  \strong{N.B.} This is not checked but should lead to more meaningful tests.
 #'
@@ -58,19 +60,29 @@
 #'  might be preferable.
 #' @param check_nulls Whether to try all arguments with \code{NULL}. (Logical)
 #'
-#'  When enabled, you don't need to add \code{NULL} to your \code{args_values},
+#'  When enabled, you don't need to add \code{NULL} to your \code{`args_values`},
 #'  unless it should be the baseline value.
+#' @param copy_env Whether each combination should be tested in a deep copy of the environment. (Logical)
+#'
+#'  Side effects will be captured in copies of the copy, why two copies of the environment will
+#'  exist at the same time.
+#'
+#'  Disabled by default to save memory but is often preferable to enable,
+#'  e.g. when the function changes non-local variables.
+#' @param parallel Whether to parallelize the generation of expectations. (Logical)
+#'
+#'  Requires a registered parallel backend. Like with \code{doParallel::registerDoParallel}.
 #' @inheritParams gxs_selection
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family expectation generators
-#' @return Either \code{NULL} or the unprepared expectations as a character vector.
+#' @return Either \code{NULL} or the unprepared expectations as a \code{character vector}.
 #' @export
 #' @inherit gxs_selection details
 #' @examples
 #' # Attach packages
 #' library(xpectr)
 #'
-#' \donttest{
+#' \dontrun{
 #' fn <- function(x, y, z){
 #'   if (x>3) stop("'x' > 3")
 #'   if (y<0) warning("'y'<0")
@@ -108,13 +120,15 @@ gxs_function <- function(fn,
                          strip = TRUE,
                          sample_n = 30,
                          envir = NULL,
+                         copy_env = FALSE,
                          assign_output = TRUE,
                          seed = 42,
                          add_wrapper_comments = TRUE,
                          add_test_comments = TRUE,
                          start_with_newline = TRUE,
                          end_with_newline = TRUE,
-                         out = "insert"){
+                         out = "insert",
+                         parallel = FALSE){
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -125,6 +139,7 @@ gxs_function <- function(fn,
                          names = "unnamed", null.ok = TRUE,
                          add = assert_collection)
   checkmate::assert_flag(x = check_nulls, add = assert_collection)
+  checkmate::assert_flag(x = copy_env, add = assert_collection)
   checkmate::assert_string(x = tolerance, add = assert_collection)
   checkmate::assert_choice(x = out, choices = c("insert", "return"), add = assert_collection)
   checkmate::assert_flag(x = strip, add = assert_collection)
@@ -134,6 +149,7 @@ gxs_function <- function(fn,
   checkmate::assert_flag(x = end_with_newline, add = assert_collection)
   checkmate::assert_flag(x = assign_output, add = assert_collection)
   checkmate::assert_flag(x = round_to_tolerance, add = assert_collection)
+  checkmate::assert_flag(x = parallel, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
   checkmate::assert_count(x = seed, null.ok = TRUE, add = assert_collection)
@@ -176,7 +192,7 @@ gxs_function <- function(fn,
   if (is.null(envir)) envir <- parent.frame()
 
   # Create tests for each combination
-  expectations <- plyr::llply(seq_len(nrow(fn_calls)), function(r){
+  expectations <- plyr::llply(seq_len(nrow(fn_calls)), .parallel = parallel, function(r){
 
     current_call <- fn_calls[r,]
     call_string <- current_call[["call"]][[1]]
@@ -194,6 +210,7 @@ gxs_function <- function(fn,
         tolerance = tolerance,
         round_to_tolerance = round_to_tolerance,
         envir = envir,
+        copy_env = copy_env,
         sample_n = sample_n,
         assign_output = assign_output,
         seed = seed,
@@ -278,7 +295,8 @@ generate_function_strings <- function(fn_name,
   tibbled_args_values <- plyr::ldply(arg_names, function(an){
     plyr::llply(args_values_substituted[[an]], function(av){
       paste0(deparse(av), collapse = "\n")
-    }) %>% tibble::enframe(name = "index") %>%
+    }) %>% unlist(recursive = FALSE) %>%
+      tibble::enframe(name = "index") %>%
       dplyr::mutate(arg_name = an,
                     index = .data$index - 1)
   }) %>% dplyr::filter(.data$index != 0)
@@ -307,6 +325,12 @@ generate_function_strings <- function(fn_name,
   if (isTRUE(check_nulls)){
     null_combinations <- plyr::ldply(arg_names, function(an){
       d <- default_values
+      # Check if empty
+      stop_if(
+        condition = nrow(d) == 0,
+        message = paste0("Argument ", an, " did not have a default value."),
+        sys.parent.n = 4
+      )
       if (d[d[["arg_name"]] == an, "value"] == "NULL"){
         return(NULL)
       }
@@ -334,7 +358,8 @@ generate_function_strings <- function(fn_name,
 
       non_defaults <- plyr::llply(current_combi, function(arg_val){
         paste0(deparse(arg_val), collapse = "\n")
-      }) %>% tibble::enframe(name = "arg_name") %>%
+      }) %>% unlist(recursive = FALSE) %>%
+        tibble::enframe(name = "arg_name") %>%
         dplyr::mutate(index = comb,
                       is_default = FALSE) %>%
         dplyr::filter(dplyr::row_number() > 1)

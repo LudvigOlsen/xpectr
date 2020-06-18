@@ -12,12 +12,12 @@ num_total_elements(x, deduplicated = FALSE)
 \item{deduplicated}{Whether to only count the unique elements. (Logical)}
 }
 \value{
-The total number of elements in \code{x}.
+The total number of elements in \code{`x`}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Unlists \code{x} recursively and finds the total number of elements.
+Unlists \code{`x`} recursively and finds the total number of elements.
 }
 \details{
 Simple wrapper for

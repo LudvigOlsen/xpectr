@@ -23,7 +23,7 @@ wrapStringAddin(
 
 \item{every_n}{Number of characters per split.
 
-If NULL, the following is used to calculate the string width:
+If \code{NULL}, the following is used to calculate the string width:
 
 \code{max(min(80 - indentation, 70), 50)}
 
@@ -36,7 +36,7 @@ characters too long. Strings shorter than \code{every_n + tolerance}
 will not be wrapped.}
 
 \item{insert}{Whether to insert the wrapped text via
-\code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
+\code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}
 or return it. (Logical)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
@@ -52,9 +52,9 @@ Returns \code{NULL} invisibly.
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
 Splits the selection every n characters
-and inserts it in a \code{\link[base:paste0]{paste0()}} call.
+and inserts it in a \code{\link[base:paste]{paste0()}} call.
 
-See \code{Details} for how to set a key command.
+See \code{`Details`} for how to set a key command.
 }
 \details{
 \subsection{How to set up a key command in RStudio}{

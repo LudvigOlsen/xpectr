@@ -17,7 +17,7 @@ E.g. \code{"test_x.R:3:"}, which navigates to the third line of \code{"/tests/te
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
 
-\item{abs_path}{Whether to return the full path or only the file name when \code{navigate} is \code{FALSE}.
+\item{abs_path}{Whether to return the full path or only the file name when \code{`navigate`} is \code{FALSE}.
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
 }
@@ -40,7 +40,7 @@ The string must start with \code{"test_"} and contain \code{".R"}.
 It is split at either \code{":"} or \code{"#"}, with the second element (here \code{"3"}) being
 interpreted as the line number.
 
-See \code{Details} for how to set a key command.
+See \code{`Details`} for how to set a key command.
 }
 \details{
 \subsection{How to set up a key command in RStudio}{

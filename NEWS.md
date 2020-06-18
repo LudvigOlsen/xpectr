@@ -1,5 +1,23 @@
 # xpectr 0.3.0.9000
 
+* `wrapStringAddin()` now wraps short strings in `paste0()` as well. Previously, strings that were too short to be split were not wrapped.
+
+* Adds `insertExpectationsCopyEnvAddin()` addin. Same as `insertExpectationsAddin()` but where code is evaluated in a deep copy of the parent environment. This is especially useful when testing a function that alters non-local variables and has side effects (error/warnings/messages).
+
+* Multiple functions now allow working on a deep copy of the environment. This is useful when testing a function that alters non-local variables. It is disabled by default to save memory.
+
+* `gxs_function()` now allows parallelization of the expectation generation process. Requires a backend, as setup with `doParallel::registerDoParallel(4)`. Remember to set `parallel = TRUE` when calling `gxs_function()`.
+
+* `strip()` and `strip_msg()` now strips ANSI control sequences by default.
+
+* `strip()` and `strip_msg()` can now make the strings lowercase (disabled by default).
+
+* `capture_side_effects()` disables `crayon` locally before evaluating the expression (by default). Avoids ANSI control sequences in messages.
+
+* `capture_parse_eval_side_effects()` now has the same options as `capture_side_effects()`.
+
+* Bug fix: `"Assigned data "NULL" must be compatible with existing data."`
+
 # xpectr 0.3.0
 
 * Breaking: `element_classes()` only returns the first class string per element.

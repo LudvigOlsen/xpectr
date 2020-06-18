@@ -19,21 +19,22 @@ Depends:
     R (>= 3.5.0)
 Imports: 
     clipr (>= 0.7.0),
-    rstudioapi (>= 0.10),
-    testthat (>= 2.3.1),
-    plyr,
-    dplyr,
-    tibble,
-    rlang,
-    utils,
-    withr (>= 2.0.0),
-    stats,
     checkmate (>= 2.0.0),
-    lifecycle
+    dplyr,
+    fansi (>= 0.4.1),
+    lifecycle,
+    plyr,
+    rlang,
+    rstudioapi (>= 0.10),
+    stats,
+    testthat (>= 2.3.1),
+    tibble,
+    utils,
+    withr (>= 2.0.0)
 Suggests: 
+    data.table,
     knitr,
-    rmarkdown,
-    data.table
+    rmarkdown
 RdMacros: 
     lifecycle
 Encoding: UTF-8

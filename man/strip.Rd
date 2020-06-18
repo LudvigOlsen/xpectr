@@ -9,17 +9,23 @@ strip(
   replacement = "",
   remove_spaces = FALSE,
   remove_numbers = FALSE,
+  remove_ansi = TRUE,
+  lowercase = FALSE,
   allow_na = TRUE
 )
 }
 \arguments{
-\item{strings}{Vector of strings. (Character)}
+\item{strings}{\code{vector} of strings. (Character)}
 
 \item{replacement}{What to replace blocks of punctuation with. (Character)}
 
 \item{remove_spaces}{Whether to remove all whitespaces. (Logical)}
 
 \item{remove_numbers}{Whether to remove all numbers. (Logical)}
+
+\item{remove_ansi}{Whether to remove ANSI control sequences. (Logical)}
+
+\item{lowercase}{Whether to make the strings lowercase. (Logical)}
 
 \item{allow_na}{Whether to allow \code{strings}
 to contain \code{NA}s. (Logical)}
@@ -39,6 +45,7 @@ Can for instance be used to simplify error messages before checking them.
 }
 \details{
 \enumerate{
+\item ANSI control sequences are removed with \code{\link[fansi:strip_ctl]{fansi::strip_ctl()}}.
 \item \code{gsub("[^[:alnum:][:blank:]]", replacement, strings))}
 \item \code{gsub('[0-9]+', '', strings)} (Note: only if specified!)
 \item \code{trimws( gsub("[[:blank:]]+", " ", strings) )}

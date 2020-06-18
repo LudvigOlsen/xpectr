@@ -23,18 +23,18 @@ As returned with \code{gxs_*} functions with \code{out = "return"}.}
 \item{trim_right}{Whether to trim whitespaces from the end of the collapsed string. (Logical)}
 }
 \value{
-A string for insertion with \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}.
+A string for insertion with \code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Collapses a list/vector of expectation strings and adds the specified indentation.
+Collapses a \code{list}/\code{vector} of expectation strings and adds the specified indentation.
 }
 \examples{
 # Attach packages
 library(xpectr)
 
-\donttest{
+\dontrun{
 df <- data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'),
                  stringsAsFactors = FALSE)
 

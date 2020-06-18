@@ -78,7 +78,10 @@ split_at <- function(x, pos) {
 
 # Get indices of list elements that are NULL
 get_null_indices <- function(l) {
-  which(sapply(l, is.null))
+  if (length(l) > 0)
+    which(sapply(l, is.null))
+  else
+    integer(0)
 }
 
 # Get names in a list

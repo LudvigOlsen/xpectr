@@ -9,9 +9,9 @@
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
 #'  Splits the selection every n characters
-#'  and inserts it in a \code{\link[base:paste0]{paste0()}} call.
+#'  and inserts it in a \code{\link[base:paste]{paste0()}} call.
 #'
-#'  See \code{Details} for how to set a key command.
+#'  See \code{`Details`} for how to set a key command.
 #' @param selection String of code. (Character)
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
@@ -20,7 +20,7 @@
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
 #' @param every_n Number of characters per split.
 #'
-#'  If NULL, the following is used to calculate the string width:
+#'  If \code{NULL}, the following is used to calculate the string width:
 #'
 #'  \code{max(min(80 - indentation, 70), 50)}
 #'
@@ -31,7 +31,7 @@
 #'  characters too long. Strings shorter than \code{every_n + tolerance}
 #'  will not be wrapped.
 #' @param insert Whether to insert the wrapped text via
-#'  \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
+#'  \code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}
 #'  or return it. (Logical)
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
@@ -113,7 +113,8 @@ wrapStringAddin <- function(selection = NULL, indentation = 0,
 
     wrapped <- split_to_paste0(selection, per = every_n,
                                tolerance = tolerance,
-                               spaces = indentation)
+                               spaces = indentation,
+                               wrap_shorts = TRUE)
 
     if (!isTRUE(insert)) {
       # Return the wrapped string instead of inserting it

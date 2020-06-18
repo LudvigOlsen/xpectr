@@ -9,7 +9,7 @@ element_classes(x, keep_names = FALSE)
 \arguments{
 \item{x}{List with elements.}
 
-\item{keep_names}{Whether to keep names. (Logical)}
+\item{keep_names}{Whether to keep existing names. (Logical)}
 }
 \value{
 The main class of each element.
@@ -17,7 +17,7 @@ The main class of each element.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Applies \code{\link[base:class]{class()}} to each element of \code{x} (without recursion). When
+Applies \code{\link[base:class]{class()}} to each element of \code{`x`} (without recursion). When
 \code{class()} returns multiple strings, the first class string is returned.
 }
 \details{

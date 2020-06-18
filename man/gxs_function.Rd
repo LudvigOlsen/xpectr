@@ -15,13 +15,15 @@ gxs_function(
   strip = TRUE,
   sample_n = 30,
   envir = NULL,
+  copy_env = FALSE,
   assign_output = TRUE,
   seed = 42,
   add_wrapper_comments = TRUE,
   add_test_comments = TRUE,
   start_with_newline = TRUE,
   end_with_newline = TRUE,
-  out = "insert"
+  out = "insert",
+  parallel = FALSE
 )
 }
 \arguments{
@@ -32,14 +34,14 @@ Should be supplied as a named list of lists, like the following:
 
 \code{args_values = list(}
 
-\code{"x1" = list(1,2,3),}
+\code{"x1" = list(1, 2, 3), }
 
-\code{"x2" = list("a","b","c")}
+\code{"x2" = list("a", "b", "c")}
 
 \code{)}
 
 The first value for each argument (referred to as the 'baseline' value) should be valid
-(not throw an error/message/warning).
+(not throw an \code{error/}\code{message}/\code{warning}).
 
 \strong{N.B.} This is not checked but should lead to more meaningful tests.
 
@@ -67,7 +69,7 @@ might be preferable.}
 
 \item{check_nulls}{Whether to try all arguments with \code{NULL}. (Logical)
 
-When enabled, you don't need to add \code{NULL} to your \code{args_values},
+When enabled, you don't need to add \code{NULL} to your \code{`args_values`},
 unless it should be the baseline value.}
 
 \item{indentation}{Indentation of the selection. (Numeric)}
@@ -90,26 +92,35 @@ we can avoid such failed tests.}
 \item{sample_n}{The number of elements/rows to sample. Set to \code{NULL} to avoid sampling.
 
 Inserts \code{\link[xpectr:strip]{smpl()}} in the generated tests when sampling was used. A seed is
-set internally, setting \code{sample.kind} as \code{"Rounding"} to ensure compatibility with R versions
+set internally, setting \code{sample.kind} as \code{"Rounding"} to ensure compatibility with \code{R} versions
 \code{< 3.6.0}.
 
 The order of the elements/rows is kept intact. No replacement is used, why no oversampling will
 take place.
 
-When testing a big data frame, sampling the rows can help keep the test files somewhat readable.}
+When testing a big \code{data.frame}, sampling the rows can help keep the test files somewhat readable.}
 
-\item{envir}{Environment to evaluate in.}
+\item{envir}{Environment to evaluate in. Defaults to
+\code{\link[base:sys.parent]{parent.frame()}}.}
+
+\item{copy_env}{Whether each combination should be tested in a deep copy of the environment. (Logical)
+
+Side effects will be captured in copies of the copy, why two copies of the environment will
+exist at the same time.
+
+Disabled by default to save memory but is often preferable to enable,
+e.g. when the function changes non-local variables.}
 
 \item{assign_output}{Whether to assign the output of a function call or long selection
 to a variable. This will avoid recalling the function and decrease cluttering. (Logical)
 
-Heuristic: when the \code{selection} isn't of a string and contains a parenthesis, it is considered a function call.
+Heuristic: when the \code{`selection`} isn't of a string and contains a parenthesis, it is considered a function call.
 A selection with more than 30 characters will be assigned as well.
 
 The tests themselves can be more difficult to interpret, as you will
 have to look at the assignment to see the object that is being tested.}
 
-\item{seed}{Seed to set. (Whole number)}
+\item{seed}{\code{seed} to set. (Whole number)}
 
 \item{add_wrapper_comments}{Whether to add intro and outro comments. (Logical)}
 
@@ -123,28 +134,34 @@ have to look at the assignment to see the object that is being tested.}
 
 \subsection{"insert" (Default)}{
 Inserts the expectations via
-\code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}.
+\code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}.
 }
 \subsection{"return"}{
-Returns the expectations in a list.
+Returns the expectations in a \code{list}.
 
 These can be prepared for insertion with
 \code{\link[xpectr:prepare_insertion]{prepare_insertion()}}.
 }}
+
+\item{parallel}{Whether to parallelize the generation of expectations. (Logical)
+
+Requires a registered parallel backend. Like with \code{doParallel::registerDoParallel}.}
 }
 \value{
-Either \code{NULL} or the unprepared expectations as a character vector.
+Either \code{NULL} or the unprepared expectations as a \code{character vector}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
 Based on a set of supplied values for each function argument,
-a set of testthat \code{expect_*} statements are generated.
+a set of \code{testthat} \code{expect_*} statements are generated.
 
 \strong{Included tests}: The first value supplied for an argument
 is considered the \emph{valid baseline} value. For each argument, we
 create tests for each of the supplied values, where the other arguments
 have their baseline value.
+
+When testing a function that alters non-local variables, consider enabling \code{`copy_env`}.
 
 See supported objects in \code{details}.
 }
@@ -173,7 +190,7 @@ ggplot2 \tab No \tab This may be a challenge, but would be cool!\cr
 # Attach packages
 library(xpectr)
 
-\donttest{
+\dontrun{
 fn <- function(x, y, z){
   if (x>3) stop("'x' > 3")
   if (y<0) warning("'y'<0")

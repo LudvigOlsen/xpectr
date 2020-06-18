@@ -27,6 +27,9 @@ test_that("strip() works", {
       "these numbers and")
   )
 
+  # TODO
+  # strip(" subscript.\n\033[31mx\033[39m The ")
+
   # errors
 
   expect_error(strip(strings, allow_na = FALSE),

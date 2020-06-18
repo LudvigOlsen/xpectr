@@ -19,7 +19,7 @@
 #'  It is split at either \code{":"} or \code{"#"}, with the second element (here \code{"3"}) being
 #'  interpreted as the line number.
 #'
-#'  See \code{Details} for how to set a key command.
+#'  See \code{`Details`} for how to set a key command.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param selection String with file name and line number. (Character)
 #'
@@ -29,7 +29,7 @@
 #' @param navigate Whether to navigate to the file or return the extracted file name and line number. (Logical)
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
-#' @param abs_path Whether to return the full path or only the file name when \code{navigate} is \code{FALSE}.
+#' @param abs_path Whether to return the full path or only the file name when \code{`navigate`} is \code{FALSE}.
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
 #' @export

@@ -14,7 +14,7 @@ E.g. \code{"stop('This gives an expect_error test')"}.
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
 
 \item{insert}{Whether to insert the expectations via
-\code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
+\code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}
 or return them. (Logical)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
@@ -36,7 +36,7 @@ RStudio Addin:
 Runs \code{\link[base:dput]{dput()}} on the selected code and inserts
 it instead of the selection.
 
-See \code{Details} for how to set a key command.
+See \code{`Details`} for how to set a key command.
 }
 \details{
 \subsection{How}{

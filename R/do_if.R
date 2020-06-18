@@ -9,33 +9,33 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  If the \code{condition} is \code{TRUE},
-#'  generate error/warning/message with the supplied message.
+#'  If the \code{`condition`} is \code{TRUE},
+#'  generate \code{error}/\code{warning}/\code{message} with the supplied message.
 #' @param condition The condition to check. (Logical)
 #' @param message Message. (Character)
 #'
-#'  Note: If \code{NULL}, the \code{condition} will be used as message.
-#' @param sys.parent.n The number of generations to go back when calling message function.
+#'  Note: If \code{NULL}, the \code{`condition`} will be used as message.
+#' @param sys.parent.n The number of generations to go back when calling the message function.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @return Returns \code{NULL} invisibly.
 #' @details
-#' When \code{condition} is \code{FALSE}, they return \code{NULL} invisibly.
+#'  When \code{`condition`} is \code{FALSE}, they return \code{NULL} invisibly.
 #'
-#' When \code{condition} is \code{TRUE}:
+#'  When \code{`condition`} is \code{TRUE}:
 #'
-#' \subsection{stop_if()}{
-#' Throws error with the supplied message.
-#' }
-#' \subsection{warn_if()}{
-#' Throws warning with the supplied message.
-#' }
-#' \subsection{message_if()}{
-#' Generates message with the supplied message.
-#' }
+#'  \subsection{stop_if()}{
+#'  Throws error with the supplied message.
+#'  }
+#'  \subsection{warn_if()}{
+#'  Throws warning with the supplied message.
+#'  }
+#'  \subsection{message_if()}{
+#'  Generates message with the supplied message.
+#'  }
 #' @examples
 #' # Attach packages
 #' library(xpectr)
-#' \donttest{
+#' \dontrun{
 #' a <- 0
 #' stop_if(a == 0, "'a' cannot be 0.")
 #' warn_if(a == 0, "'a' was 0.")

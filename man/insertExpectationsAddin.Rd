@@ -2,9 +2,22 @@
 % Please edit documentation in R/testthat_addins.R
 \name{insertExpectationsAddin}
 \alias{insertExpectationsAddin}
+\alias{insertExpectationsCopyEnvAddin}
 \title{Creates testthat tests for selected code}
 \usage{
-insertExpectationsAddin(selection = NULL, insert = TRUE, indentation = 0)
+insertExpectationsAddin(
+  selection = NULL,
+  insert = TRUE,
+  indentation = 0,
+  copy_env = FALSE
+)
+
+insertExpectationsCopyEnvAddin(
+  selection = NULL,
+  insert = TRUE,
+  indentation = 0,
+  copy_env = TRUE
+)
 }
 \arguments{
 \item{selection}{String of code. (Character)
@@ -14,7 +27,7 @@ E.g. \code{"stop('This gives an expect_error test')"}.
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
 
 \item{insert}{Whether to insert the expectations via
-\code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
+\code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}
 or return them. (Logical)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
@@ -22,9 +35,17 @@ or return them. (Logical)
 \item{indentation}{Indentation of the selection. (Numeric)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
+
+\item{copy_env}{Whether to work in a deep copy of the environment. (Logical)
+
+Side effects will be captured in copies of the copy, why two copies of the environment will
+exist at the same time.
+
+Disabled by default to save memory but is often preferable to enable,
+e.g. when the function changes non-local variables.}
 }
 \value{
-Inserts \code{\link[testthat:expect_equal]{testthat::expect_*}}
+Inserts \code{\link[testthat:equality-expectations]{testthat::expect_*}}
 unit tests for the selected code.
 
 Returns \code{NULL} invisibly.
@@ -35,22 +56,22 @@ Returns \code{NULL} invisibly.
 Inserts relevant \code{expect_*} tests based
 on the evaluation of the selected code.
 
-Example: If the selected code is the name of a data frame object,
-it will create an \code{\link[testthat:expect_equal]{expect_equal}}
+Example: If the selected code is the name of a \code{data.frame} object,
+it will create an \code{\link[testthat:equality-expectations]{expect_equal}}
 test for each column,
 along with a test of the column names.
 
-Currently supports side effects (error, warnings, messages),
-data frames, and vectors.
+Currently supports side effects (\code{error}, \code{warning}s, \code{message}s),
+\code{data.frame}s, and \code{vector}s.
 
-List columns in data frames (like nested tibbles) are currently skipped.
+List columns in \code{data.frame}s (like nested \code{tibble}s) are currently skipped.
 
-See \code{Details} for how to set a key command.
+See \code{`Details`} for how to set a key command.
 }
 \details{
 \subsection{How}{
 Parses and evaluates the selected code string
-within the parent environment.
+within the parent environment (or a deep copy thereof).
 Depending on the output, it creates a set of unit tests
 (like \code{expect_equal(data[["column"]], c(1,2,3))}),
 and inserts them instead of the selection.

@@ -4,27 +4,42 @@
 \alias{capture_side_effects}
 \title{Capture side effects}
 \usage{
-capture_side_effects(expr, envir = NULL, reset_seed = FALSE)
+capture_side_effects(
+  expr,
+  envir = NULL,
+  copy_env = FALSE,
+  reset_seed = FALSE,
+  disable_crayon = TRUE
+)
 }
 \arguments{
 \item{expr}{Expression.}
 
-\item{envir}{Environment to evaluate expression in.}
+\item{envir}{Environment to evaluate in. Defaults to
+\code{\link[base:sys.parent]{parent.frame()}}.}
+
+\item{copy_env}{Whether to use deep copies of the environment when capturing side effects. (Logical)
+
+Disabled by default to save memory but is often preferable to enable, e.g. when the function
+alters non-local variables before throwing its \code{error}/\code{warning}/\code{message}.}
 
 \item{reset_seed}{Whether to reset the random state on exit. (Logical)}
+
+\item{disable_crayon}{Whether to disable \code{crayon} formatting.
+This can remove ANSI characters from the messages. (Logical)}
 }
 \value{
-Named list with the side effects.
+\code{named list} with the side effects.
 }
 \description{
-Captures errors, warnings, and messages from an expression.
+Captures \code{error}s, \code{warning}s, and \code{message}s from an expression.
 
-In case of an error, no other side effects are captured.
+In case of an \code{error}, no other side effects are captured.
 
 Simple wrapper for \code{testthat}'s
-\code{\link[testthat:capture_error]{capture_error()}},
-\code{\link[testthat:capture_warnings]{capture_warnings()}} and
-\code{\link[testthat:capture_messages]{capture_messages()}}.
+\code{\link[testthat:capture_condition]{capture_error()}},
+\code{\link[testthat:capture_condition]{capture_warnings()}} and
+\code{\link[testthat:capture_condition]{capture_messages()}}.
 
 Note: Evaluates \code{expr} up to three times.
 }
@@ -45,8 +60,14 @@ fn <- function(raise = FALSE){
 \donttest{
 capture_side_effects(fn())
 capture_side_effects(fn(raise = TRUE))
+capture_side_effects(fn(raise = TRUE), copy_env = TRUE)
 }
+}
+\seealso{
+Other capturers: 
+\code{\link{capture_parse_eval_side_effects}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{capturers}

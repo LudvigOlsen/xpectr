@@ -7,34 +7,34 @@
 smpl(data, n, keep_order = TRUE, seed = 42)
 }
 \arguments{
-\item{data}{Vector or data frame. (Logical)}
+\item{data}{\code{vector} or \code{data.frame}. (Logical)}
 
 \item{n}{Number of elements/rows to sample.
 
-\strong{N.B.} No replacement is used, why \code{n >} the number of elements/rows in \code{data} won't
+\strong{N.B.} No replacement is used, why \code{n >} the number of elements/rows in \code{`data`} won't
 perform oversampling.}
 
 \item{keep_order}{Whether to keep the order of the elements. (Logical)}
 
-\item{seed}{Seed to use.
+\item{seed}{\code{seed} to use.
 
-The seed is set with \code{sample.kind = "Rounding"}
-for compatibility with R versions \code{< 3.6.0}.}
+The \code{seed} is set with \code{sample.kind = "Rounding"}
+for compatibility with \code{R} versions \code{< 3.6.0}.}
 }
 \value{
-When \code{data} has \code{<=n} elements, \code{data} is returned.
-Otherwise, \code{data} is sampled and returned.
+When \code{`data`} has \code{<=`n`} elements, \code{`data`} is returned.
+Otherwise, \code{`data`} is sampled and returned.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Samples a vector, factor or data frame. Useful to reduce size of testthat \code{expect_*} tests.
+Samples a \code{vector}, \code{factor} or \code{data.frame}. Useful to reduce size of testthat \code{expect_*} tests.
 Not intended for other purposes.
 
-Wraps \code{\link[base:sample.int]{sample.int()}}. Data frames are sampled row-wise.
+Wraps \code{\link[base:sample]{sample.int()}}. \code{data.frame}s are sampled row-wise.
 
-The seed is set within the function with \code{sample.kind} as \code{"Rounding"}
-for compatibility with R versions \code{< 3.6.0}. On exit, the random state is restored.
+The \code{seed} is set within the function with \code{sample.kind} as \code{"Rounding"}
+for compatibility with \code{R} versions \code{< 3.6.0}. On exit, the random state is restored.
 }
 \examples{
 # Attach packages

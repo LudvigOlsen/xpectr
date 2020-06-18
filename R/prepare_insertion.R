@@ -8,7 +8,7 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Collapses a list/vector of expectation strings and adds the specified indentation.
+#'  Collapses a \code{list}/\code{vector} of expectation strings and adds the specified indentation.
 #' @param strings Expectation strings. (List or Character)
 #'
 #'  As returned with \code{gxs_*} functions with \code{out = "return"}.
@@ -17,13 +17,13 @@
 #' @param trim_right Whether to trim whitespaces from the end of the collapsed string. (Logical)
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family inserters
-#' @return A string for insertion with \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}.
+#' @return A string for insertion with \code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}.
 #' @export
 #' @examples
 #' # Attach packages
 #' library(xpectr)
 #'
-#' \donttest{
+#' \dontrun{
 #' df <- data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'),
 #'                  stringsAsFactors = FALSE)
 #'

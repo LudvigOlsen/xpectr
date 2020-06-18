@@ -8,7 +8,7 @@ initializeTestthatAddin(insert = TRUE, indentation = NULL)
 }
 \arguments{
 \item{insert}{Whether to insert the code via
-\code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
+\code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}
 or return it. (Logical)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
@@ -28,7 +28,7 @@ Returns \code{NULL} invisibly.
 
 Inserts code for calling \code{\link[testthat:test_that]{testthat::test_that()}}.
 
-See \code{Details} for how to set a key command.
+See \code{`Details`} for how to set a key command.
 }
 \details{
 \subsection{How to set up a key command in RStudio}{

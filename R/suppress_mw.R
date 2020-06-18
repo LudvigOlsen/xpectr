@@ -9,10 +9,10 @@
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
 #'  Run expression wrapped in both
-#'  \code{\link[base:suppressMessages]{suppressMessages()}} and
-#'  \code{\link[base:suppressWarnings]{suppressWarnings()}}.
-#' @param expr Any expression to run within \code{\link[base:suppressMessages]{suppressMessages()}} and
-#'  \code{\link[base:suppressWarnings]{suppressWarnings()}}.
+#'  \code{\link[base:message]{suppressMessages()}} and
+#'  \code{\link[base:warning]{suppressWarnings()}}.
+#' @param expr Any expression to run within \code{\link[base:message]{suppressMessages()}} and
+#'  \code{\link[base:warning]{suppressWarnings()}}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @return The output of \code{expr}.
 #' @details

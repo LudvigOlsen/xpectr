@@ -7,12 +7,12 @@
 initializeGXSFunctionAddin(selection = NULL, insert = TRUE, indentation = 0)
 }
 \arguments{
-\item{selection}{Name of function to test with gxs_function. (Character)
+\item{selection}{Name of function to test with \code{gxs_function()}. (Character)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
 
 \item{insert}{Whether to insert the code via
-\code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
+\code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}
 or return them. (Logical)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
@@ -33,14 +33,14 @@ Returns \code{NULL} invisibly.
 Initializes the \code{gxs_function()} call with the arguments and default values
 of the selected function.
 
-See \code{Details} for how to set a key command.
+See \code{`Details`} for how to set a key command.
 }
 \details{
 \subsection{How}{
 Parses and evaluates the selected code string
 within the parent environment.
 When the output is a function, it extracts the formals (arguments and default values)
-and creates the initial \code{args_values} for \code{\link[xpectr:gxs_function]{gxs_function()}}.
+and creates the initial \code{`args_values`} for \code{\link[xpectr:gxs_function]{gxs_function()}}.
 When the output is not a function, it throws an error.
 }
 \subsection{How to set up a key command in RStudio}{

@@ -12,7 +12,7 @@
 #'  Runs \code{\link[base:dput]{dput()}} on the selected code and inserts
 #'  it instead of the selection.
 #'
-#'  See \code{Details} for how to set a key command.
+#'  See \code{`Details`} for how to set a key command.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param selection String of code. (Character)
 #'
@@ -23,7 +23,7 @@
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
 #' @param insert Whether to insert the expectations via
-#'  \code{\link[rstudioapi:insertText]{rstudioapi::insertText()}}
+#'  \code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}
 #'  or return them. (Logical)
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.

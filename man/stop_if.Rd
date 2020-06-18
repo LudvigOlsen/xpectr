@@ -17,9 +17,9 @@ message_if(condition, message = NULL, sys.parent.n = 0L)
 
 \item{message}{Message. (Character)
 
-Note: If \code{NULL}, the \code{condition} will be used as message.}
+Note: If \code{NULL}, the \code{`condition`} will be used as message.}
 
-\item{sys.parent.n}{The number of generations to go back when calling message function.}
+\item{sys.parent.n}{The number of generations to go back when calling the message function.}
 }
 \value{
 Returns \code{NULL} invisibly.
@@ -27,13 +27,13 @@ Returns \code{NULL} invisibly.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-If the \code{condition} is \code{TRUE},
-generate error/warning/message with the supplied message.
+If the \code{`condition`} is \code{TRUE},
+generate \code{error}/\code{warning}/\code{message} with the supplied message.
 }
 \details{
-When \code{condition} is \code{FALSE}, they return \code{NULL} invisibly.
+When \code{`condition`} is \code{FALSE}, they return \code{NULL} invisibly.
 
-When \code{condition} is \code{TRUE}:
+When \code{`condition`} is \code{TRUE}:
 
 \subsection{stop_if()}{
 Throws error with the supplied message.
@@ -48,7 +48,7 @@ Generates message with the supplied message.
 \examples{
 # Attach packages
 library(xpectr)
-\donttest{
+\dontrun{
 a <- 0
 stop_if(a == 0, "'a' cannot be 0.")
 warn_if(a == 0, "'a' was 0.")

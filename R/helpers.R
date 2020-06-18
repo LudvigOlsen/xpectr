@@ -70,8 +70,39 @@ assign_random_state <- function(state, envir = globalenv(), check_existence = TR
 
 # Get message from testthat::capture_error
 # copied from testthat:::cnd_message
-cnd_message <- function(x){
-  withr::local_options(c(rlang_backtrace_on_error = "none"))
+cnd_message <- function(x, disable_crayon = TRUE) {
+  withr::local_options(c(
+    rlang_backtrace_on_error = "none",
+    crayon.enabled = !disable_crayon
+  ))
   conditionMessage(x)
 }
 
+# Create deep or shallow clone of an environment
+# https://stackoverflow.com/a/53274519/11832955
+clone_env <- function(envir, deep = TRUE) {
+  if (isTRUE(deep)) {
+    clone <-
+      list2env(
+        rapply(
+          as.list(envir, all.names = TRUE),
+          clone_env,
+          classes = "environment",
+          how = "replace"
+        ),
+        parent = parent.env(envir)
+      )
+  } else {
+    clone <-
+      list2env(as.list(envir, all.names = TRUE), parent = parent.env(envir))
+  }
+  attributes(clone) <- attributes(envir)
+  clone
+}
+
+clone_env_if <- function(envir, cond, deep=TRUE){
+  if (isTRUE(cond))
+    clone_env(envir = envir, deep = deep)
+  else
+    envir
+}
