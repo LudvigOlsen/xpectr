@@ -12,7 +12,7 @@
 #'  statements are generated.
 #'
 #'  Example: If the selected code is the name of a \code{data.frame} object,
-#'  it will create an \code{\link[testthat:`equality-expectations`]{expect_equal}}
+#'  it will create an \code{\link[testthat:equality-expectations]{expect_equal}}
 #'  test for each column, along with a test of the column names,
 #'  types and classes, dimensions, grouping keys, etc.
 #'
@@ -75,7 +75,7 @@
 #'
 #'  \subsection{"insert" (Default)}{
 #'  Inserts the expectations via
-#'  \code{\link[rstudioapi:`rstudio-documents`]{rstudioapi::insertText()}}.
+#'  \code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}.
 #'  }
 #'  \subsection{"return"}{
 #'  Returns the expectations in a \code{list}.

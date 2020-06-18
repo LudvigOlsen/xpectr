@@ -36,7 +36,7 @@ characters too long. Strings shorter than \code{every_n + tolerance}
 will not be wrapped.}
 
 \item{insert}{Whether to insert the wrapped text via
-\code{\link[rstudioapi:`rstudio-documents`]{rstudioapi::insertText()}}
+\code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}
 or return it. (Logical)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}

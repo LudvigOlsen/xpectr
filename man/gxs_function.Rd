@@ -101,7 +101,7 @@ take place.
 When testing a big \code{data.frame}, sampling the rows can help keep the test files somewhat readable.}
 
 \item{envir}{Environment to evaluate in. Defaults to
-\code{\link[base:`sys.parent`]{parent.frame()}}.}
+\code{\link[base:sys.parent]{parent.frame()}}.}
 
 \item{copy_env}{Whether each combination should be tested in a deep copy of the environment. (Logical)
 
@@ -134,7 +134,7 @@ have to look at the assignment to see the object that is being tested.}
 
 \subsection{"insert" (Default)}{
 Inserts the expectations via
-\code{\link[rstudioapi:`rstudio-documents`]{rstudioapi::insertText()}}.
+\code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}.
 }
 \subsection{"return"}{
 Returns the expectations in a \code{list}.

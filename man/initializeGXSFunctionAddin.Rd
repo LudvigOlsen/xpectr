@@ -12,7 +12,7 @@ initializeGXSFunctionAddin(selection = NULL, insert = TRUE, indentation = 0)
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
 
 \item{insert}{Whether to insert the code via
-\code{\link[rstudioapi:`rstudio-documents`]{rstudioapi::insertText()}}
+\code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}
 or return them. (Logical)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}

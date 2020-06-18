@@ -57,7 +57,7 @@ take place.
 When testing a big \code{data.frame}, sampling the rows can help keep the test files somewhat readable.}
 
 \item{envir}{Environment to evaluate in. Defaults to
-\code{\link[base:`sys.parent`]{parent.frame()}}.}
+\code{\link[base:sys.parent]{parent.frame()}}.}
 
 \item{copy_env}{Whether to work in a deep copy of the environment. (Logical)
 
@@ -92,7 +92,7 @@ For instance used to create the \code{"output_"} name: \code{output_<test_id>}.}
 
 \subsection{"insert" (Default)}{
 Inserts the expectations via
-\code{\link[rstudioapi:`rstudio-documents`]{rstudioapi::insertText()}}.
+\code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}.
 }
 \subsection{"return"}{
 Returns the expectations in a \code{list}.
@@ -111,7 +111,7 @@ Based on the selection (string of code), a set of \code{testthat} \code{expect_*
 statements are generated.
 
 Example: If the selected code is the name of a \code{data.frame} object,
-it will create an \code{\link[testthat:`equality-expectations`]{expect_equal}}
+it will create an \code{\link[testthat:equality-expectations]{expect_equal}}
 test for each column, along with a test of the column names,
 types and classes, dimensions, grouping keys, etc.
 

@@ -12,7 +12,7 @@
 #'  on the evaluation of the selected code.
 #'
 #'  Example: If the selected code is the name of a \code{data.frame} object,
-#'  it will create an \code{\link[testthat:`equality-expectations`]{expect_equal}}
+#'  it will create an \code{\link[testthat:equality-expectations]{expect_equal}}
 #'  test for each column,
 #'  along with a test of the column names.
 #'
@@ -31,7 +31,7 @@
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
 #' @param insert Whether to insert the expectations via
-#'  \code{\link[rstudioapi:`rstudio-documents`]{rstudioapi::insertText()}}
+#'  \code{\link[rstudioapi:rstudio-documents]{rstudioapi::insertText()}}
 #'  or return them. (Logical)
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
@@ -40,7 +40,7 @@
 #' @family expectation generators
 #' @family addins
 #' @export
-#' @return Inserts \code{\link[testthat:`equality-expectations`]{testthat::expect_*}}
+#' @return Inserts \code{\link[testthat:equality-expectations]{testthat::expect_*}}
 #'  unit tests for the selected code.
 #'
 #'  Returns \code{NULL} invisibly.

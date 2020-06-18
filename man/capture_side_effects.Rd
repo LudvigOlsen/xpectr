@@ -16,7 +16,7 @@ capture_side_effects(
 \item{expr}{Expression.}
 
 \item{envir}{Environment to evaluate in. Defaults to
-\code{\link[base:`sys.parent`]{parent.frame()}}.}
+\code{\link[base:sys.parent]{parent.frame()}}.}
 
 \item{copy_env}{Whether to use deep copies of the environment when capturing side effects. (Logical)
 

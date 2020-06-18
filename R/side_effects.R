@@ -17,7 +17,7 @@
 #'  Note: Evaluates \code{expr} up to three times.
 #' @param expr Expression.
 #' @param envir Environment to evaluate in. Defaults to
-#'  \code{\link[base:`sys.parent`]{parent.frame()}}.
+#'  \code{\link[base:sys.parent]{parent.frame()}}.
 #' @param copy_env Whether to use deep copies of the environment when capturing side effects. (Logical)
 #'
 #'  Disabled by default to save memory but is often preferable to enable, e.g. when the function
