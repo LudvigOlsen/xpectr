@@ -75,7 +75,7 @@ split_string_every <- function(string, per = 60) {
 }
 
 # Split long string into elements in paste0
-split_to_paste0 <- function(string, per = 60, tolerance = 10, spaces = 2) {
+split_to_paste0 <- function(string, per = 60, tolerance = 10, spaces = 2, wrap_shorts = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -88,6 +88,11 @@ split_to_paste0 <- function(string, per = 60, tolerance = 10, spaces = 2) {
     splits <- split_string_every(paste0(string))
   } else {
     string <- add_quotation_marks(string)
+    if (isTRUE(wrap_shorts)) {
+      string <- paste0("paste0(",
+                       string,
+                       ")")
+    }
     return(string)
   }
 

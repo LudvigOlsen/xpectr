@@ -64,7 +64,7 @@
 #'
 #'  For instance used to create the \code{"output_"} name: \code{output_<test_id>}.
 #' @inheritParams capture_side_effects
-#' @param copy_env Whether to work on a deep copy of the environment. (Logical)
+#' @param copy_env Whether to work in a deep copy of the environment. (Logical)
 #'
 #'  Side effects will be captured in copies of the copy, why two copies of the environment will
 #'  exist at the same time.
@@ -112,7 +112,7 @@
 #' # Attach packages
 #' library(xpectr)
 #'
-#' \donttest{
+#' \dontrun{
 #' df <- data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'),
 #'                  stringsAsFactors = FALSE)
 #'

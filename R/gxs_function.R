@@ -82,7 +82,7 @@
 #' # Attach packages
 #' library(xpectr)
 #'
-#' \donttest{
+#' \dontrun{
 #' fn <- function(x, y, z){
 #'   if (x>3) stop("'x' > 3")
 #'   if (y<0) warning("'y'<0")

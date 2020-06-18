@@ -113,7 +113,8 @@ wrapStringAddin <- function(selection = NULL, indentation = 0,
 
     wrapped <- split_to_paste0(selection, per = every_n,
                                tolerance = tolerance,
-                               spaces = indentation)
+                               spaces = indentation,
+                               wrap_shorts = TRUE)
 
     if (!isTRUE(insert)) {
       # Return the wrapped string instead of inserting it

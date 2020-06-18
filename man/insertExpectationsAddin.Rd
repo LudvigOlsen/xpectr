@@ -2,9 +2,22 @@
 % Please edit documentation in R/testthat_addins.R
 \name{insertExpectationsAddin}
 \alias{insertExpectationsAddin}
+\alias{insertExpectationsCopyEnvAddin}
 \title{Creates testthat tests for selected code}
 \usage{
-insertExpectationsAddin(selection = NULL, insert = TRUE, indentation = 0)
+insertExpectationsAddin(
+  selection = NULL,
+  insert = TRUE,
+  indentation = 0,
+  copy_env = FALSE
+)
+
+insertExpectationsCopyEnvAddin(
+  selection = NULL,
+  insert = TRUE,
+  indentation = 0,
+  copy_env = TRUE
+)
 }
 \arguments{
 \item{selection}{String of code. (Character)
@@ -22,6 +35,14 @@ or return them. (Logical)
 \item{indentation}{Indentation of the selection. (Numeric)
 
 \strong{N.B.} Mainly intended for testing the addin programmatically.}
+
+\item{copy_env}{Whether to work in a deep copy of the environment. (Logical)
+
+Side effects will be captured in copies of the copy, why two copies of the environment will
+exist at the same time.
+
+Disabled by default to save memory but is often preferable to enable,
+e.g. when the function changes non-local variables.}
 }
 \value{
 Inserts \code{\link[testthat:expect_equal]{testthat::expect_*}}
@@ -50,7 +71,7 @@ See \code{`Details`} for how to set a key command.
 \details{
 \subsection{How}{
 Parses and evaluates the selected code string
-within the parent environment.
+within the parent environment (or a deep copy thereof).
 Depending on the output, it creates a set of unit tests
 (like \code{expect_equal(data[["column"]], c(1,2,3))}),
 and inserts them instead of the selection.

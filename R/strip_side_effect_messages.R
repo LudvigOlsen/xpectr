@@ -27,7 +27,7 @@
 #' library(xpectr)
 #' library(testthat)
 #'
-#' \donttest{
+#' \dontrun{
 #' strip_msg(stop("this 'dot' .\n is removed! 123"))
 #' strip_msg(warning("this 'dot' .\n is removed! 123"))
 #' strip_msg(message("this 'dot' .\n is removed! 123"))

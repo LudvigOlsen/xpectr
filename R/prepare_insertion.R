@@ -23,7 +23,7 @@
 #' # Attach packages
 #' library(xpectr)
 #'
-#' \donttest{
+#' \dontrun{
 #' df <- data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'),
 #'                  stringsAsFactors = FALSE)
 #'

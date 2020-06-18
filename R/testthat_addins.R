@@ -35,6 +35,7 @@
 #'  or return them. (Logical)
 #'
 #'  \strong{N.B.} Mainly intended for testing the addin programmatically.
+#' @inheritParams gxs_selection
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @family expectation generators
 #' @family addins
@@ -46,7 +47,7 @@
 #' @details
 #'  \subsection{How}{
 #'  Parses and evaluates the selected code string
-#'  within the parent environment.
+#'  within the parent environment (or a deep copy thereof).
 #'  Depending on the output, it creates a set of unit tests
 #'  (like \code{expect_equal(data[["column"]], c(1,2,3))}),
 #'  and inserts them instead of the selection.
@@ -70,13 +71,14 @@
 #' @importFrom rlang := .data
 #' @importFrom dplyr %>%
 #' @importFrom stats runif
-insertExpectationsAddin <- function(selection = NULL, insert = TRUE, indentation = 0) {
+insertExpectationsAddin <- function(selection = NULL, insert = TRUE, indentation = 0, copy_env = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(x = selection, null.ok = TRUE,
                            add = assert_collection)
   checkmate::assert_flag(x = insert, add = assert_collection)
+  checkmate::assert_flag(x = copy_env, add = assert_collection)
   checkmate::assert_integerish(x = indentation, lower = 0,
                                any.missing = FALSE,
                                null.ok = TRUE,
@@ -109,7 +111,8 @@ insertExpectationsAddin <- function(selection = NULL, insert = TRUE, indentation
 
     generator <- function(out){
       gxs_selection(selection, indentation = indentation,
-                    envir = parent_envir, out = out)
+                    envir = parent_envir, out = out,
+                    copy_env = copy_env)
     }
 
     if (!isTRUE(insert)) {
@@ -123,4 +126,15 @@ insertExpectationsAddin <- function(selection = NULL, insert = TRUE, indentation
   }
 
   invisible()
+}
+
+#' @rdname insertExpectationsAddin
+#' @export
+insertExpectationsCopyEnvAddin <- function(selection = NULL, insert = TRUE, indentation = 0, copy_env = TRUE){
+  insertExpectationsAddin(
+    selection = selection,
+    insert = insert,
+    indentation = indentation,
+    copy_env = copy_env
+  )
 }

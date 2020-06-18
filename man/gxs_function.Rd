@@ -190,7 +190,7 @@ ggplot2 \tab No \tab This may be a challenge, but would be cool!\cr
 # Attach packages
 library(xpectr)
 
-\donttest{
+\dontrun{
 fn <- function(x, y, z){
   if (x>3) stop("'x' > 3")
   if (y<0) warning("'y'<0")

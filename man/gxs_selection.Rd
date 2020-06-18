@@ -59,7 +59,7 @@ When testing a big \code{data.frame}, sampling the rows can help keep the test f
 \item{envir}{Environment to evaluate in. Defaults to
 \code{\link[base:parent.frame]{parent.frame()}}.}
 
-\item{copy_env}{Whether to work on a deep copy of the environment. (Logical)
+\item{copy_env}{Whether to work in a deep copy of the environment. (Logical)
 
 Side effects will be captured in copies of the copy, why two copies of the environment will
 exist at the same time.
@@ -148,7 +148,7 @@ ggplot2 \tab No \tab This may be a challenge, but would be cool!\cr
 # Attach packages
 library(xpectr)
 
-\donttest{
+\dontrun{
 df <- data.frame('a' = c(1, 2, 3), 'b' = c('t', 'y', 'u'),
                  stringsAsFactors = FALSE)
 
