@@ -1,3 +1,6 @@
+
+# xpectr 0.4.0.9000
+
 # xpectr 0.4.0
 
 * `wrapStringAddin()` now wraps short strings in `paste0()` as well. Previously, strings that were too short to be split were not wrapped.
