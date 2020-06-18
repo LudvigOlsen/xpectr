@@ -48,7 +48,7 @@ Generates message with the supplied message.
 \examples{
 # Attach packages
 library(xpectr)
-\donttest{
+\dontrun{
 a <- 0
 stop_if(a == 0, "'a' cannot be 0.")
 warn_if(a == 0, "'a' was 0.")
