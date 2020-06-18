@@ -12,6 +12,7 @@ gxs_selection(
   strip = TRUE,
   sample_n = 30,
   envir = NULL,
+  copy_env = FALSE,
   assign_output = TRUE,
   seed = 42,
   test_id = NULL,
@@ -55,7 +56,16 @@ take place.
 
 When testing a big \code{data.frame}, sampling the rows can help keep the test files somewhat readable.}
 
-\item{envir}{Environment to evaluate in.}
+\item{envir}{Environment to evaluate in. Defaults to
+\code{\link[base:parent.frame]{parent.frame()}}.}
+
+\item{copy_env}{Whether to work on a deep copy of the environment. (Logical)
+
+Side effects will be captured in copies of the copy, why two copies of the environment will
+exist at the same time.
+
+Disabled by default to save memory but is often preferable to enable,
+e.g. when the function changes non-local variables.}
 
 \item{assign_output}{Whether to assign the output of a function call or long selection
 to a variable. This will avoid recalling the function and decrease cluttering. (Logical)
@@ -106,6 +116,8 @@ test for each column, along with a test of the column names,
 types and classes, dimensions, grouping keys, etc.
 
 See supported objects in \code{details}.
+
+When testing a function that alters non-local variables, consider enabling \code{`copy_env`}.
 
 Feel free to suggest useful tests etc. in a GitHub issue!
 

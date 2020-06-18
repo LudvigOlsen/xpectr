@@ -18,6 +18,8 @@
 #'
 #'  See supported objects in \code{details}.
 #'
+#'  When testing a function that alters non-local variables, consider enabling \code{`copy_env`}.
+#'
 #'  Feel free to suggest useful tests etc. in a GitHub issue!
 #'
 #'  Addin: \code{\link[xpectr:insertExpectationsAddin]{insertExpectationsAddin()}}
@@ -61,7 +63,14 @@
 #' @param test_id Number to append to assignment names. (Whole number)
 #'
 #'  For instance used to create the \code{"output_"} name: \code{output_<test_id>}.
-#' @param envir Environment to evaluate in.
+#' @inheritParams capture_side_effects
+#' @param copy_env Whether to work on a deep copy of the environment. (Logical)
+#'
+#'  Side effects will be captured in copies of the copy, why two copies of the environment will
+#'  exist at the same time.
+#'
+#'  Disabled by default to save memory but is often preferable to enable,
+#'  e.g. when the function changes non-local variables.
 #' @param out Either \code{"insert"} or \code{"return"}.
 #'
 #'  \subsection{"insert" (Default)}{
@@ -125,6 +134,7 @@ gxs_selection <- function(selection,
                           strip = TRUE,
                           sample_n = 30,
                           envir = NULL,
+                          copy_env = FALSE,
                           assign_output = TRUE,
                           seed = 42,
                           test_id = NULL,
@@ -163,6 +173,7 @@ gxs_selection <- function(selection,
   checkmate::assert_flag(x = end_with_newline, add = assert_collection)
   checkmate::assert_flag(x = assign_output, add = assert_collection)
   checkmate::assert_flag(x = round_to_tolerance, add = assert_collection)
+  checkmate::assert_flag(x = copy_env, add = assert_collection)
   checkmate::assert_count(x = indentation, add = assert_collection)
   checkmate::assert_count(x = sample_n, null.ok = TRUE, add = assert_collection)
   checkmate::assert_count(x = seed, null.ok = TRUE, add = assert_collection)
@@ -176,8 +187,11 @@ gxs_selection <- function(selection,
   # Set environment if not specified
   if (is.null(envir)) envir <- parent.frame()
 
+  # Clone environment if specified
+  envir <- clone_env_if(envir = envir, cond = copy_env, deep = TRUE)
+
   # Check for side effects
-  side_effects <- capture_parse_eval_side_effects(selection, envir)
+  side_effects <- capture_parse_eval_side_effects(string = selection, envir = envir, copy_env = copy_env)
   has_side_effects <- side_effects[["has_side_effects"]]
   has_error <- !is.null(side_effects[["error"]])
 
@@ -203,6 +217,7 @@ gxs_selection <- function(selection,
     # Create expectations for error, warnings, and messages
     sfx_expectations <- create_expectations_side_effect(
       side_effects, name = selection,
+      copy_env = copy_env,
       indentation = indentation,
       add_comments = add_test_comments,
       strip = strip,

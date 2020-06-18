@@ -15,13 +15,15 @@ gxs_function(
   strip = TRUE,
   sample_n = 30,
   envir = NULL,
+  copy_env = FALSE,
   assign_output = TRUE,
   seed = 42,
   add_wrapper_comments = TRUE,
   add_test_comments = TRUE,
   start_with_newline = TRUE,
   end_with_newline = TRUE,
-  out = "insert"
+  out = "insert",
+  parallel = FALSE
 )
 }
 \arguments{
@@ -32,9 +34,9 @@ Should be supplied as a named list of lists, like the following:
 
 \code{args_values = list(}
 
-\code{"x1" = list(1,2,3),}
+\code{"x1" = list(1, 2, 3), }
 
-\code{"x2" = list("a","b","c")}
+\code{"x2" = list("a", "b", "c")}
 
 \code{)}
 
@@ -98,7 +100,16 @@ take place.
 
 When testing a big \code{data.frame}, sampling the rows can help keep the test files somewhat readable.}
 
-\item{envir}{Environment to evaluate in.}
+\item{envir}{Environment to evaluate in. Defaults to
+\code{\link[base:parent.frame]{parent.frame()}}.}
+
+\item{copy_env}{Whether each combination should be tested in a deep copy of the environment. (Logical)
+
+Side effects will be captured in copies of the copy, why two copies of the environment will
+exist at the same time.
+
+Disabled by default to save memory but is often preferable to enable,
+e.g. when the function changes non-local variables.}
 
 \item{assign_output}{Whether to assign the output of a function call or long selection
 to a variable. This will avoid recalling the function and decrease cluttering. (Logical)
@@ -131,6 +142,10 @@ Returns the expectations in a \code{list}.
 These can be prepared for insertion with
 \code{\link[xpectr:prepare_insertion]{prepare_insertion()}}.
 }}
+
+\item{parallel}{Whether to parallelize the generation of expectations. (Logical)
+
+Requires a registered parallel backend. Like with \code{doParallel::registerDoParallel}.}
 }
 \value{
 Either \code{NULL} or the unprepared expectations as a \code{character vector}.
@@ -145,6 +160,8 @@ a set of \code{testthat} \code{expect_*} statements are generated.
 is considered the \emph{valid baseline} value. For each argument, we
 create tests for each of the supplied values, where the other arguments
 have their baseline value.
+
+When testing a function that alters non-local variables, consider enabling \code{`copy_env`}.
 
 See supported objects in \code{details}.
 }

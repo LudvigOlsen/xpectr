@@ -48,7 +48,8 @@ test_that("testing initializeGXSFunctionAddin()", {
       "  args_values = list(\n",
       "    \"x\" = list()",
       "  ),",
-      "  indentation = 2",
+      "  indentation = 2,",
+      "  copy_env = FALSE",
       ")",
       " ",
       "#"
@@ -62,11 +63,11 @@ test_that("testing initializeGXSFunctionAddin()", {
   # Testing length
   expect_equal(
     length(output_19148),
-    13L)
+    14L)
   # Testing sum of element lengths
   expect_equal(
     sum(xpectr::element_lengths(output_19148)),
-    13L)
+    14L)
 
   # Testing initializeGXSFunctionAddin(selection = " ini...
   # Changed from baseline: selection = " initial...
@@ -97,7 +98,8 @@ test_that("testing initializeGXSFunctionAddin()", {
       "    \"insert\" = list(TRUE),",
       "    \"indentation\" = list(0)",
       "  ),",
-      "  indentation = 2",
+      "  indentation = 2,",
+      "  copy_env = FALSE",
       ")",
       " ",
       "#"
@@ -111,11 +113,11 @@ test_that("testing initializeGXSFunctionAddin()", {
   # Testing length
   expect_equal(
     length(output_19370),
-    15L)
+    16L)
   # Testing sum of element lengths
   expect_equal(
     sum(xpectr::element_lengths(output_19370)),
-    15L)
+    16L)
 
   # Testing initializeGXSFunctionAddin(selection = NA, i...
   # Changed from baseline: selection = NA
@@ -167,7 +169,7 @@ test_that("testing initializeGXSFunctionAddin()", {
     c("# Generate expectations for 'identity'", "# Tip: comment out the gxs_function() call",
       "# so it is easy to regenerate the tests", "xpectr::set_test_seed(42)",
       "xpectr::gxs_function(", "  fn = identity,", "  args_values = list(\n",
-      "    \"x\" = list()", "  ),", "  indentation = 2", ")", " ",
+      "    \"x\" = list()", "  ),", "  indentation = 2,", "  copy_env = FALSE", ")", " ",
       "#"),
     fixed = TRUE)
   # Testing names
@@ -178,11 +180,11 @@ test_that("testing initializeGXSFunctionAddin()", {
   # Testing length
   expect_equal(
     length(output_15190),
-    13L)
+    14L)
   # Testing sum of element lengths
   expect_equal(
     sum(xpectr::element_lengths(output_15190)),
-    13L)
+    14L)
 
   # Testing initializeGXSFunctionAddin(selection = "iden...
   # Changed from baseline: indentation = NULL
@@ -211,7 +213,8 @@ test_that("testing initializeGXSFunctionAddin()", {
       "  args_values = list(\n",
       "    \"x\" = list()",
       "  ),",
-      "  indentation = 2",
+      "  indentation = 2,",
+      "  copy_env = FALSE",
       ")",
       " ",
       "#"
@@ -225,11 +228,11 @@ test_that("testing initializeGXSFunctionAddin()", {
   # Testing length
   expect_equal(
     length(output_17365),
-    13L)
+    14L)
   # Testing sum of element lengths
   expect_equal(
     sum(xpectr::element_lengths(output_17365)),
-    13L)
+    14L)
 
   ## Finished testing 'initializeGXSFunctionAddin'                            ####
   #

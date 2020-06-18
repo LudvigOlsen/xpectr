@@ -1,10 +1,16 @@
 # xpectr 0.3.0.9000
 
+* Multiple functions now allow working on a deep copy of the environment. This is useful when testing a function that alters non-local variables. It is disabled by default to save memory.
+
+* `gxs_function()` now allows parallelization of the expectation generation process. Requires a backend, as setup with `doParallel::registerDoParallel(4)`. Remember to set `parallel = TRUE` when calling `gxs_function()`.
+
 * `strip()` and `strip_msg()` now strips ANSI control sequences by default.
 
 * `strip()` and `strip_msg()` can now make the strings lowercase (disabled by default).
 
-* `capture_side_effects()` disables `crayon` locally before evaluating the expression. Avoids ANSI control sequences in messages.
+* `capture_side_effects()` disables `crayon` locally before evaluating the expression (by default). Avoids ANSI control sequences in messages.
+
+* `capture_parse_eval_side_effects()` now has the same options as `capture_side_effects()`.
 
 * Bug fix: `"Assigned data "NULL" must be compatible with existing data."`
 

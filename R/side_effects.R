@@ -16,10 +16,18 @@
 #'
 #'  Note: Evaluates \code{expr} up to three times.
 #' @param expr Expression.
-#' @param envir Environment to evaluate expression in.
+#' @param envir Environment to evaluate in. Defaults to
+#'  \code{\link[base:parent.frame]{parent.frame()}}.
+#' @param copy_env Whether to use deep copies of the environment when capturing side effects. (Logical)
+#'
+#'  Disabled by default to save memory but is often preferable to enable, e.g. when the function
+#'  alters non-local variables before throwing its \code{error}/\code{warning}/\code{message}.
 #' @param reset_seed Whether to reset the random state on exit. (Logical)
+#' @param disable_crayon Whether to disable \code{crayon} formatting.
+#'  This can remove ANSI characters from the messages. (Logical)
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @return \code{named list} with the side effects.
+#' @family capturers
 #' @export
 #' @examples
 #' # Attach packages
@@ -38,13 +46,15 @@
 #' \donttest{
 #' capture_side_effects(fn())
 #' capture_side_effects(fn(raise = TRUE))
+#' capture_side_effects(fn(raise = TRUE), copy_env = TRUE)
 #' }
-capture_side_effects <- function(expr, envir = NULL, reset_seed = FALSE) {
+capture_side_effects <- function(expr, envir = NULL, copy_env = FALSE, reset_seed = FALSE, disable_crayon = TRUE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_environment(x = envir, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(x = reset_seed, add = assert_collection)
+  checkmate::assert_flag(x = copy_env, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
@@ -68,11 +78,11 @@ capture_side_effects <- function(expr, envir = NULL, reset_seed = FALSE) {
   initial_random_state <- .Random.seed
 
   # Disable crayon (ANSI codes)
-  withr::local_options(c(crayon.enabled = FALSE))
+  withr::local_options(c(crayon.enabled = !disable_crayon))
 
   # Capture error
   error <- testthat::capture_error(suppress_mw(
-    eval(sexpr, envir = envir)))
+    eval(sexpr, envir = clone_env_if(envir, cond = copy_env, deep = TRUE))))
   error_class = class(error)
 
   # If no error, capture messages and warnings
@@ -81,14 +91,14 @@ capture_side_effects <- function(expr, envir = NULL, reset_seed = FALSE) {
     # Capture messages
     assign_random_state(initial_random_state, check_existence = FALSE)
     messages <- testthat::capture_messages(suppressWarnings(
-      eval(sexpr, envir = envir)))
+      eval(sexpr, envir = clone_env_if(envir, cond = copy_env, deep = TRUE))))
 
     # Capture warnings
     assign_random_state(initial_random_state, check_existence = FALSE)
     warnings <- testthat::capture_warnings(suppressMessages(
-      eval(sexpr, envir = envir)))
+      eval(sexpr, envir = clone_env_if(envir, cond = copy_env, deep = TRUE))))
   } else {
-    error <- cnd_message(error)
+    error <- cnd_message(error, disable_crayon = disable_crayon)
     messages <- NULL
     warnings <- NULL
   }
@@ -122,10 +132,10 @@ capture_side_effects <- function(expr, envir = NULL, reset_seed = FALSE) {
 #'
 #'  When capturing an \code{error}, no other side effects are captured.
 #' @param string String of code that can be parsed and evaluated in \code{envir}.
-#' @param envir Environment to evaluate in. Defaults to
-#'  \code{\link[base:parent.frame]{parent.frame()}}.
+#' @inheritParams capture_side_effects
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @return \code{named list} with the side effects.
+#' @family capturers
 #' @export
 #' @examples
 #' # Attach package
@@ -136,7 +146,8 @@ capture_side_effects <- function(expr, envir = NULL, reset_seed = FALSE) {
 #' capture_parse_eval_side_effects("warning('hi!')")
 #' capture_parse_eval_side_effects("message('hi!')")
 #' }
-capture_parse_eval_side_effects <- function(string, envir = NULL) {
+capture_parse_eval_side_effects <- function(string, envir = NULL, copy_env = FALSE,
+                                            reset_seed = FALSE, disable_crayon = TRUE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -157,6 +168,9 @@ capture_parse_eval_side_effects <- function(string, envir = NULL) {
   catcher_string <- paste0(
     "xpectr::capture_side_effects(",
     string,
+    ", copy_env = ", deparse(copy_env),
+    ", reset_seed = ", deparse(reset_seed),
+    ", disable_crayon = ", deparse(disable_crayon),
     ")"
   )
 

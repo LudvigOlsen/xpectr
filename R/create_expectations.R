@@ -711,6 +711,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
 
 
 create_expectations_side_effect <- function(side_effects, name = NULL,
+                                            copy_env = FALSE,
                                             indentation = 0, strip = TRUE,
                                             add_comments = TRUE, test_id = 10000) {
 
@@ -737,6 +738,9 @@ create_expectations_side_effect <- function(side_effects, name = NULL,
   checkmate::assert_flag(
     x = strip, add = assert_collection
   )
+  checkmate::assert_flag(
+    x = copy_env, add = assert_collection
+  )
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
@@ -747,9 +751,11 @@ create_expectations_side_effect <- function(side_effects, name = NULL,
   call_name <- name
   name <- create_output_var_name("side_effects_", test_id)
 
+  copy_env_string <- ifelse(isTRUE(copy_env), ", copy_env = TRUE", "")
+
   # Create assignment string
   assign_string <- create_assignment_strings(
-    call_name = paste0("xpectr::capture_side_effects(", call_name, ", reset_seed = TRUE)"),
+    call_name = paste0("xpectr::capture_side_effects(", call_name, copy_env_string, ", reset_seed = TRUE)"),
     new_name = name,
     evaluate_once = TRUE,
     comment = "# Assigning side effects")
