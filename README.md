@@ -14,7 +14,7 @@ version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-
 [![Codecov test
 coverage](https://codecov.io/gh/ludvigolsen/xpectr/branch/master/graph/badge.svg)](https://codecov.io/gh/ludvigolsen/xpectr?branch=master)
 [![Travis build
-status](https://travis-ci.org/LudvigOlsen/xpectr.svg?branch=master)](https://travis-ci.org/LudvigOlsen/xpectr)
+status](https://travis-ci.com/LudvigOlsen/xpectr.svg?branch=master)](https://travis-ci.com/LudvigOlsen/xpectr)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/xpectr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/xpectr)
 [![DOI](https://zenodo.org/badge/234099679.svg)](https://zenodo.org/badge/latestdoi/234099679)
