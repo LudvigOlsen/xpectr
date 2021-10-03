@@ -25,7 +25,7 @@ tests for [`testthat`](https://testthat.r-lib.org/) unit testing.
 <r-pkgs@ludvigolsen.dk> ) <br/> **Started:** January 2020
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental-1)
 
 When developing R packages, it’s good practice to build a good set of
 unit and regression tests that will notify you when something breaks in
@@ -347,7 +347,7 @@ Data frames are tested columnwise.
 ``` r
 # Inspect df
 df
-#> # A tibble: 3 x 3
+#> # A tibble: 3 × 3
 #> # Groups:   a [3]
 #>       a b     c    
 #>   <dbl> <chr> <fct>

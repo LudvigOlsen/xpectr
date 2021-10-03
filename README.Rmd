@@ -45,7 +45,7 @@ rvers <- substring(dep, 7, nchar(dep)-1)
 **Author:** [Ludvig R. Olsen](http://ludvigolsen.dk/) ( r-pkgs@ludvigolsen.dk ) <br/>
 **Started:** January 2020 
 
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental-1)
 
 When developing R packages, it's good practice to build a good set of unit and regression tests that will notify you when something breaks in the future. For this, the [`testthat`](https://testthat.r-lib.org/) package is commonly used. 
 Often though, we end up writing a similar set of tests again and again, which can be both tedious and time-consuming. 
