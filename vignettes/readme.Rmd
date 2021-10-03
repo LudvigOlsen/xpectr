@@ -44,7 +44,7 @@ knitr::opts_chunk$set(
 ```
 
 
-When developing R packages, it's good practice to build a good set of unit tests that will notify you when something breaks in the future. For this, the [`testthat`](https://testthat.r-lib.org/) package is commonly used. 
+When developing R packages, it's good practice to build a good set of unit and regression tests that will notify you when something breaks in the future. For this, the [`testthat`](https://testthat.r-lib.org/) package is commonly used. 
 Often though, we end up writing a similar set of tests again and again, which can be both tedious and time-consuming. 
 
 `xpectr` helps you by generating common `testthat` tests. Its goal is **not** to replace the active thinking process of finding meaningful tests for your functions, but to help **systematize** and **ease** that process. 

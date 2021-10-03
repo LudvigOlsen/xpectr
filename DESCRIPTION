@@ -1,6 +1,6 @@
 Package: xpectr
 Title: Generates Expectations for 'testthat' Unit Testing
-Version: 0.4.0.9000
+Version: 0.4.1
 Authors@R: 
     c(person(given = "Ludvig Renbo",
              family = "Olsen",
@@ -38,7 +38,6 @@ Suggests:
 RdMacros: 
     lifecycle
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr

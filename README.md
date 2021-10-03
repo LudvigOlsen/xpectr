@@ -13,8 +13,6 @@ downloads](https://cranlogs.r-pkg.org/badges/xpectr)](https://cran.r-project.org
 version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
 [![Codecov test
 coverage](https://codecov.io/gh/ludvigolsen/xpectr/branch/master/graph/badge.svg)](https://codecov.io/gh/ludvigolsen/xpectr?branch=master)
-[![Travis build
-status](https://travis-ci.com/LudvigOlsen/xpectr.svg?branch=master)](https://travis-ci.com/LudvigOlsen/xpectr)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/xpectr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/xpectr)
 [![DOI](https://zenodo.org/badge/234099679.svg)](https://zenodo.org/badge/latestdoi/234099679)
@@ -30,10 +28,10 @@ tests for [`testthat`](https://testthat.r-lib.org/) unit testing.
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
 When developing R packages, it’s good practice to build a good set of
-unit tests that will notify you when something breaks in the future. For
-this, the [`testthat`](https://testthat.r-lib.org/) package is commonly
-used. Often though, we end up writing a similar set of tests again and
-again, which can be both tedious and time-consuming.
+unit and regression tests that will notify you when something breaks in
+the future. For this, the [`testthat`](https://testthat.r-lib.org/)
+package is commonly used. Often though, we end up writing a similar set
+of tests again and again, which can be both tedious and time-consuming.
 
 `xpectr` helps you by generating common `testthat` tests. Its goal is
 **not** to replace the active thinking process of finding meaningful
@@ -49,16 +47,6 @@ and to add relevant tests.
 Note: If you comment out the call to `gxs_function()`, it is easy to
 later regenerate the tests. By using a diff tool, you can check that
 only the intended changes have been made to the file.
-
-## Call for feedback
-
-While `xpectr` has already shown itself very useful in the scenarios
-I’ve used it in, its usefulness is likely to multiply with the amount
-of feedback by the community of package developers.
-
-If you have *any* thoughts on the current set of tests and supported
-objects, or ideas for improvements/additions, please open an issue or
-send me a mail at <r-pkgs@ludvigolsen.dk>
 
 ## Installation
 
@@ -79,18 +67,17 @@ devtools::install_github("ludvigolsen/xpectr")
 
 ### Generator functions
 
-These functions are used to *generate expectations*
-(gxs).
+These functions are used to *generate expectations* (gxs).
 
 | Function          | Description                                                                            |
-| :---------------- | :------------------------------------------------------------------------------------- |
+|:------------------|:---------------------------------------------------------------------------------------|
 | `gxs_selection()` | Generates `testthat::expect_*` statements from a selection (string of code)            |
 | `gxs_function()`  | Generates `testthat::expect_*` statements for combinations of supplied argument values |
 
 ### Functions for use in tests
 
 | Function                                                    | Description                                                                  |
-| :---------------------------------------------------------- | :--------------------------------------------------------------------------- |
+|:------------------------------------------------------------|:-----------------------------------------------------------------------------|
 | `strip()`                                                   | Strips strings of non-alphanumeric characters                                |
 | `strip_msg()`                                               | Strips side-effect messages of non-alphanumeric characters and rethrows them |
 | `suppress_mw()`                                             | Suppresses warnings and messages                                             |
@@ -104,7 +91,7 @@ These functions are used to *generate expectations*
 ### Helper functions
 
 | Function                                 | Description                                                               |
-| :--------------------------------------- | :------------------------------------------------------------------------ |
+|:-----------------------------------------|:--------------------------------------------------------------------------|
 | `prepare_insertion()`                    | Collapses a vector of expectation strings and adds indentation            |
 | `capture_parse_eval_side_effects()`      | Wraps string in `capture_side_effects()` before parsing and evaluating it |
 | `stop_if()`, `warn_if()`, `message_if()` | If `TRUE`, generate error/warning/message with the supplied message       |
@@ -112,7 +99,7 @@ These functions are used to *generate expectations*
 ## Addins
 
 | Addin                                                                                            | Description                                                                                                                             | Suggested Key Command |
-| :----------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- | :-------------------- |
+|:-------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------|:----------------------|
 | *Insert Expectations* </br><font size="2">`insertExpectationsAddin()`</font>                     | Generates `testthat` `expect_*` tests from selected code (with `gxs_selection()`)                                                       | `Alt+E`               |
 | *Initialize `test_that()`* </br><font size="2">`initializeTestthatAddin()`</font>                | Inserts `testthat::test_that()` code                                                                                                    | `Alt+T`               |
 | *Initialize `gxs_function()`* </br><font size="2">`initializeGXSFunctionAddin()`</font>          | Initializes a `gxs_function()` call with default values of a function                                                                   | `Alt+F`               |
@@ -128,34 +115,33 @@ file.
 
 ## Table of Contents
 
-  - [xpectr](#xpectr)
-      - [Call for feedback](#call-for-feedback)
-      - [Installation](#installation)
-      - [Main functions](#main-functions)
-          - [Generator functions](#generator-functions)
-          - [Functions for use in tests](#functions-for-use-in-tests)
-          - [Helper functions](#helper-functions)
-      - [Addins](#addins)
-      - [Using in packages](#using-in-packages)
-      - [Examples](#examples)
-          - [gxs\_selection](#gxs_selection)
-              - [Selection is a vector](#selection-is-a-vector)
-                  - [Numeric vector](#numeric-vector)
-                  - [Factor](#factor)
-                  - [Long vector (sampling)](#long-vector-\(sampling\))
-              - [Selection is a data frame](#selection-is-a-data-frame)
-              - [Selection is a function call with side
+-   [xpectr](#xpectr)
+    -   [Installation](#installation)
+    -   [Main functions](#main-functions)
+        -   [Generator functions](#generator-functions)
+        -   [Functions for use in tests](#functions-for-use-in-tests)
+        -   [Helper functions](#helper-functions)
+    -   [Addins](#addins)
+    -   [Using in packages](#using-in-packages)
+    -   [Examples](#examples)
+        -   [gxs_selection](#gxs_selection)
+            -   [Selection is a vector](#selection-is-a-vector)
+                -   [Numeric vector](#numeric-vector)
+                -   [Factor](#factor)
+                -   [Long vector (sampling)](#long-vector-(sampling))
+            -   [Selection is a data frame](#selection-is-a-data-frame)
+            -   [Selection is a function call with side
                 effects](#selection-is-a-function-call-with-side-effects)
-          - [gxs\_function](#gxs_function)
-          - [RStudio Addins](#rstudio-addins)
-              - [How to set up a key command in
+        -   [gxs_function](#gxs_function)
+        -   [RStudio Addins](#rstudio-addins)
+            -   [How to set up a key command in
                 RStudio](#how-to-set-up-a-key-command-in-rstudio)
-              - [initializeGXSFunctionAddin](#initializegxsfunctionaddin)
-              - [wrapStringAddin](#wrapstringaddin)
-              - [initializeTestthatAddin](#initializetestthataddin)
-              - [assertCollectionAddin](#assertcollectionaddin)
-              - [dputSelectedAddin](#dputselectedaddin)
-              - [navigateTestFileAddin](#navigatetestfileaddin)
+            -   [initializeGXSFunctionAddin](#initializegxsfunctionaddin)
+            -   [wrapStringAddin](#wrapstringaddin)
+            -   [initializeTestthatAddin](#initializetestthataddin)
+            -   [assertCollectionAddin](#assertcollectionaddin)
+            -   [dputSelectedAddin](#dputselectedaddin)
+            -   [navigateTestFileAddin](#navigatetestfileaddin)
 
 ## Examples
 
@@ -197,7 +183,7 @@ fn <- function(raise = FALSE){
 }
 ```
 
-### gxs\_selection
+### gxs_selection
 
 Note: `gxs_selection()` can be used with the `Insert Expectations`
 addin. See `?insertExpectationsAddin` for instructions on how to set up
@@ -526,7 +512,7 @@ expect_error(
 ## Finished testing 'fn(raise = TRUE)'                                      ####
 ```
 
-### gxs\_function
+### gxs_function
 
 When testing the inputs to a function, `gxs_function()` allows us to
 quickly specify values to check and generates tests for each of them.
@@ -752,7 +738,7 @@ After installing the package, go to:
 
 Find `"Insert Expectations"` and press its field under `Shortcut`.
 
-Press desired key command, e.g. `Alt+E`.
+Press desired key command, e.g. `Alt+E`.
 
 Press `Apply`.
 
@@ -805,8 +791,7 @@ xpectr::gxs_function(
 The `wrapStringAddin` splits long strings and wraps them with
 `paste0()`.
 
-Suggested keycommand:
-`Alt+P`
+Suggested keycommand: `Alt+P`
 
 ``` r
 wrapStringAddin("This is a fairly long sentence that we would very very much like to make shorter in our test file!")

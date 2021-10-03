@@ -36,7 +36,6 @@ rvers <- substring(dep, 7, nchar(dep)-1)
 [![metacran downloads](https://cranlogs.r-pkg.org/badges/xpectr)](https://cran.r-project.org/package=xpectr)
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-`r rvers`-6666ff.svg)](https://cran.r-project.org/)
 [![Codecov test coverage](https://codecov.io/gh/ludvigolsen/xpectr/branch/master/graph/badge.svg)](https://codecov.io/gh/ludvigolsen/xpectr?branch=master)
-[![Travis build status](https://travis-ci.com/LudvigOlsen/xpectr.svg?branch=master)](https://travis-ci.com/LudvigOlsen/xpectr)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/xpectr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/xpectr)
 [![DOI](https://zenodo.org/badge/234099679.svg)](https://zenodo.org/badge/latestdoi/234099679)
 <!-- badges: end -->
@@ -48,7 +47,7 @@ rvers <- substring(dep, 7, nchar(dep)-1)
 
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
-When developing R packages, it's good practice to build a good set of unit tests that will notify you when something breaks in the future. For this, the [`testthat`](https://testthat.r-lib.org/) package is commonly used. 
+When developing R packages, it's good practice to build a good set of unit and regression tests that will notify you when something breaks in the future. For this, the [`testthat`](https://testthat.r-lib.org/) package is commonly used. 
 Often though, we end up writing a similar set of tests again and again, which can be both tedious and time-consuming. 
 
 `xpectr` helps you by generating common `testthat` tests. Its goal is **not** to replace the active thinking process of finding meaningful tests for your functions, but to help **systematize** and **ease** that process. 
@@ -56,12 +55,6 @@ Often though, we end up writing a similar set of tests again and again, which ca
 One such example is `gxs_function()`, which generates tests for a set of argument value combinations. This allows you to focus on the selection of argument values to test. Once the tests have been generated, you can go through each of them to ensure your function is working as intended and to add relevant tests. 
 
 Note: If you comment out the call to `gxs_function()`, it is easy to later regenerate the tests. By using a diff tool, you can check that only the intended changes have been made to the file.
-
-## Call for feedback
-
-While `xpectr` has already shown itself very useful in the scenarios I've used it in, its usefulness is likely to multiply with the amount of feedback by the community of package developers.
-
-If you have *any* thoughts on the current set of tests and supported objects, or ideas for improvements/additions, please open an issue or send me a mail at r-pkgs@ludvigolsen.dk 
 
 ## Installation
 
