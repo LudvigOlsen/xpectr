@@ -30,8 +30,7 @@ From: https://gist.github.com/gadenbuie/c83e078bf8c81b035e32c3fc0cf04ee8
 \details{
 A simple function to extract headers from an RMarkdown or Markdown document
 and build a table of contents. Returns a markdown list with links to the
-headers using
-\href{http://pandoc.org/MANUAL.html#header-identifiers}{pandoc header identifiers}.
+headers using pandoc header identifiers.
 
 WARNING: This function only works with hash-tag headers.
 
