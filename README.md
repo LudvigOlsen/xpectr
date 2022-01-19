@@ -12,7 +12,9 @@ downloads](https://cranlogs.r-pkg.org/badges/xpectr)](https://cran.r-project.org
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
 [![Codecov test
-coverage](https://codecov.io/gh/ludvigolsen/xpectr/branch/master/graph/badge.svg)](https://codecov.io/gh/ludvigolsen/xpectr?branch=master)
+coverage](https://codecov.io/gh/ludvigolsen/xpectr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ludvigolsen/xpectr?branch=master)
+[![GitHub Actions CI
+status](https://github.com/ludvigolsen/xpectr/actions/workflows/R-check.yaml/badge.svg?branch=master)](https://github.com/ludvigolsen/xpectr/actions/workflows/R-check.yaml?branch=master)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/xpectr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/xpectr)
 [![DOI](https://zenodo.org/badge/234099679.svg)](https://zenodo.org/badge/latestdoi/234099679)
