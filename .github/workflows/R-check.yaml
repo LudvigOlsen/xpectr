@@ -25,7 +25,6 @@ jobs:
           - {os: windows-latest, r: 'release'}
           - {os: windows-latest, r: 'oldrel'}
           - {os: ubuntu-18.04,   r: 'devel'}
-          - {os: ubuntu-18.04,   r: 'structure'}
           - {os: ubuntu-18.04,   r: 'release'}
           - {os: ubuntu-18.04,   r: 'oldrel'}
 
