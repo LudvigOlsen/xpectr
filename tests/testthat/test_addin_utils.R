@@ -49,15 +49,18 @@ test_that("apply_capture() works as expected", {
                      "b" = factor(c("c", "d", "e"),
                                   levels = c("c","d","e")))
 
-  expect_equal(
-    apply_capture("a_df", dput, envir = current_envir),
-    c(
-      "structure(list(a = c(1, 2, 3), b = structure(1:3, .Label = c(\"c\", ",
-      paste0("\"d\", \"e\"), class = \"factor\")), class = \"data.frame\"",
-             ", row.names = c(NA, "),
-      "-3L))"
-    )
-  )
+  # TODO Will be called "levels" instead of ".Label" in upcoming R
+  # CRAN says: "It is never safe to test the output from deparsing."
+  # Fix this approach and reenable test
+  # expect_equal(
+  #   apply_capture("a_df", dput, envir = current_envir),
+  #   c(
+  #     "structure(list(a = c(1, 2, 3), b = structure(1:3, .Label = c(\"c\", ",
+  #     paste0("\"d\", \"e\"), class = \"factor\")), class = \"data.frame\"",
+  #            ", row.names = c(NA, "),
+  #     "-3L))"
+  #   )
+  # )
   expect_equal(
     apply_capture("a_df", identity, envir = current_envir),
     c("  a b", "1 1 c", "2 2 d", "3 3 e")

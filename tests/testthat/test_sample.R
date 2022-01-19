@@ -54,13 +54,13 @@ test_that("smpl() samples correctly", {
   fac_2 <- factor(as.character(c(1,2,1,2,3,1,5,7)))
   fac_3 <- factor(c("a", "b", "c", "d", "e", "f"))
   expect_equal(smpl(fac_1, n = 3),
-               structure(c(2L, 4L, 5L), .Label = c("1", "2", "3", "5", "7"), class = "factor"))
+               structure(c(2L, 4L, 5L), levels = c("1", "2", "3", "5", "7"), class = "factor"))
   expect_equal(smpl(fac_2, n = 3),
-               structure(c(2L, 4L, 5L), .Label = c("1", "2", "3", "5", "7"), class = "factor"))
+               structure(c(2L, 4L, 5L), levels = c("1", "2", "3", "5", "7"), class = "factor"))
   expect_equal(smpl(fac_2, n = 3, seed = 3),
-               structure(c(2L, 1L, 1L), .Label = c("1", "2", "3", "5", "7"), class = "factor"))
+               structure(c(2L, 1L, 1L), levels = c("1", "2", "3", "5", "7"), class = "factor"))
   expect_equal(smpl(fac_3, n = 3, seed = 7),
-               structure(c(1L, 2L, 6L), .Label = c("a", "b", "c", "d", "e", "f"), class = "factor"))
+               structure(c(1L, 2L, 6L), levels = c("a", "b", "c", "d", "e", "f"), class = "factor"))
 
   # Data Frames
   set_test_seed(1)
