@@ -395,9 +395,8 @@ generate_function_strings <- function(fn_name,
                                           .data$changed_string_name_only,
                                           .data$changed_string_valued)) %>%
     dplyr::filter(dplyr::row_number() == 1) %>%
-    dplyr::select(.data$combination, .data$num_changed,
-                  .data$arg_name,
-                  .data$changed_string)
+    dplyr::select("combination", "num_changed",
+                  "arg_name", "changed_string")
 
   # Create function calls
   function_calls <- combinations %>%
@@ -424,10 +423,10 @@ generate_function_strings <- function(fn_name,
 
   # Prepare output tibble
   function_calls %>%
-    dplyr::select(.data$call_strings, .data$changed_string) %>%
+    dplyr::select("call_strings", "changed_string") %>%
     dplyr::distinct(.data$call_strings, .keep_all = TRUE) %>%
-    dplyr::rename(call = .data$call_strings,
-                  changed = .data$changed_string)
+    dplyr::rename(call = "call_strings",
+                  changed = "changed_string")
 
 }
 

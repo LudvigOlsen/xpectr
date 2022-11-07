@@ -260,11 +260,7 @@ test_that("gxs_function() works", {
     "# Testing side effects",
     "# Assigning side effects",
     "side_effects_16291 <- xpectr::capture_side_effects(fn(a = 5, a_fn = mean, b = c(\"jj\", \"ll\"), d = NULL, e = 3, f = \"hii\"), reset_seed = TRUE)",
-    ifelse(
-      is_checkmate_v2_1(),
-      "expect_equal(\n  xpectr::strip(side_effects_16291[['error']]),\n  xpectr::strip(\"1 assertions failed:\\n * Variable 'b': All elements must have at least 3 characters but\\n element 1 has 2 characters.\"),\n  fixed = TRUE)",
-      "expect_equal(\n  xpectr::strip(side_effects_16291[['error']]),\n  xpectr::strip(\"1 assertions failed:\\n * Variable 'b': All elements must have at least 3 characters.\"),\n  fixed = TRUE)"
-    ),
+    "expect_equal(\n  xpectr::strip(side_effects_16291[['error']]),\n  xpectr::strip(\"1 assertions failed:\\n * Variable 'b': All elements must have at least 3 characters, but\\n element 1 has 2 characters..\"),\n  fixed = TRUE)",
     "expect_equal(\n  xpectr::strip(side_effects_16291[['error_class']]),\n  xpectr::strip(c(\"simpleError\", \"error\", \"condition\")),\n  fixed = TRUE)",
     " ",
     "# Testing fn(a = 5, a_fn = mean, b = c(\"ehhh\", \"loool\", ...",
@@ -389,25 +385,18 @@ test_that("gxs_function() works", {
   )
 
   set_test_seed(1)
-  expect_equal(strip(gxs_function(
-    fn,
-    list(
+  expect_equal(
+    strip(gxs_function(fn, list(
       "a" = list(5, 3, 7, NA),
       a_fn = list(mean, sum),
-      "b" = list(
-        c("ahhh", "ohhh"),
-        c("ehhh", "loool"),
-        c("jj", "ll"),
-        c("ehhh", "loool", "heeej")
-      ),
+      "b" = list(c("ahhh","ohhh"), c("ehhh","loool"), c("jj","ll"),  c("ehhh","loool", "heeej")),
       "d" = list(NULL, data.frame("col1" = c(1))),
       "e" = list(3, 6, NA),
       "f" = list("hii", "lol", NA, 3)
     ),
-    out = "return"
-  )),
-  strip(expected_tests2),
-  fixed = TRUE)
+    out = "return")),
+    strip(expected_tests2),
+    fixed = TRUE)
 
   eval_expectations(expected_tests2, envir = current_envir)
 
