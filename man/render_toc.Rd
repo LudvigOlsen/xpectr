@@ -41,12 +41,14 @@ set to \code{NULL} for it to be included.
 }
 \section{Usage}{
 
-Just drop in a chunk where you want the toc to appear (set \code{echo=FALSE}):\preformatted{# Table of Contents
+Just drop in a chunk where you want the toc to appear (set \code{echo=FALSE}):
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# Table of Contents
 
 ```\{r echo=FALSE\}
 render_toc("/path/to/the/file.Rmd")
 ```
-}
+}\if{html}{\out{</div>}}
 }
 
 \keyword{internal}

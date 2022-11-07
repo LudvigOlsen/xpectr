@@ -126,9 +126,7 @@ have to look at the assignment to see the object that is being tested.}
 
 \item{add_test_comments}{Whether to add comments for each test. (Logical)}
 
-\item{start_with_newline}{Whether to have a newline in the beginning/end. (Logical)}
-
-\item{end_with_newline}{Whether to have a newline in the beginning/end. (Logical)}
+\item{start_with_newline, end_with_newline}{Whether to have a newline in the beginning/end. (Logical)}
 
 \item{out}{Either \code{"insert"} or \code{"return"}.
 
