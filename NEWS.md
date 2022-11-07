@@ -1,5 +1,5 @@
 
-# xpectr 0.4.2
+# xpectr 0.4.3
 
 Due to not fixing some non-critical errors before the given deadline, `xpectr` was shortly removed from `CRAN`. This release brings it back online :-)
 
