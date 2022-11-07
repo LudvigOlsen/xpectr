@@ -8,3 +8,4 @@
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^CRAN-RELEASE$
+^CRAN-SUBMISSION$
