@@ -28,7 +28,7 @@ output:
     toc: yes
     toc_depth: 4
 vignette: >
-  %\VignetteIndexEntry{Introduction_to_cvms}
+  %\VignetteIndexEntry{Introduction_to_xpectr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
