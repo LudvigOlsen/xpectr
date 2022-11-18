@@ -48,10 +48,13 @@ Generates message with the supplied message.
 \examples{
 # Attach packages
 library(xpectr)
-\dontrun{
+
+# Note: The use of `try()` is just for package-testing purposes
+
+\donttest{
 a <- 0
-stop_if(a == 0, "'a' cannot be 0.")
-warn_if(a == 0, "'a' was 0.")
+try(stop_if(a == 0, "'a' cannot be 0."))
+try(warn_if(a == 0, "'a' was 0."))
 message_if(a == 0, "'a' was so kind to be 0.")
 }
 }

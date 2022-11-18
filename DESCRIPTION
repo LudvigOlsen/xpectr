@@ -1,6 +1,6 @@
 Package: xpectr
 Title: Generates Expectations for 'testthat' Unit Testing
-Version: 0.4.3
+Version: 0.4.3.9000
 Authors@R: 
     c(person(given = "Ludvig Renbo",
              family = "Olsen",

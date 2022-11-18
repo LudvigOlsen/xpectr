@@ -44,13 +44,15 @@ systems. By stripping both the error message and the expected message
 library(xpectr)
 library(testthat)
 
-\dontrun{
-strip_msg(stop("this 'dot' .\n is removed! 123"))
-strip_msg(warning("this 'dot' .\n is removed! 123"))
+# Note: The use of `try()` is just for package-testing purposes
+
+\donttest{
+try(strip_msg(stop("this 'dot' .\n is removed! 123")))
+try(strip_msg(warning("this 'dot' .\n is removed! 123")))
 strip_msg(message("this 'dot' .\n is removed! 123"))
 strip_msg(message("this 'dot' .\n is removed! 123"), remove_numbers = TRUE)
 error_fn <- function(){stop("this 'dot' .\n is removed! 123")}
-strip_msg(error_fn())
+try(strip_msg(error_fn()))
 
 # With testthat tests
 expect_error(strip_msg(error_fn()),

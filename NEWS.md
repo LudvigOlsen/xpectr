@@ -1,4 +1,8 @@
 
+# xpectr 0.4.3.9000
+
+* Changes some examples from `\dontrun` to `\donttest` as requested by `CRAN`.
+
 # xpectr 0.4.3
 
 Due to not fixing some non-critical errors before the given deadline, `xpectr` was shortly removed from `CRAN`. This release brings it back online :-)
