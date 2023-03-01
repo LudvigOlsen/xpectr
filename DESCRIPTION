@@ -5,7 +5,8 @@ Authors@R:
     c(person(given = "Ludvig Renbo",
              family = "Olsen",
              role = c("aut", "cre"),
-             email = "r-pkgs@ludvigolsen.dk"),
+             email = "r-pkgs@ludvigolsen.dk",
+             comment = c(ORCID = "0009-0006-6798-7454", Twitter = "@ludvigolsen")),
       person(given = "R. Mark",
              family = "Sharp",
              role = c("ctb")))
@@ -39,5 +40,5 @@ RdMacros:
     lifecycle
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
