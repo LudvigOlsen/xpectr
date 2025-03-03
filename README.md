@@ -23,7 +23,7 @@ status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/xpectr?br
 `xpectr` provides a set of utilities and RStudio addins for generating
 tests for [`testthat`](https://testthat.r-lib.org/) unit testing.
 
-**Author:** [Ludvig R. Olsen](http://ludvigolsen.dk/) (
+**Author:** [Ludvig R. Olsen](https://ludvigolsen.dk/) (
 <r-pkgs@ludvigolsen.dk> ) <br/> **Started:** January 2020
 
 [![Lifecycle:
@@ -71,44 +71,44 @@ devtools::install_github("ludvigolsen/xpectr")
 
 These functions are used to *generate expectations* (gxs).
 
-| Function          | Description                                                                            |
-|:------------------|:---------------------------------------------------------------------------------------|
-| `gxs_selection()` | Generates `testthat::expect_*` statements from a selection (string of code)            |
-| `gxs_function()`  | Generates `testthat::expect_*` statements for combinations of supplied argument values |
+| Function | Description |
+|:---|:---|
+| `gxs_selection()` | Generates `testthat::expect_*` statements from a selection (string of code) |
+| `gxs_function()` | Generates `testthat::expect_*` statements for combinations of supplied argument values |
 
 ### Functions for use in tests
 
-| Function                                                    | Description                                                                  |
-|:------------------------------------------------------------|:-----------------------------------------------------------------------------|
-| `strip()`                                                   | Strips strings of non-alphanumeric characters                                |
-| `strip_msg()`                                               | Strips side-effect messages of non-alphanumeric characters and rethrows them |
-| `suppress_mw()`                                             | Suppresses warnings and messages                                             |
-| `capture_side_effects()`                                    | Captures errors, warnings, and messages from an expression                   |
-| `smpl()`                                                    | Samples a vector, factor or data frame with internal random seed             |
-| `simplified_formals()`                                      | Formats formals as easily testable character vector                          |
-| `element_lengths()`, `element_types()`, `element_classes()` | Gets the length/type/class of each element                                   |
-| `num_total_elements()`                                      | Unlists recursively and finds the total number of elements                   |
-| `set_test_seed()`                                           | Set random seed for unit tests compatible with `R < 3.6.0`                   |
+| Function | Description |
+|:---|:---|
+| `strip()` | Strips strings of non-alphanumeric characters |
+| `strip_msg()` | Strips side-effect messages of non-alphanumeric characters and rethrows them |
+| `suppress_mw()` | Suppresses warnings and messages |
+| `capture_side_effects()` | Captures errors, warnings, and messages from an expression |
+| `smpl()` | Samples a vector, factor or data frame with internal random seed |
+| `simplified_formals()` | Formats formals as easily testable character vector |
+| `element_lengths()`, `element_types()`, `element_classes()` | Gets the length/type/class of each element |
+| `num_total_elements()` | Unlists recursively and finds the total number of elements |
+| `set_test_seed()` | Set random seed for unit tests compatible with `R < 3.6.0` |
 
 ### Helper functions
 
-| Function                                 | Description                                                               |
-|:-----------------------------------------|:--------------------------------------------------------------------------|
-| `prepare_insertion()`                    | Collapses a vector of expectation strings and adds indentation            |
-| `capture_parse_eval_side_effects()`      | Wraps string in `capture_side_effects()` before parsing and evaluating it |
-| `stop_if()`, `warn_if()`, `message_if()` | If `TRUE`, generate error/warning/message with the supplied message       |
+| Function | Description |
+|:---|:---|
+| `prepare_insertion()` | Collapses a vector of expectation strings and adds indentation |
+| `capture_parse_eval_side_effects()` | Wraps string in `capture_side_effects()` before parsing and evaluating it |
+| `stop_if()`, `warn_if()`, `message_if()` | If `TRUE`, generate error/warning/message with the supplied message |
 
 ## Addins
 
-| Addin                                                                                            | Description                                                                                                                             | Suggested Key Command |
-|:-------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------|:----------------------|
-| *Insert Expectations* </br><font size="2">`insertExpectationsAddin()`</font>                     | Generates `testthat` `expect_*` tests from selected code (with `gxs_selection()`)                                                       | `Alt+E`               |
-| *Initialize `test_that()`* </br><font size="2">`initializeTestthatAddin()`</font>                | Inserts `testthat::test_that()` code                                                                                                    | `Alt+T`               |
-| *Initialize `gxs_function()`* </br><font size="2">`initializeGXSFunctionAddin()`</font>          | Initializes a `gxs_function()` call with default values of a function                                                                   | `Alt+F`               |
-| *`dput()` selected* </br><font size="2">`dputSelectedAddin()`</font>                             | Applies `dput()` to selected code                                                                                                       | `Alt+D`               |
-| *Wrap string with `paste0()`* </br><font size="2">`wrapStringAddin()`</font>                     | Splits selected string every n characters and wraps in `paste0()` call                                                                  | `Alt+P`               |
-| *Insert `checkmate` `AssertCollection`code* </br><font size="2">`assertCollectionAddin()`</font> | Inserts code for initializing and reporting a `checkmate` `AssertCollection`                                                            | `Alt+C`               |
-| *Navigate To Test File* </br><font size="2">`navigateTestFileAddin()`</font>                     | Navigates to extracted file name and line number. E.g. select or copy `test_x.R:5` and it opens `/tests/testthat/test_x.R` at line `5`. | `Alt+N`               |
+| Addin | Description | Suggested Key Command |
+|:---|:---|:---|
+| *Insert Expectations* </br><font size="2">`insertExpectationsAddin()`</font> | Generates `testthat` `expect_*` tests from selected code (with `gxs_selection()`) | `Alt+E` |
+| *Initialize `test_that()`* </br><font size="2">`initializeTestthatAddin()`</font> | Inserts `testthat::test_that()` code | `Alt+T` |
+| *Initialize `gxs_function()`* </br><font size="2">`initializeGXSFunctionAddin()`</font> | Initializes a `gxs_function()` call with default values of a function | `Alt+F` |
+| *`dput()` selected* </br><font size="2">`dputSelectedAddin()`</font> | Applies `dput()` to selected code | `Alt+D` |
+| *Wrap string with `paste0()`* </br><font size="2">`wrapStringAddin()`</font> | Splits selected string every n characters and wraps in `paste0()` call | `Alt+P` |
+| *Insert `checkmate` `AssertCollection`code* </br><font size="2">`assertCollectionAddin()`</font> | Inserts code for initializing and reporting a `checkmate` `AssertCollection` | `Alt+C` |
+| *Navigate To Test File* </br><font size="2">`navigateTestFileAddin()`</font> | Navigates to extracted file name and line number. E.g. select or copy `test_x.R:5` and it opens `/tests/testthat/test_x.R` at line `5`. | `Alt+N` |
 
 ## Using in packages
 
@@ -117,33 +117,33 @@ file.
 
 ## Table of Contents
 
--   [xpectr](#xpectr)
-    -   [Installation](#installation)
-    -   [Main functions](#main-functions)
-        -   [Generator functions](#generator-functions)
-        -   [Functions for use in tests](#functions-for-use-in-tests)
-        -   [Helper functions](#helper-functions)
-    -   [Addins](#addins)
-    -   [Using in packages](#using-in-packages)
-    -   [Examples](#examples)
-        -   [gxs_selection](#gxs_selection)
-            -   [Selection is a vector](#selection-is-a-vector)
-                -   [Numeric vector](#numeric-vector)
-                -   [Factor](#factor)
-                -   [Long vector (sampling)](#long-vector-(sampling))
-            -   [Selection is a data frame](#selection-is-a-data-frame)
-            -   [Selection is a function call with side
-                effects](#selection-is-a-function-call-with-side-effects)
-        -   [gxs_function](#gxs_function)
-        -   [RStudio Addins](#rstudio-addins)
-            -   [How to set up a key command in
-                RStudio](#how-to-set-up-a-key-command-in-rstudio)
-            -   [initializeGXSFunctionAddin](#initializegxsfunctionaddin)
-            -   [wrapStringAddin](#wrapstringaddin)
-            -   [initializeTestthatAddin](#initializetestthataddin)
-            -   [assertCollectionAddin](#assertcollectionaddin)
-            -   [dputSelectedAddin](#dputselectedaddin)
-            -   [navigateTestFileAddin](#navigatetestfileaddin)
+- [xpectr](#xpectr)
+  - [Installation](#installation)
+  - [Main functions](#main-functions)
+    - [Generator functions](#generator-functions)
+    - [Functions for use in tests](#functions-for-use-in-tests)
+    - [Helper functions](#helper-functions)
+  - [Addins](#addins)
+  - [Using in packages](#using-in-packages)
+  - [Examples](#examples)
+    - [gxs_selection](#gxs_selection)
+      - [Selection is a vector](#selection-is-a-vector)
+        - [Numeric vector](#numeric-vector)
+        - [Factor](#factor)
+        - [Long vector (sampling)](#long-vector-(sampling))
+      - [Selection is a data frame](#selection-is-a-data-frame)
+      - [Selection is a function call with side
+        effects](#selection-is-a-function-call-with-side-effects)
+    - [gxs_function](#gxs_function)
+    - [RStudio Addins](#rstudio-addins)
+      - [How to set up a key command in
+        RStudio](#how-to-set-up-a-key-command-in-rstudio)
+      - [initializeGXSFunctionAddin](#initializegxsfunctionaddin)
+      - [wrapStringAddin](#wrapstringaddin)
+      - [initializeTestthatAddin](#initializetestthataddin)
+      - [assertCollectionAddin](#assertcollectionaddin)
+      - [dputSelectedAddin](#dputselectedaddin)
+      - [navigateTestFileAddin](#navigatetestfileaddin)
 
 ## Examples
 
@@ -419,7 +419,7 @@ messages and warnings are tested as character vectors, to make sure we
 catch additional warnings/messages.
 
 When running `testthat` unit tests on different systems, they sometimes
-vary in the use of punctuation and newlines (\\n). The `strip()` and
+vary in the use of punctuation and newlines (\n). The `strip()` and
 `strip_msg()` functions are wrapped around the side effects to remove
 non-alphanumeric symbols from the tested strings. This helps the
 `expect_*` functions to ignore those differences. In cases where such
@@ -434,15 +434,16 @@ messages and warnings.
 ``` r
 # Inspect fn
 fn
-#> function(raise = FALSE){
-#>   message("Hi! I'm Kevin, your favorite message!")
-#>   warning("G'Day Mam! I'm a warning to the world!")
-#>   message("Kevin is ma name! Yesss!")
-#>   warning("Hopefully the whole world will see me :o")
-#>   if (isTRUE(raise)){
-#>     stop("Lord Evil Error has arrived! Yeehaaa")
-#>   }
-#>   "the output"
+#> function (raise = FALSE) 
+#> {
+#>     message("Hi! I'm Kevin, your favorite message!")
+#>     warning("G'Day Mam! I'm a warning to the world!")
+#>     message("Kevin is ma name! Yesss!")
+#>     warning("Hopefully the whole world will see me :o")
+#>     if (isTRUE(raise)) {
+#>         stop("Lord Evil Error has arrived! Yeehaaa")
+#>     }
+#>     "the output"
 #> }
 ```
 
