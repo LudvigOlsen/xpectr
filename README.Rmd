@@ -43,7 +43,7 @@ rvers <- substring(dep, 7, nchar(dep)-1)
 
 `xpectr` provides a set of utilities and RStudio addins for generating tests for [`testthat`](https://testthat.r-lib.org/) unit testing.
 
-**Author:** [Ludvig R. Olsen](https://ludvigolsen.dk/) ( r-pkgs@ludvigolsen.dk ) <br/>
+**Author:** [Ludvig R. Olsen](https://www.ludvigolsen.dk/) ( r-pkgs@ludvigolsen.dk ) <br/>
 **Started:** January 2020 
 
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental-1)
