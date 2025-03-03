@@ -23,7 +23,7 @@ status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/xpectr?br
 `xpectr` provides a set of utilities and RStudio addins for generating
 tests for [`testthat`](https://testthat.r-lib.org/) unit testing.
 
-**Author:** [Ludvig R. Olsen](https://ludvigolsen.dk/) (
+**Author:** [Ludvig R. Olsen](https://www.ludvigolsen.dk/) (
 <r-pkgs@ludvigolsen.dk> ) <br/> **Started:** January 2020
 
 [![Lifecycle:
