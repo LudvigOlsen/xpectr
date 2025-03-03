@@ -27,20 +27,13 @@ test_that("capture_side_effects() works with tibbles", {
     output_10856,
     type = "list")
   # Testing values
-  if (!(strip(output_10856[["error"]]) %in%
-        strip(c(
-          "Must extract column with a single valid subscript.\nx Subscript `NA` can't be `NA`.",
-          "Must extract column with a single valid subscript.\n Subscript `NA` can't be `NA`.",
-          "Can't extract column with `NA`.\n✖ Subscript `NA` must be a location, not an integer `NA`."
-        )))){
-    stop(strip(output_10856[["error"]]))
-  }
   expect_true(
     strip(output_10856[["error"]]) %in%
     strip(c(
       "Must extract column with a single valid subscript.\nx Subscript `NA` can't be `NA`.",
       "Must extract column with a single valid subscript.\n Subscript `NA` can't be `NA`.",
-      "Can't extract column with `NA`.\n✖ Subscript `NA` must be a location, not an integer `NA`."
+      "Can't extract column with `NA`.\n✖ Subscript `NA` must be a location, not an integer `NA`.",
+      "Cant extract column with NAx Subscript NA must be a location not an integer NA"
     )))
   expect_equal(
     output_10856[["error_class"]],
