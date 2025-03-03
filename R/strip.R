@@ -61,7 +61,6 @@ strip <- function(strings,
 ##  .................. #< 2adf3d749542993ca3074b95c0f31e8e ># ..................
 ##  Argument Asserts                                                        ####
 
-
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_flag(allow_na, add = assert_collection)
   checkmate::reportAssertions(assert_collection) # Must check allow_na first!

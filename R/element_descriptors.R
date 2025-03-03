@@ -30,6 +30,11 @@
 #' element_lengths(l)
 #' element_lengths(l, keep_names = TRUE)
 element_lengths <- function(x, keep_names = FALSE){
+  checkmate::assert_flag(
+    x = keep_names,
+    na.ok = FALSE,
+    null.ok = FALSE,
+  )
   unlist(lapply(x, length), use.names = keep_names)
 }
 
@@ -59,6 +64,11 @@ element_lengths <- function(x, keep_names = FALSE){
 #' element_types(l)
 #' element_types(l, keep_names = TRUE)
 element_types <- function(x, keep_names = FALSE){
+  checkmate::assert_flag(
+    x = keep_names,
+    na.ok = FALSE,
+    null.ok = FALSE,
+  )
   unlist(lapply(x, typeof), use.names = keep_names)
 }
 
@@ -89,6 +99,11 @@ element_types <- function(x, keep_names = FALSE){
 #' element_classes(l)
 #' element_classes(l, keep_names = TRUE)
 element_classes <- function(x, keep_names = FALSE){
+  checkmate::assert_flag(
+    x = keep_names,
+    na.ok = FALSE,
+    null.ok = FALSE,
+  )
   first_class <- function(x){class(x)[[1]]}
   unlist(lapply(x, first_class), use.names = keep_names)
 }
@@ -122,6 +137,11 @@ element_classes <- function(x, keep_names = FALSE){
 #' num_total_elements(l)
 #' num_total_elements(l, deduplicated = TRUE)
 num_total_elements <- function(x, deduplicated = FALSE){
+  checkmate::assert_flag(
+    x = deduplicated,
+    na.ok = FALSE,
+    null.ok = FALSE,
+  )
   elems <- unlist(x, recursive = TRUE, use.names = FALSE)
   if (isTRUE(deduplicated))
     elems <- unique(elems)

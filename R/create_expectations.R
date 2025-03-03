@@ -545,7 +545,7 @@ create_expectations_vector <- function(data, name = NULL, indentation = 0,
         "null"
       )
     ) &&
-    !any(element_lengths(data, length) > 1)
+    !any(element_lengths(data) > 1)
 
   all_uniquely_named <- checkmate::test_list(x = as.list(data), names = "unique")
 

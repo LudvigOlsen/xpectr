@@ -3,9 +3,7 @@
 #' A set of utilities and RStudio addins for generating tests.
 #'
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @docType package
-#' @name xpectr
-NULL
+"_PACKAGE"
 
 
 # R CMD check NOTE handling
