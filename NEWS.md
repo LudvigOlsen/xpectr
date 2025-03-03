@@ -1,7 +1,9 @@
 
-# xpectr 0.4.3.9000
+# xpectr 0.4.4
 
-* Changes some examples from `\dontrun` to `\donttest` as requested by `CRAN`.
+* Fixes minor bug.
+
+* Fixes rare test failure.
 
 # xpectr 0.4.3
 
@@ -10,6 +12,8 @@ Due to not fixing some non-critical errors before the given deadline, `xpectr` w
 * Fixes `tidyselect`-related warnings.
 
 * Fixes a few tests due to changes in error messages in the tested functions.
+
+* Changes some examples from `\dontrun` to `\donttest` as requested by `CRAN`.
 
 # xpectr 0.4.1
 
