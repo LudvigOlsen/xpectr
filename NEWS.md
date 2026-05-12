@@ -1,4 +1,8 @@
 
+# xpectr 0.4.5
+
+* Fixes failing tests for CRAN compatibility.
+
 # xpectr 0.4.4
 
 * Fixes minor bug.
