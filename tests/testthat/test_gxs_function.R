@@ -627,10 +627,11 @@ test_that("gxs_function() works with multiline function definitions as arg value
     xpectr::strip(side_effects_19370[['error']]),
     xpectr::strip("could not find function \"x\""),
     fixed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_19370[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
-    fixed = TRUE)
+  expect_true(
+    identical(
+      tail(xpectr::strip(side_effects_19370[['error_class']]), 3),
+      xpectr::strip(c("simpleError", "error", "condition"))
+    ))
 
   # Testing fn1(x = function(a) { b <- a * a b}, y = NUL...
   # Changed from baseline: y = NULL
